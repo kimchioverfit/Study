@@ -9,6 +9,9 @@
 
 모델의 학습 가능한 파라미터가 대부분 존재하는 곳
 
+세부적으로 모듈화 하여 [backbone](./Backbone.md), [neck](./Neck.md), [head](./Head.md) 이런식으로 나누기도 한다. 
+
+
 여러개의 히든레이어로 ['인코더(Encoder)'](./Encoder.md)를 구성 가능
 
 ---
