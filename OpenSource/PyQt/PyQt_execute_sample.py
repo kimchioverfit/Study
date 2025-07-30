@@ -20,3 +20,8 @@ class Child(ProgressDialog):
     #     self.excute_this_fn = self.func_b
     # 이런식으로 만들어주면, worker가 함수를 run할때, 조건에 따라 다른 함수를 호출하게 구현이 가능함.
 
+    # 물론 그냥 excute_this_fn 이용하지않고, ProgressDialog에서 호출해주는 함수를 인터페이스와 같은 이름으로 일치시켜도됨
+    # 여기서는 excute_this_fn 니까, def excute가 아니라 def excute_this_fn(...) 이 되게 하고 
+    # excute_this_fn = excute는 지워도됨
+
+    # 전략의 차이인데... 어려운듯 
