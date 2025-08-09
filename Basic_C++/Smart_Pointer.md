@@ -1,4 +1,4 @@
-# Pointer
+# Smart Pointer
 
 
 ### Shared ptr, unique ptr
