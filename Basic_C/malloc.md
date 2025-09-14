@@ -12,6 +12,8 @@ Heap 영역에서 지정한 크기만큼 메모리를 할당하고
 #include <stdlib.h>
 
 int *p = (int *)malloc(sizeof(int)); // int 1개 크기만큼 heap에 메모리 할당
+// 참고로 C에는 암묵적인 캐스팅이 있고, CPP에서는 금지함
+int * p = malloc(sizeof(int));
 ```
 
 ```cpp
