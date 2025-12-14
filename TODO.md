@@ -19,6 +19,15 @@ ReLU 활성화 함수와 Dropout 기법 도입.
 
 3. GPU/DSP/NPU architectures 샘플 구현 
 
+NPU란 ?
+
+Neural Processing Unit
+딥러닝에서 사용하는 행렬 연산, Convolution 연산 등을 초고속, 저전력으로 처리하도록 만든 전용 Processor.
+
+CNN, RNN, Transformer 같은 신경망 연산 
+
+GPU는 병렬코어로 병렬연산 최적화라면 NPU는 아예 Tensor 를 타겟으로 회로설계한거임. 구체적 내용은 추가 검색 필요 
+
 4. 병렬처리 개선 - 단순 Threading으로는 가장 많은 시간을 쓰는 inference 속도를 개선하기 힘들듯 -python의 경우에는 GIL (Global Interpreter Lock) 때문에 그러함 그리고, https://seokhyun2.tistory.com/44 공부 
 
 5. Resnet50
