@@ -12,8 +12,6 @@
       <li class="list-item">
         <a class="list-link" href="{{ .RelPermalink }}">{{ $title }}</a>
         {{ with .File }}<span class="meta">{{ .Path }}</span>{{ end }}
-        {{ $summary := .Summary | plainify | truncate 160 }}
-        {{ if $summary }}<div class="excerpt">{{ $summary }}</div>{{ end }}
       </li>
     {{ end }}
   </ul>

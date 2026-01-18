@@ -131,11 +131,6 @@ body {
   color: var(--accent);
 }
 
-.excerpt {
-  margin-top: 6px;
-  color: var(--ink-muted);
-  font-size: 14px;
-}
 
 .meta {
   color: var(--ink-muted);
