@@ -1,9 +1,9 @@
-baseURL = "https://kimchioverfit.github.io/Study/"
+﻿baseURL = "https://kimchioverfit.github.io/Study/"
 languageCode = "ko-kr"
 title = "Study Notes"
 paginate = 20
 
-contentDir = "content"
+contentDir = "."
 
 [params]
   description = "Technical notes and study log."
@@ -13,3 +13,11 @@ contentDir = "content"
     [markup.goldmark.renderer]
       unsafe = true
 
+ignoreFiles = [
+  "^content/",
+  "^docs/",
+  "^imgs/",
+  "^README\\.md$",
+  "^TODO\\.md$",
+  "^나의임시공부파일\\.md$"
+]
