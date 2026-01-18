@@ -3,7 +3,7 @@ languageCode = "ko-kr"
 title = "Study Notes"
 paginate = 20
 
-contentDir = "."
+contentDir = "content"
 
 [params]
   description = "Technical notes and study log."
@@ -13,17 +13,55 @@ contentDir = "."
     [markup.goldmark.renderer]
       unsafe = true
 
-ignoreFiles = [
-  "^content/",
-  "^docs/",
-  "^imgs/",
-  "^layouts/",
-  "^static/",
-  "^archetypes/",
-  "^data/",
-  "^assets/",
-  "^\\.github/",
-  "^README\\.md$",
-  "^TODO\\.md$",
-  "^나의임시공부파일\\.md$"
-]
+[module]
+  [[module.mounts]]
+    source = "_index.md"
+    target = "content/_index.md"
+  [[module.mounts]]
+    source = "Algorithm"
+    target = "content/Algorithm"
+  [[module.mounts]]
+    source = "Basic_C"
+    target = "content/Basic_C"
+  [[module.mounts]]
+    source = "Basic_C++"
+    target = "content/Basic_C++"
+  [[module.mounts]]
+    source = "Basic_CS"
+    target = "content/Basic_CS"
+  [[module.mounts]]
+    source = "Cloud"
+    target = "content/Cloud"
+  [[module.mounts]]
+    source = "CUDA"
+    target = "content/CUDA"
+  [[module.mounts]]
+    source = "Design_Pattern"
+    target = "content/Design_Pattern"
+  [[module.mounts]]
+    source = "Linux"
+    target = "content/Linux"
+  [[module.mounts]]
+    source = "Math"
+    target = "content/Math"
+  [[module.mounts]]
+    source = "Medium_C++"
+    target = "content/Medium_C++"
+  [[module.mounts]]
+    source = "ML&DNN"
+    target = "content/ML&DNN"
+  [[module.mounts]]
+    source = "Network"
+    target = "content/Network"
+  [[module.mounts]]
+    source = "OpenSource"
+    target = "content/OpenSource"
+  [[module.mounts]]
+    source = "OS"
+    target = "content/OS"
+  [[module.mounts]]
+    source = "Papers"
+    target = "content/Papers"
+  [[module.mounts]]
+    source = "Python"
+    target = "content/Python"
