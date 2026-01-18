@@ -57,29 +57,15 @@ docker공부하자
 TODO
 
 
-2. UV install (형상관리?)쪽 알아두면 좋을듯
-3. MAC id기반으로 pixel per um 분리하기
-4. libtorch 오픈소스 기여 - https://github.com/pytorch/vision/issues/5439
-5. TFEfficientFormerModel 모델로 교체 검토, 속도 비교
-6. MASK RCNN 논문 리뷰 - https://herbwood.tistory.com/20
-
-8. Model optimize - onnxruntime 으로 가속화가능, but quantize등을 하지않으면 용량도 차이없고, 별로빨라지지도않음
 9. ptr 실습
 10. 커널함수 확인
 11. TLS 공부
-12. Lib,DLL 공부
 
-14. rapid csv 고려
 15. cuda 연습
-16. 학습코드 깃에
 
-18. 회귀, BERT, ...
-19. TensorRT에 대해서 학습
-20. cuda side pjt
 21. cv::cuda::GpuMat
 22. template matching 점수 기준에 관해..
-23. 모델 추론속도 -> 지식 증류  + pruning (+onnx) + 양자화
-24. 리팩토링 결과 확실히 문서화
+
 25. multiprocessing이 spawn 방식?
 26. 전략	효과
 27. model.half()	VRAM 사용량 절반
