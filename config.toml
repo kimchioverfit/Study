@@ -17,6 +17,12 @@ ignoreFiles = [
   "^content/",
   "^docs/",
   "^imgs/",
+  "^layouts/",
+  "^static/",
+  "^archetypes/",
+  "^data/",
+  "^assets/",
+  "^\\.github/",
   "^README\\.md$",
   "^TODO\\.md$",
   "^나의임시공부파일\\.md$"
