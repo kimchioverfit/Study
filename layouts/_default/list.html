@@ -1,0 +1,14 @@
+﻿{{ define "main" }}
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="page-intro">{{ . }}</div>{{ end }}
+  </header>
+  <ul class="list">
+    {{ range .Pages.ByTitle }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ with .File }}<span class="meta">{{ .Path }}</span>{{ end }}
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

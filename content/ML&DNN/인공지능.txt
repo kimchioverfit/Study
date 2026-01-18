@@ -1,0 +1,44 @@
+Gradient Descent (경사하강법) -> loss function의 최소값을 찾기위함. 평균제곱오차 (MSE)를 주로 사용. Local minimum에 빠질 가능성이 있음
+
+종류
+1. Batch GD : weight에 대한 편미분. 전체 데이터에 대한 업데이트 한번에. -> optimal 수렴이 안정적, 계산량이 적음. 병렬처리에 유리
+2. Stochastic GD : 데이터 하나에 대한 error gradient. Local optimal에 빠질일이 적음. step에 걸리는 속도가 짧아 수렴속도 빠름. Global optimal을 못찾을 수도 있음.  랜덤인스턴스를 매번 설정
+3. mini batch : 위의 두개 혼합
+
+Logistic Regression -> 이진분류. Sigmoid function이용.
+
+Overfitting -> 학습을 과하게 시켜 테스트케이스에만 오차가 적은경우. 마진이 넓음. 
+해결법 : 사용 feature수를 줄이기, 정규화
+
+Underfitting -> 모델의 표현 부족으로 트레이닝 데이터조차 예측못함. 
+해결법 : 사용 feature증가, 정규화
+
+
+
+MLP(Multi Layer Perceptron)
+입력-은닉-출력층
+은닉층을 통해 좌표평면을 왜곡하는 효과가 있음.
+
+
+Back-Propagation 오류역전파 -> 예측값과 출력값을 비교하고, 오차를 통해 W를 수정. Layer별 노드 기여도에 대한 W를 알 수 있음. 하지만 step function은 미분이 어려워 sigmoid 이용.
+
+ReLU -> 0전까지는 의미가 없다가, 0보다 큰 경우의 기울기는 일정한 형태. 미분하기가좋음
+
+Ensemble 집단지성 -> 여러 predictor에 적용, 결과를 voting함.
+
+
+SVM (Support Vector Machine)  -> 분류를 위한 기준선 정의모델
+
+
+커널트릭 -> 차원변환을 통한 분류 (저차원->고차원) 데이터 튜플을 고차원으로 보낸뒤 벡터의 내적을 계산한것과 내적 후에 고차원으로 보내는 것이 같은 값임을 이용함.
+
+Clustering
+종류 
+1. Gausian Mixture : 가우시안을 합쳐버림. 베이시안 기법을 이용해서 각각의 확률응용. Anomaly dection에 활용됨.
+2. K-means : 각 군에 Centroid를 잡고, 인스턴스에 레이블 후에 centroid 업데이트. 그 다음 centroid이동 후 반복
+
+PCA(Principal Component Analysis) -> 고차원을 선형연관성 없는 저차원으로 바꾸는것. 선형결합을 통해 새로운 변수창출
+
+
+
+마지막으로 하고싶은 말 : 제가 가진 역량을 바탕으로 AI기획직군에 참여하여, IOT기술을 바탕으로빠르게 급성장하는 중국 시장의 MS 확대를 이뤄내고싶습니다.

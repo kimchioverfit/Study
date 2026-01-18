@@ -1,0 +1,58 @@
+# Efficient Graph Based Segmentation 
+
+Felzenszwalb & Huttenlocher Segmentation 라고도 불림
+
+이미지를 그래프(픽셀/슈퍼픽셀을 노드, 유사도를 엣지)로 보고, 
+
+지역적 기준(local criterion)에 따라 영역(region)을 합치면서 세그멘테이션을 수행
+
+픽셀 단위 그래프 분할 → 여러 개의 후보 영역(region proposals)을 얻는 기본 방식.
+
+---
+### Example
+
+
+```math
+A = 
+\begin{bmatrix}
+1 & 2 & 3 & 4 & 5\\
+6 & 7 & 8 & 9 & 10\\
+\cdots & \cdots & \cdots & \cdots  & \cdots \\
+\cdots  & \cdots & \cdots & \cdots & 25\\ 
+\end{bmatrix}
+```
+
+1. 우선 인접 행렬을 획득하도록 하자. 
+    
+    (1,1)에서의 adjacency matrix를 구하면, 
+
+    {2,6}(2,1)에서는 {2, 6, 8, 12} 이런 식으로...
+
+    다 구하면 25 x 25 짜리 인접행렬이 생성된다.
+
+2. 유사도를 측정해보자.
+    
+    ```math
+    W_{ij} = 
+    exp(-(I_i-I_j)^2/2σ^2I)
+    ```
+    계산 과정은 생략
+
+3. Results
+    
+    ```math
+    W_{(1\sim 5)(1\sim5)} = 
+    \begin{bmatrix}
+    0 & 1 & 0 & 0 & 0\\
+    1 & 0 & 0.13 & 0 & 0\\
+    0 & 0 & 1 & 0  & 1 \\
+    \cdots  & \cdots & \cdots & 1 & 0\\ 
+    \end{bmatrix}
+    ```
+    이런 식으로 나온 결과를 보면, 군집화가 되는 것을 볼 수 있다.
+
+    이를 통해서 군집화된 Pixel들을 하나의 Object로서, Segmentation작업할 수 있다.
+
+    유사도를 얻는 함수는 Selective search까지 쓰이고, <u>DNN 부터는 이제 잘 안쓰임</u>.
+
+---

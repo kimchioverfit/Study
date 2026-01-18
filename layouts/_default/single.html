@@ -1,0 +1,7 @@
+﻿{{ define "main" }}
+  <article class="post">
+    <h1>{{ .Title }}</h1>
+    {{ with .File }}<div class="meta">{{ .Path }}</div>{{ end }}
+    <div class="post-body">{{ .Content }}</div>
+  </article>
+{{ end }}

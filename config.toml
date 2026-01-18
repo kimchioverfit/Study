@@ -1,0 +1,14 @@
+﻿baseURL = "https://<username>.github.io/<repo>/"
+languageCode = "ko-kr"
+title = "Study Notes"
+paginate = 20
+
+contentDir = "content"
+
+[params]
+  description = "Technical notes and study log."
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
