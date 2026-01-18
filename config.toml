@@ -1,4 +1,4 @@
-﻿baseURL = "https://<username>.github.io/<repo>/"
+baseURL = "https://kimchioverfit.github.io/Study/"
 languageCode = "ko-kr"
 title = "Study Notes"
 paginate = 20
@@ -12,3 +12,4 @@ contentDir = "content"
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
