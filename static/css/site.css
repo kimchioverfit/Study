@@ -116,16 +116,25 @@ body {
 }
 
 .list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
+  padding: 14px 0;
   border-bottom: 1px solid var(--border);
 }
 
-.list a {
+.list-link {
+  display: inline-block;
+  font-weight: 600;
   text-decoration: none;
   color: var(--ink);
+}
+
+.list-link:hover {
+  color: var(--accent);
+}
+
+.excerpt {
+  margin-top: 6px;
+  color: var(--ink-muted);
+  font-size: 14px;
 }
 
 .meta {
