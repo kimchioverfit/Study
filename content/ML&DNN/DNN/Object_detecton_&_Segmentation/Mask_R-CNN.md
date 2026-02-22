@@ -12,5 +12,5 @@
 3. ROI Heads (Box classification, Box Regression, Mask head)
 + ROI Align (연산 모듈)
 
-이렇게 구성되어 있고, 핵심 기술은 [Faster R-CNN](3.Faster_R-CNN.md) 과 유사하다. 
+이렇게 구성되어 있고, 핵심 기술은 [Faster R-CNN](./Faster_R-CNN.md) 과 유사하다. 
 

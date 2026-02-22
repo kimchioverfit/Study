@@ -2,7 +2,7 @@
 
 ### Main idea
 
-1. [Selective Search](./1.Selective_search.md)로부터 수천 개의 region proposals을 얻음.
+1. [Selective Search](./Selective_search.md)로부터 수천 개의 region proposals을 얻음.
 
 2. 각 proposal을 CNN(당시 AlexNet)에 넣어 feature 추출.
 

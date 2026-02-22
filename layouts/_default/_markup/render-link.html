@@ -1,5 +1,7 @@
 {{- $dest := .Destination -}}
-{{- if strings.HasSuffix $dest ".md" -}}
-  {{- $dest = relref .Page $dest -}}
+{{- if strings.HasSuffix (lower $dest) ".md" -}}
+  {{- with .Page.GetPage $dest -}}
+    {{- $dest = .RelPermalink -}}
+  {{- end -}}
 {{- end -}}
 <a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>

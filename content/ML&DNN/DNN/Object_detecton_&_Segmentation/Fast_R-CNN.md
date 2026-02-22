@@ -3,7 +3,7 @@
 
 Fast R-CNN에 대해 학습하기 전에, R-CNN에서 사용된 Region Proposal 의 기본인
 `Selective Search' 에 해대 알아보자.
-[R-CNN](2.R-CNN.md)
+[R-CNN](./R-CNN.md)
 
 
 ### 어떻게 R-CNN보다 빨라진걸까?

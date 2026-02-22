@@ -29,7 +29,7 @@ X =
 
 ### 2. 벡터화 (Flatten)
 
-['백터화란?'](./Vectorization.md)
+['백터화란?']({{< relref "ML&DNN/DNN/Basic_ML_DL/Vectorization(Flattening).md" >}})
 
 모델 입력으로 사용하기 위해 1D 벡터로 변환:
 

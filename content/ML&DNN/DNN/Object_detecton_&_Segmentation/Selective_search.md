@@ -2,7 +2,7 @@
 
 ### Main idea
 
-[Felzenszwalb & Huttenlocher segmentation](./0.Efficient_Graph_Based_Segmentation.md) 같은 저수준 분할을 여러 스케일에서 수행.
+[Felzenszwalb & Huttenlocher segmentation](./Efficient_Graph_Based_Segmentation.md) 같은 저수준 분할을 여러 스케일에서 수행.
 
 이후 색상, 질감, 크기, 공간적 인접성 등을 기준으로 영역(region)들을 계층적(hierarchical)으로 병합.
 
