@@ -11,7 +11,7 @@ LPCTSTR = Long Pointer to a Constant `TCHAR` String
 
 
 
-[`TCHAR`란? ](./TCHAR.md)
+[`TCHAR`란? ]({{< relref "Medium_C++/TCHAR.md" >}})
 
 ### 🔹 구성 요소
 

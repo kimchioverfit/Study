@@ -38,7 +38,7 @@ data 영역에 저장되기 때문. (“data 영역” = 프로그램 실행 시
 │ Text segment  │  (실행 코드, 리터럴 상수)
 └───────────────┘ 낮은 주소
 
-[참조 프로세스](../Basic_CS/Compiler/process.md)
+[참조 프로세스]({{< relref "Basic_CS/Compiler/process.md" >}})
 
 
 

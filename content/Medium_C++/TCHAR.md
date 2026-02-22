@@ -13,7 +13,7 @@ TCHAR는 Windows 프로그래밍에서 사용하는 문자형 자료형(type) �
 ```
 
 
-[`wchar_t`란?](./wchar_t.md)
+[`wchar_t`란?]({{< relref "Medium_C++/wchar_t.md" >}})
 
 즉,
 
