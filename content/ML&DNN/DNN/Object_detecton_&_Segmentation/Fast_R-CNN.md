@@ -25,7 +25,7 @@ ROI Pooling은 ROI를 지정한 크기의 grid 로 나눈 후 max pooling을 수
 각 채널별로 독립적으로 수행하고, 이같은 방법을 통해 고정된 크기의 feature map을 출력하는 것이 가능하다.
 
 
-<img src="../../../imgs/fast_r-cnn_1.jpg">
+<img src="/Study/imgs/fast_r-cnn_1.jpg">
 
 1) 먼저 원본 이미지를 CNN 모델에 통과시켜서 feature map을 얻는다.
     - 800x800 크기의 이미지를 VGG 모델에 입력해서 8x8 feature map을 얻는다.
@@ -58,7 +58,7 @@ Fast R-CNN 에서는 feature vector를 multi-task loss를 사용해 Classifier�
 
 두 모델을 한 번에 학습시키기 때문에, R-CNN모델과 같이 각 모델을 독립적으로 학습시켜야 하는 번거로움이 없다는 장점이 있음.
 
-<img src="../../../imgs/fast_r-cnn_2.jpg">
+<img src="/Study/imgs/fast_r-cnn_2.jpg.png">
 
 λ : 두 loss 사이의 가중치를 조정하는 balancing hyperparamter
 

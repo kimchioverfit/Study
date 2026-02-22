@@ -3,7 +3,7 @@
 
 딥러닝의 순서
 
-<img src="../../imgs/DNN.png">
+<img src="/Study/imgs/DNN.png">
 
 Input -> Model -> Prediciton -> Loss function -> Gradient descent -> Backpropagation
 
