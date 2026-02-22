@@ -26,11 +26,11 @@
 \mathbf{h} = f(\mathbf{z})
 \]
 
-- \(\mathbf{x}\): 입력 벡터
-- \(\mathbf{W}\): 가중치 행렬 (학습 대상)
-- \(\mathbf{b}\): 바이어스 벡터
-- \(f(\cdot)\): 활성화 함수 (ReLU, Sigmoid, Tanh 등)
-- \(\mathbf{h}\): 히든 레이어의 출력
+- $\mathbf{x}$: 입력 벡터
+- $\mathbf{W}$: 가중치 행렬 (학습 대상)
+- $\mathbf{b}$: 바이어스 벡터
+- $f(\cdot)$: 활성화 함수 (ReLU, Sigmoid, Tanh 등)
+- $\mathbf{h}$: 히든 레이어의 출력
 
 
 ### 입력 벡터 예시 
@@ -77,12 +77,12 @@ w_{m1}x_1 + w_{m2}x_2 + \cdots + w_{mn}x_n + b_m
 z_i = \sum_{j=1}^{n} w_{ij} x_j + b_i \quad \text{for } i = 1, 2, \dots, m
 ```
 
-이 식은 하나의 출력 뉴런 \( z_i \)가 모든 입력 \( x_j \)와 연결되어  
-**가중합 (weighted sum)** 을 수행한 뒤, 편향 \( b_i \)가 더해지는 구조임을 보여줍니다.
+이 식은 하나의 출력 뉴런 $ z_i $가 모든 입력 $ x_j $와 연결되어  
+**가중합 (weighted sum)** 을 수행한 뒤, 편향 $ b_i $가 더해지는 구조임을 보여줍니다.
 
-즉, 입력 벡터 공간 \( \mathbb{R}^n \)이  
-가중치 행렬 \( W \in \mathbb{R}^{m \times n} \)를 통해  
-출력 벡터 공간 \( \mathbb{R}^m \)으로 **사상(mapping)** 되는  
+즉, 입력 벡터 공간 $ \mathbb{R}^n $이  
+가중치 행렬 $ W \in \mathbb{R}^{m \times n} $를 통해  
+출력 벡터 공간 $ \mathbb{R}^m $으로 **사상(mapping)** 되는  
 **선형변환(linear transformation)** 입니다.
 
 
