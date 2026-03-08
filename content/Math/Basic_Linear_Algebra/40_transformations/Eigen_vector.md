@@ -1,6 +1,8 @@
-# eigen vector & eigen value
+# Eigen vector
 
-eigen  vector 란, 행렬이 변환되어도 그대로 유지되는 벡터를 말한다.
+eigen vector란, 행렬이 변환되어도 방향이 유지되는 벡터를 말한다.
+
+대응되는 스케일 값은 [Eigen value](./Eigen_value.md)이다.
 
 ### 예시를 하나 보도록 하자 
 
@@ -115,4 +117,3 @@ v=
 ### 이러한 eigen value & eigen vector를 어디에 쓰는 것일까?
 
 [Eigen decomposition](./Eigen_decomposition.md)
-

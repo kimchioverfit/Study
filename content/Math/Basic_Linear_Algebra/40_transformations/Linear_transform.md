@@ -69,6 +69,11 @@ $$
 - **회전**, **스케일링**, **반사**, **전단(shear)** 등은 선형 변환
 - **이동(translation)**은 선형 변환이 아님 (원점을 이동시키므로)
 
+관련 예시:
+
+- [Rotation Transformation](./Rotation_transformation.md)
+- [Reflection Transformation](./Reflection_transformation.md)
+
 ---
 
 ## 🔧 구성 요소
@@ -100,4 +105,3 @@ $$
 | 행렬 표현 | 항상 가능 (고정 기준 기준) |
 | 예시 | 회전, 스케일, 반사 등 |
 | 비선형 예시 | 이동, 제곱, 사인 등 |
-
