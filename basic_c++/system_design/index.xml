@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>system design on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_c++/system_design/</link><description>Recent content in system design on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_c++/system_design/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/system_design/plug-in_system/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/system_design/plug-in_system/</guid><description>&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 함수 포인터 타입 정의
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;typedef&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;int&lt;/span&gt; (&lt;span style="color:#f92672"&gt;*&lt;/span&gt;PluginFunc)(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;HMODULE dll &lt;span style="color:#f92672"&gt;=&lt;/span&gt; LoadLibraryA(&lt;span style="color:#e6db74"&gt;&amp;#34;plugin.dll&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PluginFunc plugin &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (PluginFunc)GetProcAddress(dll, &lt;span style="color:#e6db74"&gt;&amp;#34;doWork&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; result &lt;span style="color:#f92672"&gt;=&lt;/span&gt; plugin(&lt;span style="color:#ae81ff"&gt;42&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;FreeLibrary(dll);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;런타임에 로딩된 함수를 포인터로 호출 가능.&lt;/p&gt;
+&lt;p&gt;사용하는 경우는 아래와 같음.&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;상황&lt;/th&gt;
+					&lt;th&gt;이유&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;플러그인 구조&lt;/td&gt;
+					&lt;td&gt;새 기능 추가 시 exe를 안 바꾸고 DLL만 교체 가능&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;런타임 로딩&lt;/td&gt;
+					&lt;td&gt;성능 또는 라이선스 이유로 일부 기능만 조건부 로딩&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;리플렉션 비슷한 구조&lt;/td&gt;
+					&lt;td&gt;함수 이름만 알고 실행 가능&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</description></item></channel></rss>

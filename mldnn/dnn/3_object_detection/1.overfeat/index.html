@@ -1,0 +1,88 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/3_object_detection/>Object Detection</a></div><h1>1.Overfeat</h1></header><div class="doc-body post-body"><h1 id=overfeat-2013>OverFeat (2013)</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/1312.6229>OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks</a>
+— Sermanet et al., ICLR 2014</p><blockquote><p>Sermanet et al., 2013. Region proposal 없이 <strong>CNN을 이미지 전체에 sliding window처럼 돌려서, 분류(classification)·위치추정(localization)·검출(detection)을 하나의 통합 프레임워크로 동시에 수행</strong>한 초기 모델. ILSVRC 2013 localization 트랙 우승작.
+시기상 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+보다 먼저 나왔고 접근 방식도 정반대(“이미지 전체를 훑기” vs “후보 영역만 골라내기”)다. 여기서 쓰인 <strong>&ldquo;FC layer를 conv로 바꿔서 통째로 한 번에 처리&rdquo;</strong> 트릭은 이후 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/>Faster R-CNN의 RPN</a>
+, SSD/YOLO 같은 One-stage detector의 뿌리와 맞닿아 있다.</p></blockquote><h2 id=-1-이-논문-이전-상황--sliding-window는-원래-못-쓰는-방법이었다>🔷 1. 이 논문 이전 상황 — Sliding Window는 원래 &ldquo;못 쓰는&rdquo; 방법이었다</h2><p>물체 검출의 가장 단순한 발상은 이렇다.</p><pre tabindex=0><code>이미지 위에서 작은 창(window)을 조금씩 옮겨가며, 그 창 안에 물체가 있는지 매번 분류기로 확인</code></pre><pre tabindex=0><code>[이미지]
+┌─────────────────────────┐
+│ [□]→[□]→[□]→[□]→ ...     │   ← 창을 한 칸씩 옮기며
+│ 여러 크기(scale)로도 반복    │      전부 분류기에 통과시켜야 함
+└─────────────────────────┘</code></pre><p>문제는 <strong>창의 개수가 위치 × 스케일 조합으로 수만~수십만 개</strong>가 된다는 점이다. 이걸 창 하나하나마다 CNN에 새로 통과시키면 계산량이 감당이 안 된다 — <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+이 굳이 Selective Search로 후보를 ~2000개까지 미리 걸러낸 것도 바로 이 &ldquo;다 훑으면 너무 느리다"는 문제 때문이다.</p><p>OverFeat의 질문: <strong>&ldquo;굳이 창마다 따로 돌려야 하나? 한 번에 다 계산할 방법은 없을까?&rdquo;</strong></p><h2 id=-2-핵심-아이디어--fc-layer를-11-conv로-바꿔서-통째로-한-번에>🔷 2. 핵심 아이디어 — FC layer를 1×1 Conv로 바꿔서 &ldquo;통째로 한 번에&rdquo;</h2><p><a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>CNN</a>
+구조를 떠올려보면, 보통 conv layer들로 특징을 뽑은 뒤 마지막에 <strong>FC(fully connected) layer</strong>로 분류 결과를 낸다. FC layer는 입력 크기가 고정되어 있어야 하고, 한 번에 하나의 결과만 낸다.</p><p>OverFeat의 트릭: <strong>이 FC layer를 1×1 conv로 재해석</strong>한다.</p><pre tabindex=0><code>[기존 방식]                              [OverFeat 방식]
+
+ 고정 크기 입력(예: 224×224)              임의 크기 입력(예: 큰 이미지 그대로)
+        │                                        │
+   conv layers                              conv layers
+        │                                        │
+  Flatten → FC layer                    FC를 1×1 conv로 재해석
+        │                                        │
+   결과 1개                          위치별 결과가 격자(grid)로 한꺼번에 출력
+   (창 하나에 대한 답)                  (모든 &#34;창&#34;에 대한 답을 한 번의 forward로)</code></pre><ul><li>FC layer의 가중치 자체는 1×1 conv 필터와 수학적으로 동일하게 표현할 수 있다 — <strong>파라미터를 바꾸는 게 아니라, 같은 연산을 다르게 재해석하는 것</strong></li><li>이렇게 바꾸면 네트워크가 <strong>입력 이미지 크기에 더 이상 얽매이지 않는다.</strong> 큰 이미지를 그대로 넣으면, conv 연산이 슬라이딩하며 훑고 지나간 것과 똑같은 효과로 <strong>여러 &ldquo;창"에 대한 결과가 격자 형태로 한꺼번에</strong> 나온다</li><li>핵심 이득: 창들끼리 겹치는 영역의 연산이 <strong>자동으로 재사용</strong>된다 (conv 연산 자체가 원래 이런 식으로 동작하니까). 창 하나하나를 처음부터 다시 계산하지 않아도 된다는 뜻</li><li>이 &ldquo;FC를 conv로 바꿔서 이미지 전체를 한 번에 처리"하는 아이디어는 이후 semantic segmentation의 FCN, 그리고 <a class=inline-link href=./4.Faster_R-CNN.md#-4-rpn%ec%9d%98-%ea%b5%ac%ec%a1%b0--%ec%9e%91%ec%9d%80-cnn-%ed%95%98%eb%82%98%ea%b0%80-%eb%91%90-%ea%b0%80%ec%a7%80%eb%a5%bc-%eb%8f%99%ec%8b%9c%ec%97%90-%ec%98%88%ec%b8%a1>Faster R-CNN의 RPN</a>
+이 conv feature map 위에서 슬라이딩하는 방식에도 그대로 이어진다</li></ul><h2 id=-3-multi-scale--여러-배율로-돌려서-크기가-다른-물체까지-잡기>🔷 3. Multi-scale — 여러 배율로 돌려서 크기가 다른 물체까지 잡기</h2><p>물체는 사진마다 크기가 제각각이다. 하나의 스케일만 보면 너무 작거나 너무 큰 물체는 놓치기 쉽다.</p><pre tabindex=0><code>원본 이미지
+   ├─► 작게 리사이즈  → 네트워크 통과 → 예측 결과 A
+   ├─► 중간 크기      → 네트워크 통과 → 예측 결과 B
+   └─► 크게 리사이즈  → 네트워크 통과 → 예측 결과 C
+
+              A + B + C를 종합 → 최종 예측</code></pre><ul><li>같은 이미지를 <strong>여러 스케일로 리사이즈</strong>해서 각각 네트워크에 통과시키고, 그 결과들을 나중에 합친다</li><li>스케일마다 &ldquo;잘 잡히는 물체 크기"가 다르기 때문에, 여러 스케일을 합치면 다양한 크기의 물체를 놓치지 않고 잡을 수 있다</li></ul><h2 id=-4-세-가지-task를-한-프레임워크에서--classification--localization--detection>🔷 4. 세 가지 task를 한 프레임워크에서 — Classification + Localization + Detection</h2><p>OverFeat은 같은 <a class=inline-link href=/Study/mldnn/basics/10_components/backbone/>backbone</a>
+(conv feature 추출부)을 공유하는 <strong>두 개의 head</strong>로 세 가지 task를 전부 처리한다.</p><pre tabindex=0><code>                    conv feature map (공유)
+                          │
+            ┌─────────────┴─────────────┐
+            ▼                           ▼
+    Classification head           Regression head
+   &#34;여기에 어떤 클래스의        &#34;물체의 정확한 위치는
+    물체가 있는가?&#34;              (x, y, w, h) 얼마인가?&#34;</code></pre><table><thead><tr><th>Task</th><th>하는 일</th></tr></thead><tbody><tr><td><strong>Classification</strong></td><td>이미지(또는 위치)에 어떤 클래스가 있는지 예측</td></tr><tr><td><strong>Localization</strong></td><td>그 물체의 bounding box 좌표를 회귀(regression)로 예측</td></tr><tr><td><strong>Detection</strong></td><td>위 둘을 합쳐서 &ldquo;어디에 무엇이 있는지"까지 한 번에 출력</td></tr></tbody></table><ul><li>Classification head와 Regression head가 <strong>같은 conv feature를 공유</strong>하고, 마지막 부분만 갈라진다 — 이후 <a class=inline-link href=./3.Fast_R-CNN.md#2-multi-task-loss>Fast R-CNN의 multi-task loss</a>
+나 <a class=inline-link href=./4.Faster_R-CNN.md#-4-rpn%ec%9d%98-%ea%b5%ac%ec%a1%b0--%ec%9e%91%ec%9d%80-cnn-%ed%95%98%eb%82%98%ea%b0%80-%eb%91%90-%ea%b0%80%ec%a7%80%eb%a5%bc-%eb%8f%99%ec%8b%9c%ec%97%90-%ec%98%88%ec%b8%a1>Faster R-CNN의 RPN</a>
+도 &ldquo;하나의 feature를 공유해서 분류+회귀를 동시에 예측"하는 같은 설계 철학을 따른다</li><li>하나의 학습된 네트워크로 세 가지 대회 트랙(classification/localization/detection)에 모두 출전할 수 있었다는 것이 당시로서는 상당히 새로운 접근이었다</li></ul><h2 id=-5-greedy-box-merging--겹치는-예측들을-하나로-합치기>🔷 5. Greedy Box Merging — 겹치는 예측들을 하나로 합치기</h2><p>여러 위치, 여러 스케일에서 쏟아지는 예측 결과에는 <strong>같은 물체를 가리키는 중복된 박스</strong>가 많다. 이를 하나로 정리하는 후처리가 필요하다.</p><pre tabindex=0><code>여러 위치·스케일에서 나온 겹치는 박스들
+   [□] [□] [□]
+     [□] [□]         →  greedy하게 누적·병합  →  최종 박스 1개
+       [□]</code></pre><ul><li>예측된 박스들을 <strong>신뢰도(confidence)</strong> 순으로 보면서, 충분히 겹치는(가까운) 박스들끼리는 좌표를 평균 내듯 누적·병합해나가는 방식</li><li>이후 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+계열 이후 detection에서 표준으로 자리잡은 <strong>NMS(Non-Maximum Suppression)</strong> 와 목적은 같다(&ldquo;중복된 박스를 하나로 정리&rdquo;) — 다만 OverFeat은 NMS처럼 겹치는 박스를 단순히 억제/제거하는 대신, <strong>여러 박스의 정보를 합쳐서(merge) 더 정확한 박스를 만들어내는 방식</strong>을 썼다는 점이 차이</li></ul><h2 id=-6-의의와-한계>🔷 6. 의의와 한계</h2><p><strong>의의</strong>:</p><ul><li><strong>분류·위치추정·검출을 하나의 CNN으로 통합</strong>한 초기 사례로, ILSVRC 2013 localization 트랙에서 우승</li><li>&ldquo;FC를 conv로 바꿔 이미지 전체를 한 번에 처리한다"는 아이디어는 이 논문만의 것으로 끝나지 않고, 이후 segmentation(FCN)과 detection(<a class=inline-link href=/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/>Faster R-CNN의 RPN</a>
+, SSD, YOLO) 전반에 걸쳐 반복적으로 재사용되는 핵심 개념이 됐다</li></ul><p><strong>한계</strong>:</p><ul><li>이미지를 촘촘히 훑는 sliding window 방식은, 물체가 없는 배경 위치까지 굉장히 많이 평가하게 만든다 — 분류기가 &ldquo;이 중 극소수만 진짜 물체"인 상황에서 학습·추론해야 해서 비효율적이었다</li><li>곧이어 등장한 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+이 Selective Search로 <strong>후보 영역을 미리 ~2000개로 걸러내는 방식</strong>을 들고나오면서 detection 정확도(mAP)에서 크게 앞서, 한동안 <strong>region proposal 기반 접근(two-stage)</strong> 이 대세가 됐다</li><li>하지만 이후 SSD·YOLO 같은 <strong>One-stage detector</strong>들이 다시 &ldquo;이미지 전체를 촘촘히 훑어 한 번에 예측"하는 방향으로 돌아오면서, OverFeat의 아이디어가 재조명됐다 — 결국 OverFeat은 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN 계열(two-stage)</a>
+과 One-stage 계열 양쪽 모두의 뿌리에 걸쳐 있는 초기 모델로 평가된다</li></ul><h2 id=-7-정리--한-문장씩>🔷 7. 정리 — 한 문장씩</h2><table><thead><tr><th>질문</th><th>답</th></tr></thead><tbody><tr><td>무엇을 없앴나</td><td>창(window)마다 CNN을 따로 돌리는 반복 연산</td></tr><tr><td>어떻게 없앴나</td><td>FC layer를 1×1 conv로 바꿔 이미지 전체를 한 번의 forward로 처리</td></tr><tr><td>크기가 다른 물체는 어떻게</td><td>이미지를 여러 스케일로 리사이즈해서 각각 돌리고 결과를 합침</td></tr><tr><td>세 가지 task를 어떻게 통합했나</td><td>같은 conv feature 위에 classification head + regression head</td></tr><tr><td>중복 예측은 어떻게 처리</td><td>greedy box merging (겹치는 박스들을 누적·병합)</td></tr><tr><td>왜 이후 R-CNN에 밀렸나</td><td>배경 위치를 너무 많이 평가해 비효율적 — region proposal이 이 문제를 해결</td></tr><tr><td>왜 다시 중요해졌나</td><td>SSD/YOLO 같은 One-stage detector, Faster R-CNN의 RPN이 같은 &ldquo;conv로 슬라이딩&rdquo; 아이디어를 계승</td></tr></tbody></table><h2 id=참고>참고</h2><ul><li>관련 문서: <a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/2_backbone/2.alexnet/>AlexNet</a>
+· <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/>Faster R-CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/vision_overview/>Vision Overview</a></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

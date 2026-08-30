@@ -1,0 +1,56 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/amodal_segmentation/>Amodal Segmentation</a></div><h1>5.Self Supervised Scene De Occlusion</h1></header><div class="doc-body post-body"><h1 id=self-supervised-scene-de-occlusion>Self-Supervised Scene De-Occlusion</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/2004.02788>Self-Supervised Scene De-occlusion</a>
+— Zhan et al., CVPR 2020</p><p>Xiaohang Zhan et al., <strong>CVPR 2020</strong>. 결론부터 아주 쉽게: <strong>&ldquo;사람이 라벨링한 amodal 정답이 하나도 없어도, 물체를 스스로 인위적으로 가렸다가 복원하는 연습을 반복시켜서 &lsquo;가려진 부분을 상상하는 능력&rsquo;을 학습시킨 논문.&rdquo;</strong> <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/>COCOA</a>
+, <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/>KINS</a>
+처럼 사람이 일일이 라벨링하는 비용 문제를 근본적으로 우회한, 이 계보에서 <strong>&ldquo;라벨링 없는 학습(self-supervised)&rdquo;</strong> 방향의 대표작이다.</p><blockquote><p>전체 계보 속 위치는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/>Amodal Segmentation 개요</a>
+참고.</p></blockquote><h2 id=1-이-논문이-풀려는-문제--라벨링-비용>1. 이 논문이 풀려는 문제 — 라벨링 비용</h2><p>지금까지의 흐름을 되짚어보면:</p><ul><li><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/>Zhu et al.(2017)</a>
+: 사람이 5,000장에 직접 amodal 마스크를 그림</li><li><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/>Qi et al.(2019)</a>
+: 자율주행 도메인까지 확장했지만 역시 사람이 직접 라벨링</li></ul><p><strong>&ldquo;안 보이는 부분의 정답"을 사람이 그리는 건 원래 쉬운 일이 아니다</strong> (본인도 안 보이는 걸 정확히 그려야 하니까). 데이터셋을 더 키우려면 이 라벨링 비용이 계속 걸림돌이 된다. 이 논문의 질문: <strong>&ldquo;진짜 정답 없이, 학습 데이터 스스로 정답을 만들어내게 할 수는 없을까?&rdquo;</strong></p><h2 id=2-핵심-아이디어--스스로-가리고-스스로-복원-연습>2. 핵심 아이디어 — 스스로 가리고, 스스로 복원 연습</h2><p>발상 자체는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/>Li & Malik(2016)</a>
+의 &ldquo;인위적으로 가려서 학습 쌍을 만든다"는 아이디어와 뿌리가 같지만, 훨씬 정교한 <strong>자기지도학습(self-supervised) 루프</strong>로 발전시켰다.</p><pre tabindex=0><code>① 안 가려진 물체 A(정답으로 취급 가능)를 하나 고른다
+② 다른 물체 B의 모양으로 A의 일부를 인위적으로 덮어 &#34;가려진 것처럼&#34; 만든다
+③ 모델에게 &#34;가려진 A&#34;만 보여주고, 원래 A의 온전한 모습(모양+내용)을 복원하도록 시킨다
+④ 정답(원래 A)과 비교해서 학습 — 이 정답은 처음부터 우리가 만들었으니 무료로 계속 생성 가능</code></pre><p>이 과정을 실제로 수행하는 두 개의 네트워크가 있다:</p><table><thead><tr><th>구성 요소</th><th>복원하는 것</th></tr></thead><tbody><tr><td><strong>PCNet-M</strong> (Mask)</td><td>가려진 부분의 <strong>모양(마스크)</strong> 을 복원</td></tr><tr><td><strong>PCNet-C</strong> (Content)</td><td>가려진 부분의 <strong>실제 이미지 내용(질감, 색)</strong> 까지 복원</td></tr></tbody></table><p>&ldquo;PCNet"의 P는 <strong>Partial Completion</strong>(부분적으로 가려진 것을 완성한다)의 줄임말이다.</p><h2 id=3-보너스--가림-순서depth-ordering까지-자동으로-추론>3. 보너스 — 가림 순서(depth ordering)까지 자동으로 추론</h2><p>이 논문은 amodal 모양 복원뿐 아니라, <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/>Zhu et al.(2017)</a>
+이 사람이 직접 라벨링했던 <strong>&ldquo;누가 누구를 가리는지"의 순서</strong>까지 <strong>점진적으로(progressive) 추론</strong>해서 알아낸다 — 역시 별도의 순서 라벨 없이.</p><pre tabindex=0><code>[순서를 모르는 뒤죽박죽 상태] → 점진적 추론 → [A가 B를 가림, B가 C를 가림 ... 순서 복원]
+                                              → 순서를 알면 각 물체의 amodal 모양도 더 잘 복원됨</code></pre><h2 id=4-의의와-활용>4. 의의와 활용</h2><ul><li><strong>사람이 만든 정답 없이도, 완전 지도학습(fully-supervised) 방법과 맞먹는 성능</strong>을 냈다는 것이 가장 큰 성과 — &ldquo;라벨링 비용&rdquo; 문제의 근본적인 해법 제시</li><li>활용처가 amodal segmentation 자체를 넘어선다:<ul><li><strong>이미지 편집/재구성</strong>: 가려진 물체를 꺼내서 위치를 옮기거나, 가리고 있던 물체를 지우고 원래 모습을 채워 넣는 등 고품질 이미지 조작이 가능해짐</li><li><strong>기존 데이터셋 자동 변환</strong>: 사람이 손으로 라벨링해야 했던 &ldquo;modal → amodal 변환"을 이 프레임워크가 <strong>자동으로 수행</strong>할 수 있음 — 다른 데이터셋의 라벨링 비용까지 줄여준다</li></ul></li></ul><h2 id=5-한계>5. 한계</h2><p>self-supervised 학습도 결국 &ldquo;물체를 인위적으로 합성해서 가리는&rdquo; 방식에 기반하므로, 실제 세상의 모든 가림 패턴을 완벽히 대변하진 못한다. 그리고 이 접근도 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/6.bcnet/>BCNet(2021)</a>
+이 강조하는 <strong>&ldquo;가리는 물체와 가려지는 물체를 구조적으로 분리해서 모델링&rdquo;</strong> 하는 관점과는 결이 다르다 — 두 흐름은 서로 보완적으로 발전한다.</p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

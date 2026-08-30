@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VIT on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/</link><description>Recent content in VIT on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/efficientformer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/efficientformer/</guid><description>&lt;h1 id="efficientformer--vision-transformers-at-mobilenet-speed-2022"&gt;EfficientFormer — Vision Transformers at MobileNet Speed (2022)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2206.01191"&gt;EfficientFormer: Vision Transformers at MobileNet Speed&lt;/a&gt;
+ — Yanyu Li et al. (Snap Inc. &amp;amp; Northeastern University), NeurIPS 2022 · &lt;a class="inline-link" href="https://github.com/snap-research/EfficientFormer"&gt;공식 구현&lt;/a&gt;
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;ViT가 모바일에서 느린 진짜 이유를 실제 기기에서 하나씩 측정해서 찾아내고, 그 병목들을 전부 걷어낸 순수 트랜스포머 구조를 만든 논문.&amp;rdquo;&lt;/strong&gt;
+그 결과 &lt;strong&gt;EfficientFormer-L1이 iPhone 12에서 1.6 ms에 ImageNet top-1 79.2%&lt;/strong&gt; — &lt;a class="inline-link" href="https://arxiv.org/abs/1801.04381"&gt;MobileNetV2&lt;/a&gt;
+×1.4와 &lt;strong&gt;같은 속도로 4.5%p 더 정확&lt;/strong&gt;하다.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/transformer_for_image_recognition_at_scale/"&gt;ViT&lt;/a&gt;
+와 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Attention Is All You Need&lt;/a&gt;
+의 self-attention 개념을 먼저 보고 오면 읽기 수월하다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/transformer_for_image_recognition_at_scale/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/transformer_for_image_recognition_at_scale/</guid><description>&lt;h1 id="vit--an-image-is-worth-16x16-words-2020"&gt;ViT — An Image is Worth 16x16 Words (2020)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2010.11929"&gt;An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale&lt;/a&gt;
+ — Dosovitskiy et al., ICLR 2021&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;이미지를 16×16 패치로 잘라 토큰처럼 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Transformer&lt;/a&gt;
+에 그대로 넣어, CNN 없이 이미지 분류를 수행한 모델.
+모바일 지연시간 관점의 후속 개선은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/efficientformer/"&gt;EfficientFormer&lt;/a&gt;
+ 참고.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;(본문 작성 예정 — 현재는 논문 링크만 정리해 둔 상태)&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>10 components on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/</link><description>Recent content in 10 components on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/backbone/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/backbone/</guid><description>&lt;h1 id="backbone"&gt;Backbone&lt;/h1&gt;
+&lt;p&gt;주된 feature extractor&lt;/p&gt;
+&lt;p&gt;일반적으로 CNN, Transformer 기반임.&lt;/p&gt;
+&lt;p&gt;학습이 잘 된 사전 학습 가중치를 이용하기도 한다.&lt;/p&gt;
+&lt;p&gt;예를 들어, resnet50_fpn 모델을 로드했다고 가정하자.&lt;/p&gt;
+&lt;p&gt;이 모델의 정확도를 향상하기 위해서는 아래와 같은 방법이 요구된다&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;백본 교체&lt;/li&gt;
+&lt;li&gt;데이터셋 품질 향상&lt;/li&gt;
+&lt;li&gt;데이터 증강&lt;/li&gt;
+&lt;li&gt;하이퍼 파라미터 튜닝&lt;/li&gt;
+&lt;li&gt;손실 함수 개선&lt;/li&gt;
+&lt;li&gt;ROI 조정&lt;/li&gt;
+&lt;li&gt;Pretrain, fine tuning 전략&lt;/li&gt;
+&lt;li&gt;Post-processing&lt;/li&gt;
+&lt;li&gt;Ensemble 기법 (여러 모델 예측 결과 조합)&lt;/li&gt;
+&lt;li&gt;학습 스케쥴 및 에포크 조절&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;등등의 방법이 있는데, 1을 적용해보자&lt;/p&gt;
+&lt;p&gt;resnet50_fpn 모델은 기본적으로 50 layer가 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/decoder/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/decoder/</guid><description>&lt;p&gt;s&lt;/p&gt;
+&lt;h1 id="-딥러닝에서-디코더decoder란"&gt;🧠 딥러닝에서 디코더(Decoder)란?&lt;/h1&gt;
+&lt;p&gt;디코더는 딥러닝 모델에서 **잠재 벡터(latent vector)**를 받아서, 이를 기반으로 &lt;strong&gt;원하는 출력 형태로 복원 또는 변환&lt;/strong&gt;하는 부분.&lt;br&gt;
+인코더가 입력을 요약하는 역할이라면, 디코더는 &lt;strong&gt;그 요약된 정보를 풀어내는 역할&lt;/strong&gt;을 한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-디코더의-위치-및-역할"&gt;✅ 디코더의 위치 및 역할&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;flowchart LR
+ I[&amp;#34;Input&amp;#34;] --&amp;gt; E[&amp;#34;Encoder&amp;#34;] --&amp;gt; Z[&amp;#34;Latent vector z&amp;#34;] --&amp;gt; D[&amp;#34;Decoder&amp;#34;] --&amp;gt; O[&amp;#34;Output&amp;#34;]&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;입력(Input)&lt;/strong&gt;: 원시 데이터 (이미지, 텍스트 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;인코더(Encoder)&lt;/strong&gt;: 입력을 잠재 벡터 z로 변환&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;디코더(Decoder)&lt;/strong&gt;: z로부터 출력 생성&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;출력(Output)&lt;/strong&gt;: 예측된 결과 (복원 이미지, 번역된 문장 등)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-예시-autoencoder"&gt;📦 예시: Autoencoder&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;flowchart TD
+ A[&amp;#34;Latent vector z&amp;#34;] --&amp;gt; B[&amp;#34;Linear → ReLU&amp;lt;br/&amp;gt;디코더 hidden layer&amp;#34;] --&amp;gt; C[&amp;#34;Linear → Sigmoid&amp;lt;br/&amp;gt;디코더 출력&amp;#34;] --&amp;gt; D[&amp;#34;784차원 복원된 이미지 벡터&amp;#34;]&lt;/pre&gt;&lt;p&gt;수학적으로:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/encoder/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/encoder/</guid><description>&lt;h1 id="-딥러닝에서-인코더encoder란"&gt;🧠 딥러닝에서 인코더(Encoder)란?&lt;/h1&gt;
+&lt;p&gt;인코더는 딥러닝 모델에서 &lt;strong&gt;입력 데이터를 의미 있는 잠재 표현(latent representation)으로 압축&lt;/strong&gt;하는 부분을 말한다.&lt;br&gt;
+보통 여러 개의 **히든 레이어(hidden layers)**로 구성되어 있으며, 입력의 특징을 추출하고 요약하는 역할을 한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-인코더의-위치-및-역할"&gt;✅ 인코더의 위치 및 역할&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;flowchart LR
+ I[&amp;#34;Input&amp;#34;] --&amp;gt; E[&amp;#34;Encoder&amp;#34;] --&amp;gt; Z[&amp;#34;Latent vector z&amp;#34;] --&amp;gt; D[&amp;#34;Decoder&amp;#34;] --&amp;gt; O[&amp;#34;Output&amp;#34;]&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;입력(Input)&lt;/strong&gt;: 원시 데이터 (이미지, 텍스트, 음성 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;인코더(Encoder)&lt;/strong&gt;: 입력을 의미 있는 벡터 z로 변환&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;잠재 벡터 z&lt;/strong&gt;: 입력의 핵심 정보만 담긴 압축 표현&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/decoder/"&gt;디코더(Decoder)&lt;/a&gt;
+: 벡터 z로부터 출력 복원 또는 생성&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-예시-autoencoder"&gt;📦 예시: Autoencoder&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;flowchart TD
+ A[&amp;#34;784차원 이미지 벡터&amp;#34;] --&amp;gt; B[&amp;#34;Linear → ReLU&amp;lt;br/&amp;gt;인코더 hidden layer&amp;#34;] --&amp;gt; C[&amp;#34;Linear → ReLU&amp;lt;br/&amp;gt;인코더 hidden layer&amp;#34;] --&amp;gt; D[&amp;#34;Latent vector z&amp;lt;br/&amp;gt;인코더 출력&amp;#34;]&lt;/pre&gt;&lt;p&gt;수학적으로:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/head/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/head/</guid><description>&lt;h1 id="head"&gt;Head&lt;/h1&gt;
+&lt;p&gt;최종 Task를 수행하는 모듈&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Classfication&lt;/li&gt;
+&lt;li&gt;Regression&lt;/li&gt;
+&lt;li&gt;Segmentation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;보통 여러개의 FC layer 또는 Conv layer로 구성.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/hidden_layer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/hidden_layer/</guid><description>&lt;h1 id="--hidden-layer"&gt;✅ Hidden layer&lt;/h1&gt;
+&lt;h2 id="-1-히든-레이어란"&gt;🔷 1. 히든 레이어란?&lt;/h2&gt;
+&lt;h3 id="딥러닝의-가장-핵심적인-부분"&gt;&lt;u&gt;딥러닝의 가장 핵심적인 부분&lt;/u&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;입력층(Input Layer)&lt;/strong&gt; 과 &lt;strong&gt;출력층(Output Layer)&lt;/strong&gt; 사이&lt;/p&gt;
+&lt;p&gt;모델의 학습 가능한 파라미터가 대부분 존재하는 곳&lt;/p&gt;
+&lt;p&gt;세부적으로 모듈화 하여 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/backbone/"&gt;backbone&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/neck/"&gt;neck&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/head/"&gt;head&lt;/a&gt;
+ 이런식으로 나누기도 한다.&lt;/p&gt;
+&lt;p&gt;여러개의 히든레이어로 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/encoder/"&gt;&amp;lsquo;인코더(Encoder)&amp;rsquo;&lt;/a&gt;
+를 구성 가능&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-2-수학적-구조"&gt;🔷 2. 수학적 구조&lt;/h2&gt;
+&lt;p&gt;하나의 히든 레이어는 아래와 같은 &lt;strong&gt;선형변환 + 비선형변환&lt;/strong&gt;으로 구성된다:&lt;/p&gt;
+\[
+\mathbf{z} = \mathbf{W} \cdot \mathbf{x} + \mathbf{b}
+\]&lt;p&gt;
+&lt;/p&gt;
+\[
+\mathbf{h} = f(\mathbf{z})
+\]&lt;ul&gt;
+&lt;li&gt;$\mathbf{x}$: 입력 벡터&lt;/li&gt;
+&lt;li&gt;$\mathbf{W}$: 가중치 행렬 (학습 대상)&lt;/li&gt;
+&lt;li&gt;$\mathbf{b}$: 바이어스 벡터&lt;/li&gt;
+&lt;li&gt;$f(\cdot)$: 활성화 함수 (ReLU, Sigmoid, Tanh 등)&lt;/li&gt;
+&lt;li&gt;$\mathbf{h}$: 히든 레이어의 출력&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="입력-벡터-예시"&gt;입력 벡터 예시&lt;/h3&gt;
+&lt;div class="math-block"&gt;\[x = 
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}
+\in \mathbb{R}^{n}\]&lt;/div&gt;&lt;h3 id="가중치-행렬-예시"&gt;가중치 행렬 예시&lt;/h3&gt;
+&lt;div class="math-block"&gt;\[W =
+\begin{bmatrix}
+w_{11} &amp; w_{12} &amp; \cdots &amp; w_{1n} \\
+w_{21} &amp; w_{22} &amp; \cdots &amp; w_{2n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+w_{m1} &amp; w_{m2} &amp; \cdots &amp; w_{mn}
+\end{bmatrix}
+\in \mathbb{R}^{m \times n}\]&lt;/div&gt;&lt;h3 id="선형변환-계산식"&gt;선형변환 계산식&lt;/h3&gt;
+&lt;div class="math-block"&gt;\[z = Wx + b =
+\begin{bmatrix}
+w_{11}x_1 + w_{12}x_2 + \cdots + w_{1n}x_n + b_1 \\
+w_{21}x_1 + w_{22}x_2 + \cdots + w_{2n}x_n + b_2 \\
+\vdots \\
+w_{m1}x_1 + w_{m2}x_2 + \cdots + w_{mn}x_n + b_m
+\end{bmatrix}\]&lt;/div&gt;&lt;h2 id="출력-벡터의-각-원소-표현"&gt;출력 벡터의 각 원소 표현&lt;/h2&gt;
+&lt;div class="math-block"&gt;\[z_i = \sum_{j=1}^{n} w_{ij} x_j + b_i \quad \text{for } i = 1, 2, \dots, m\]&lt;/div&gt;&lt;p&gt;이 식은 하나의 출력 뉴런 $ z_i $가 모든 입력 $ x_j $와 연결되어&lt;br&gt;
+&lt;strong&gt;가중합 (weighted sum)&lt;/strong&gt; 을 수행한 뒤, 편향 $ b_i $가 더해지는 구조임을 보여줍니다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/hidden_layer_sample/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/hidden_layer_sample/</guid><description>&lt;h1 id="hidden-layer-sample"&gt;Hidden layer sample&lt;/h1&gt;
+&lt;h3 id="1채널짜리-바이너리-이미지의-수학적-표현"&gt;1채널짜리 바이너리 이미지의 수학적 표현&lt;/h3&gt;
+&lt;hr&gt;
+&lt;h2 id="-수학적-표현"&gt;📌 수학적 표현&lt;/h2&gt;
+&lt;h3 id="1-행렬-형태"&gt;1. 행렬 형태&lt;/h3&gt;
+&lt;p&gt;이미지가 $ H \times W $ 크기일 때:&lt;/p&gt;
+&lt;div class="math-block"&gt;\[X \in \{0, 1\}^{H \times W}\]&lt;/div&gt;&lt;p&gt;예시 (28×28 이미지):&lt;/p&gt;
+&lt;div class="math-block"&gt;\[X =
+\begin{bmatrix}
+0 &amp; 1 &amp; 0 &amp; \cdots \\
+1 &amp; 1 &amp; 0 &amp; \cdots \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots
+\end{bmatrix}
+\in \{0, 1\}^{28 \times 28}\]&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="2-벡터화-flatten"&gt;2. 벡터화 (Flatten)&lt;/h3&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/vectorization_flattening/"&gt;&amp;lsquo;백터화란?&amp;rsquo;&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;모델 입력으로 사용하기 위해 1D 벡터로 변환:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/neck/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/neck/</guid><description>&lt;h1 id="neck"&gt;Neck&lt;/h1&gt;
+&lt;p&gt;선택적 사항&lt;/p&gt;
+&lt;p&gt;멀티 스케일 feature를 결합하여 더 정교한 표현을 생성&lt;/p&gt;
+&lt;p&gt;Object detection, Segmentation 에 주로 사용된다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/neural_network_example/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/neural_network_example/</guid><description>&lt;h1 id="nueral-network-example"&gt;Nueral Network example&lt;/h1&gt;
+&lt;p&gt;뉴럴 네트워크의 기본 학습을 위한 샘플 공부&lt;/p&gt;
+&lt;p&gt;시작하기에 앞서, 기본적인 전제는 아래와 같다.&lt;/p&gt;
+&lt;p&gt;Input : Scalar x
+Hidden layer : Neural 1 개(w, b 1 개 쌍), activation funciton은 sigmoid
+Ouput layer : y
+Loss function : MSE
+Parameter : Hidden layer 내부의 Layer-1에서는 w1, b1이 있다고 가정, Output layer 에서는 w2, b2가 있다고 가정&lt;/p&gt;
+&lt;h1 id="forward"&gt;Forward&lt;/h1&gt;
+&lt;h3 id="hidden-layer"&gt;Hidden layer&lt;/h3&gt;
+&lt;p&gt;$z_1 = w_1 x + b_1$&lt;/p&gt;
+&lt;p&gt;신경망 학습의 기본이 &lt;code&gt;선형 → 비선형 → 선형&lt;/code&gt; 의 반복 구조.
+에시에서는 1개짜리 뉴런으로 했으므로 위와 같음.
+Activation layer 에 들어가기 위해서는 선형구조여야 한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/nnfunction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/nnfunction/</guid><description>&lt;h1 id="nn-function"&gt;nn Function&lt;/h1&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;항목&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;nn.Linear&lt;/code&gt;&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;nn.Conv2d&lt;/code&gt;&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;입력 형태&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;1D 벡터 (예: &lt;code&gt;[batch, features]&lt;/code&gt;)&lt;/td&gt;
+					&lt;td&gt;4D 텐서 (예: &lt;code&gt;[batch, channels, height, width]&lt;/code&gt;)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;연산 방식&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;전체 입력 × 가중치 행렬&lt;/td&gt;
+					&lt;td&gt;지역 영역에만 커널(필터) 적용 (슬라이딩)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;가중치 구조&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;[out_features, in_features]&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;[out_channels, in_channels, kernel_H, kernel_W]&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;학습 파라미터 수&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;많음 (입력 크기 전체 연결)&lt;/td&gt;
+					&lt;td&gt;적음 (지역 연결 + weight sharing)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;주로 사용되는 곳&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;MLP, 텍스트 벡터 처리&lt;/td&gt;
+					&lt;td&gt;이미지, 시계열 등 공간구조 입력 처리&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;공간정보 보존&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;❌ 전혀 없음&lt;/td&gt;
+					&lt;td&gt;✅ 공간 구조 유지 (local 구조 학습)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;고정 입력 크기 요구&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;예 (입력 차원 고정)&lt;/td&gt;
+					&lt;td&gt;아니오 (패딩/스트라이드로 유동적 처리 가능)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/vectorization_flattening/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/10_components/vectorization_flattening/</guid><description>&lt;h1 id="벡터화-flattening란"&gt;벡터화 (Flattening)란?&lt;/h1&gt;
+&lt;p&gt;벡터화란 **2차원 또는 다차원 배열(이미지 등)**을 &lt;strong&gt;1차원 벡터 형태로 변환&lt;/strong&gt;하는 작업.&lt;br&gt;
+딥러닝 모델, 특히 **완전연결층(Dense Layer)**에 입력으로 넣기 위해 필요한 전처리 단계.&lt;/p&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;항상 쓰는 것은 아니고&lt;/strong&gt;, &lt;u&gt;MLP (다층 퍼셉트론), FC layer 계열 입력용&lt;/u&gt;으로 쓰는 것임.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-수학적-표현"&gt;🧮 수학적 표현&lt;/h2&gt;
+&lt;p&gt;예를 들어, $ X \in \{0,1\}^{H \times W} $ 인 바이너리 이미지를 다음과 같이 1D 벡터로 변환한다:&lt;/p&gt;
+&lt;div class="math-block"&gt;\[x \in \{0,1\}^{H \cdot W}\]&lt;/div&gt;&lt;p&gt;즉,&lt;/p&gt;
+&lt;div class="math-block"&gt;\[x = \text{flatten}(X)\]&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="-예시-33-바이너리-이미지"&gt;📌 예시: 3×3 바이너리 이미지&lt;/h2&gt;
+&lt;p&gt;원래 이미지 행렬:&lt;/p&gt;</description></item></channel></rss>

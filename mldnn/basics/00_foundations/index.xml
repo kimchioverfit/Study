@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>00 foundations on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/</link><description>Recent content in 00 foundations on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/0.basic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/0.basic/</guid><description>&lt;h1 id="ml--dl"&gt;ML &amp;amp; DL&lt;/h1&gt;
+&lt;p&gt;머신러닝과 딥러닝&lt;/p&gt;
+&lt;p&gt;머신러닝이건 딥러닝이건 기본적으로 입력이 있고, 활성화 함수를 지나 출력이 되는 구조.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;둘의 차이는 아래와 같다.&lt;/p&gt;
+&lt;img src="https://kimchioverfit.github.io/Study/imgs/ML_DL_Diff.png"&gt;
+&lt;p&gt;머신 러닝은 인간 작업자가 특정 Feature 에 대한 &lt;code&gt;가중치 설정&lt;/code&gt;등의 작업이 있어야 하지만, &lt;u&gt;딥러닝은 자기가 찾아서 함&lt;/u&gt;.&lt;/p&gt;
+&lt;p&gt;레이어의 수 차이가 아님.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="딥러닝-학습-파이프라인"&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/20_training/dn_training_pipeline/"&gt;딥러닝 학습 파이프라인&lt;/a&gt;
+&lt;/h2&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/1.feature/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/1.feature/</guid><description>&lt;h1 id="feature-특징"&gt;Feature (특징)&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Feature(특징)&lt;/strong&gt; — 데이터를 구분하고 판단하는 데 쓰이는 &lt;strong&gt;의미 있는 정보 한 조각&lt;/strong&gt;.
+모델은 raw 데이터 자체가 아니라, 거기서 뽑아낸 feature를 보고 결정을 내린다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="-1-정의"&gt;🔷 1. 정의&lt;/h2&gt;
+&lt;p&gt;머신러닝/딥러닝 모델의 &lt;strong&gt;입력이 되는 속성(attribute)·패턴&lt;/strong&gt;을 feature라고 한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;모델이 보는 단서&amp;quot;라고 생각하면 된다.&lt;/li&gt;
+&lt;li&gt;좋은 feature를 쓰면 → 모델이 패턴을 쉽게 학습.&lt;/li&gt;
+&lt;li&gt;나쁘거나 부족한 feature → 아무리 좋은 모델도 예측 불가.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;핵심: &lt;strong&gt;&amp;ldquo;무엇을 보고 판단할 것인가&amp;rdquo;&lt;/strong&gt; 를 정하는 것이 feature다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="-2-두-가지-맥락-정형-데이터-vs-이미지"&gt;🔷 2. 두 가지 맥락 (정형 데이터 vs 이미지)&lt;/h2&gt;
+&lt;p&gt;같은 &amp;ldquo;feature&amp;quot;라는 단어가 데이터 종류에 따라 조금 다르게 쓰인다.&lt;/p&gt;</description></item></channel></rss>

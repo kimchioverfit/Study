@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Concurrency on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_cs/concurrency/</link><description>Recent content in Concurrency on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_cs/concurrency/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_cs/concurrency/atomic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_cs/concurrency/atomic/</guid><description>&lt;h1 id="stdatomic과-메모리-모델"&gt;std::atomic과 메모리 모델&lt;/h1&gt;
+&lt;p&gt;C++ 표준(C++11~)과 CPU 하드웨어 레벨의 이야기로, OS와 무관하게 적용된다. C에도 동일한 개념의 &lt;code&gt;&amp;lt;stdatomic.h&amp;gt;&lt;/code&gt;(&lt;code&gt;_Atomic&lt;/code&gt;, &lt;code&gt;atomic_int&lt;/code&gt;)가 있다.&lt;/p&gt;
+&lt;h2 id="1-왜-필요한가--int는-원자적이지-않다"&gt;1. 왜 필요한가 — &amp;ldquo;int는 원자적이지 않다&amp;rdquo;&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; counter &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// ❌ 두 스레드가 counter++ 하면
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// load → add → store 3단계가 인터리빙되어 값 유실
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;atomic&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; counter{&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;}; &lt;span style="color:#75715e"&gt;// ✅ counter++가 단일 원자 연산 (LOCK XADD 등)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;counter.fetch_add(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;counter++&lt;/code&gt; 같은 read-modify-write는 CPU 입장에서 여러 단계라서, 뮤텍스나 atomic 없이는 &lt;strong&gt;데이터 레이스(미정의 동작)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;volatile&lt;/code&gt;은 &lt;strong&gt;원자성과 무관&lt;/strong&gt;하다 — 컴파일러 최적화 억제일 뿐, 동기화 도구가 아님 (시그널 핸들러의 &lt;code&gt;sig_atomic_t&lt;/code&gt;(&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/process/signal/"&gt;Signal&lt;/a&gt;
+ 5장)와 스레드 동기화를 혼동하지 말 것)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-주요-연산"&gt;2. 주요 연산&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;atomic&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; a{&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;a.store(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 쓰기
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; v &lt;span style="color:#f92672"&gt;=&lt;/span&gt; a.load(); &lt;span style="color:#75715e"&gt;// 읽기
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; old &lt;span style="color:#f92672"&gt;=&lt;/span&gt; a.exchange(&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 새 값 쓰고 이전 값 반환
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;a.fetch_add(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;); a.fetch_sub(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;); a.fetch_or(&lt;span style="color:#ae81ff"&gt;0x4&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// CAS (Compare-And-Swap) — lock-free 자료구조의 핵심 연산
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; expected &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; ok &lt;span style="color:#f92672"&gt;=&lt;/span&gt; a.compare_exchange_strong(expected, &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// a == expected면: a = 10, true 반환
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 다르면: expected에 현재 값이 담기고 false 반환
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 전형적 CAS 루프 (lock-free 갱신)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; cur &lt;span style="color:#f92672"&gt;=&lt;/span&gt; a.load();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;a.compare_exchange_weak(cur, cur &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ; &lt;span style="color:#75715e"&gt;// 실패 시 cur에 최신 값이 들어오므로 그걸로 재시도
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;weak&lt;/code&gt;은 이유 없이 실패(spurious failure)할 수 있는 대신 일부 아키텍처(ARM의 LL/SC)에서 더 싸다 — &lt;strong&gt;루프 안에서는 weak&lt;/strong&gt;, 단발 호출은 strong&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a.is_lock_free()&lt;/code&gt; — 해당 타입이 진짜 하드웨어 원자 명령으로 처리되는지 확인. 크기가 크면 내부적으로 lock을 쓸 수도 있다 (&lt;code&gt;std::atomic&amp;lt;BigStruct&amp;gt;&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="3-메모리-순서-memory_order"&gt;3. 메모리 순서 (memory_order)&lt;/h2&gt;
+&lt;p&gt;atomic의 진짜 어려운 부분. CPU와 컴파일러는 성능을 위해 &lt;strong&gt;메모리 접근을 재배치&lt;/strong&gt;하는데, atomic 연산에 순서 제약을 지정할 수 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_cs/concurrency/parallel_models/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_cs/concurrency/parallel_models/</guid><description>&lt;h1 id="병렬-프로그래밍-모델--태스크-병렬-vs-스레드-병렬"&gt;병렬 프로그래밍 모델 — 태스크 병렬 vs 스레드 병렬&lt;/h1&gt;
+&lt;p&gt;&amp;ldquo;루프를 병렬로 돌린다&amp;quot;는 같은 목표를 두고 Windows(PPL), 리눅스(pthread/OpenMP/TBB), C++ 표준이 각자 어떤 추상화를 제공하는지 비교. 개념 자체는 OS 무관이다.&lt;/p&gt;
+&lt;h2 id="1-추상화-레벨의-차이"&gt;1. 추상화 레벨의 차이&lt;/h2&gt;
+&lt;p&gt;Windows PPL(Parallel Patterns Library)의 &lt;code&gt;concurrency::parallel_for&lt;/code&gt;는 pthread와 &lt;strong&gt;추상화 레벨 자체가 다르다.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Windows PPL — &amp;#34;무엇을 병렬로 할지&amp;#34;만 선언
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;ppl.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;concurrency&lt;span style="color:#f92672"&gt;::&lt;/span&gt;parallel_for(&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, N, [&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;](&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; results[i] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; heavy_compute(data[i]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// pthread — 스레드 수 결정, 범위 분할, 생성, join까지 전부 수동
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; t &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; t &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; NTHREAD; t&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; range[t] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;range_t&lt;/span&gt;){ .start &lt;span style="color:#f92672"&gt;=&lt;/span&gt; t &lt;span style="color:#f92672"&gt;*&lt;/span&gt; N &lt;span style="color:#f92672"&gt;/&lt;/span&gt; NTHREAD, .end &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (t &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt; N &lt;span style="color:#f92672"&gt;/&lt;/span&gt; NTHREAD };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pthread_create&lt;/span&gt;(&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;tid[t], NULL, worker, &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;range[t]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; t &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; t &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; NTHREAD; t&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pthread_join&lt;/span&gt;(tid[t], NULL);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;항목&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;concurrency::parallel_for&lt;/code&gt; (PPL)&lt;/th&gt;
+					&lt;th&gt;pthread&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;추상화 레벨&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;태스크 병렬&lt;/strong&gt; — 작업을 선언하면 런타임이 알아서 분배&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;스레드 병렬&lt;/strong&gt; — 실행 흐름을 직접 관리&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;스레드 관리&lt;/td&gt;
+					&lt;td&gt;내장 스레드 풀 + 워크 스틸링 스케줄러가 자동 처리&lt;/td&gt;
+					&lt;td&gt;생성/분할/join 전부 수동&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;부하 불균형&lt;/td&gt;
+					&lt;td&gt;워크 스틸링으로 자동 완화 (i마다 작업량이 달라도 OK)&lt;/td&gt;
+					&lt;td&gt;정적 분할이면 가장 느린 스레드가 전체를 지배&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;세밀 제어 (affinity, RT 우선순위, 스택)&lt;/td&gt;
+					&lt;td&gt;❌ 런타임에 위임&lt;/td&gt;
+					&lt;td&gt;✅ 전부 가능&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;이식성&lt;/td&gt;
+					&lt;td&gt;Windows 전용 (MSVC)&lt;/td&gt;
+					&lt;td&gt;POSIX 전 플랫폼&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;워크 스틸링(work stealing)&lt;/strong&gt;: 스레드 풀의 각 워커가 자기 작업 큐를 갖고, 자기 큐가 비면 &lt;strong&gt;다른 워커의 큐에서 작업을 훔쳐온다.&lt;/strong&gt; 작업량이 불균등해도 놀고 있는 코어가 저절로 일을 가져가므로 부하가 균형 잡힌다 — PPL, TBB, Go 런타임, Java ForkJoinPool이 모두 이 방식이다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_cs/concurrency/sync_advanced/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_cs/concurrency/sync_advanced/</guid><description>&lt;h1 id="동기화-심화--우선순위-역전과-spinlock"&gt;동기화 심화 — 우선순위 역전과 Spinlock&lt;/h1&gt;
+&lt;p&gt;우선순위 역전과 spinlock은 특정 OS에 국한되지 않는 동시성/실시간 이론이다 — Windows, RTOS(VxWorks, FreeRTOS), 베어메탈 어디서든 같은 구조로 발생한다. 예제 API는 리눅스 기준(&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/multi_thread/pthread_api/"&gt;Pthread API&lt;/a&gt;
+)으로 작성했다.&lt;/p&gt;
+&lt;h2 id="1-우선순위-역전-priority-inversion"&gt;1. 우선순위 역전 (Priority Inversion)&lt;/h2&gt;
+&lt;h3 id="1-1-정의와-발생-구조"&gt;1-1. 정의와 발생 구조&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;높은 우선순위 태스크가, 낮은 우선순위 태스크가 잡은 lock 때문에 — 그리고 그 사이에 끼어든 중간 우선순위 태스크 때문에 — 사실상 무한정 밀리는 현상.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;등장 인물 3명으로 재현된다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;L&lt;/strong&gt; (낮은 우선순위): 공유 자원의 lock을 잡고 작업 중&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;H&lt;/strong&gt; (높은 우선순위): 같은 lock이 필요해서 대기&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;M&lt;/strong&gt; (중간 우선순위): lock과 무관한 CPU 작업&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;시간 →
+L: ──[lock 획득]──╳ (M에게 선점당함) ─ ─ ─ ─ ─ ─ ─ ─ [재개]──[unlock]
+M: ██████████ CPU 독점 (lock 무관) ██████████
+H: [lock 대기 시작] ─ ─ ─ ─ 계속 블록 ─ ─ ─ ─ ─ ─ ─ ─ ─ [겨우 획득]&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;L이 lock을 잡는다&lt;/li&gt;
+&lt;li&gt;H가 깨어나 같은 lock을 요구 → L이 풀 때까지 블록&lt;/li&gt;
+&lt;li&gt;이때 M이 실행 가능해지면, 스케줄러는 &lt;strong&gt;M &amp;gt; L&lt;/strong&gt;이므로 M을 실행한다&lt;/li&gt;
+&lt;li&gt;L은 CPU를 못 받아 lock을 풀지 못하고, H는 계속 기다린다&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;결과적으로 &lt;strong&gt;H가 M보다 뒤로 밀리는 &amp;ldquo;우선순위 역전&amp;rdquo;&lt;/strong&gt; 이 완성된다. H와 L만 있으면 대기 시간이 &amp;ldquo;L의 크리티컬 섹션 길이&amp;quot;로 유한하지만(bounded), M이 끼는 순간 &lt;strong&gt;M이 CPU를 쓰는 만큼 무한정 늘어난다(unbounded)&lt;/strong&gt; — 이것이 진짜 문제다.&lt;/p&gt;</description></item></channel></rss>

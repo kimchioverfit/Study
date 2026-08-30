@@ -1,0 +1,46 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Git | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-section><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><section class=section-hero><div class=section-hero-copy><div class=eyebrow-row><a class=eyebrow-link href=/Study/>🗂 Archive</a>
+<span class=eyebrow-sep>/</span>
+<span class="eyebrow-link is-static">Git</span></div><h1>Git</h1></div><div class=section-stats><span class=stat-label>Entries</span>
+<span class=stat-value>6</span></div></section><section class=entry-grid><a class=entry-card href=/Study/tools/git/00_overview/><h2>00 Overview</h2><p>Git 개요 — 4개의 공간과 문서 안내 Git은 파일의 변경 이력을 스냅샷 단위로 저장하는 분산 버전 관리 시스템(DVCS) 이다. 모든 개발자가 전체 히스토리를 로컬에 통째로 복제해 두고, 필요할 때만 원격과 주 …</p></a><a class=entry-card href=/Study/tools/git/01_basic_commands/><h2>01 Basic Commands</h2><p>Git 기본 명령어 — 생성 / 기록 / 확인 전체 공간 개념은 00. 개요 참고.
+1. 저장소 생성 & 설정 명령어 설명 git init 현재 폴더를 Git 저장소로 초기화 (.git 생성) git …</p></a><a class=entry-card href=/Study/tools/git/02_branch_remote/><h2>02 Branch Remote</h2><p>Git 브랜치 & 원격 저장소 4. 브랜치 (branch / switch / merge) 명령어 설명 git branch 브랜치 목록 git branch &lt;name> 새 브랜치 생성 git …</p></a><a class=entry-card href=/Study/tools/git/03_undo_recovery/><h2>03 Undo Recovery</h2><p>Git 되돌리기 & 복구 6. 되돌리기 (restore / reset / revert) 명령어 되돌리는 대상 히스토리 git restore &lt;file> working directory의 수정 취소 …</p></a><a class=entry-card href=/Study/tools/git/04_rebase/><h2>04 Rebase</h2><p>Git Rebase 완전 정리 rebase는 이해하기 가장 까다로운 명령이라 문서를 따로 두고 크게 다룬다.
+한 줄 정의 rebase = 내 브랜치의 커밋들을 떼어내서, 다른 커밋(보통 최신 main) 위에 …</p></a><a class=entry-card href=/Study/tools/git/05_cherry_pick/><h2>05 Cherry Pick</h2><p>Git Cherry-pick — 특정 커밋만 골라 옮기기 한 줄 정의 cherry-pick = 다른 브랜치의 커밋 중 &ldquo;원하는 것 하나(또는 몇 개)만&rdquo; 콕 집어 현재 브랜치에 복사해 얹는 것. …</p></a></section></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

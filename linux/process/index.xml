@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Process on Study Notes</title><link>https://kimchioverfit.github.io/Study/linux/process/</link><description>Recent content in Process on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/linux/process/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/linux/process/daemon/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/process/daemon/</guid><description>&lt;h1 id="process-group-session-daemon"&gt;Process Group, Session, Daemon&lt;/h1&gt;
+&lt;p&gt;프로세스 그룹과 세션은 셸의 잡 컨트롤(&lt;code&gt;Ctrl+C&lt;/code&gt;가 파이프라인 전체를 죽이는 원리)과 데몬화(daemonize)를 이해하는 데 필요한 개념이다.&lt;/p&gt;
+&lt;h2 id="1-프로세스-그룹과-세션의-계층-구조"&gt;1. 프로세스 그룹과 세션의 계층 구조&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Session (세션) ── 제어 터미널(controlling terminal) 최대 1개와 연결
+ ├── Process Group A (foreground) ← 터미널 입력/시그널을 받음
+ │ ├── ls
+ │ └── grep (ls | grep 파이프라인 = 한 그룹)
+ └── Process Group B (background)
+ └── long_task &amp;amp;&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;개념&lt;/th&gt;
+					&lt;th&gt;ID&lt;/th&gt;
+					&lt;th&gt;설명&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;프로세스 그룹&lt;/td&gt;
+					&lt;td&gt;PGID&lt;/td&gt;
+					&lt;td&gt;시그널을 한꺼번에 받는 단위. 셸은 파이프라인 하나를 한 그룹으로 묶는다&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;세션&lt;/td&gt;
+					&lt;td&gt;SID&lt;/td&gt;
+					&lt;td&gt;그룹들의 모음. 하나의 제어 터미널을 가질 수 있다&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;세션 리더&lt;/td&gt;
+					&lt;td&gt;SID == PID&lt;/td&gt;
+					&lt;td&gt;세션을 만든 프로세스 (보통 로그인 셸)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Ctrl+C&lt;/code&gt;를 누르면 터미널 드라이버가 &lt;strong&gt;foreground 프로세스 그룹 전체&lt;/strong&gt;에 &lt;code&gt;SIGINT&lt;/code&gt;를 보낸다 — &lt;code&gt;ls | grep&lt;/code&gt;이 한꺼번에 죽는 이유&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kill -TERM -PGID&lt;/code&gt; (음수 PID)로 그룹 전체에 시그널을 보낼 수 있다 (&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/process/signal/"&gt;Signal&lt;/a&gt;
+ 2장)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-관련-함수"&gt;2. 관련 함수&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;unistd.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getpgrp&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 내 프로세스 그룹 ID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setpgid&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; pid, &lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; pgid); &lt;span style="color:#75715e"&gt;// 프로세스 그룹 변경/생성
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getsid&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; pid); &lt;span style="color:#75715e"&gt;// 세션 ID 조회
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setsid&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 새 세션 생성 (데몬화의 핵심)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="setpgid--셸이-잡-컨트롤을-구현하는-방법"&gt;setpgid() — 셸이 잡 컨트롤을 구현하는 방법&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 셸이 파이프라인 실행 시: 첫 자식의 PID를 그룹 ID로 삼아 묶는다
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;setpgid&lt;/span&gt;(child_pid, pipeline_leader_pid);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="setsid--새-세션-만들기"&gt;setsid() — 새 세션 만들기&lt;/h3&gt;
+&lt;p&gt;호출한 프로세스가 &lt;strong&gt;새 세션의 리더 + 새 그룹의 리더&lt;/strong&gt;가 되고, &lt;strong&gt;제어 터미널과의 연결이 완전히 끊긴다.&lt;/strong&gt;&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/linux/process/fork/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/process/fork/</guid><description>&lt;h1 id="linux-process-fork"&gt;Linux Process: fork()&lt;/h1&gt;
+&lt;h2 id="-fork란"&gt;✅ fork()란?&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;fork()&lt;/code&gt;는 현재 실행 중인 프로세스(부모)를 복제하여 새로운 프로세스(자식)를 생성하는 시스템 콜이다.
+호출 한 번에 반환이 두 번 일어나는 것이 특징이다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;unistd.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;sys/wait.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;pid_t&lt;/span&gt; pid &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fork&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (pid &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// fork 실패
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;perror&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;fork failed&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (pid &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 자식 프로세스: pid == 0
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;child, pid=%d&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;getpid&lt;/span&gt;());
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 부모 프로세스: pid == 자식의 PID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;parent, child pid=%d&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, pid);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;wait&lt;/span&gt;(NULL);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;반환값&lt;/th&gt;
+					&lt;th&gt;의미&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;&amp;lt; 0&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;fork 실패 (자식 생성 안 됨)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;== 0&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;자식 프로세스 쪽 리턴값&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;&amp;gt; 0&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;부모 프로세스 쪽 리턴값 (생성된 자식의 PID)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="1-fork의-동작-원리--copy-on-write-cow"&gt;1. fork()의 동작 원리 — Copy-On-Write (COW)&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;fork()&lt;/code&gt;가 호출되면 커널은 부모의 다음 자원들을 자식에게 복제한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/linux/process/process_api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/process/process_api/</guid><description>&lt;h1 id="linux-process-api"&gt;Linux Process API&lt;/h1&gt;
+&lt;p&gt;프로세스의 생성 이후 — 실행 이미지 교체, 식별, 대기/회수, 종료까지 담당하는 대표 함수들 정리.
+프로세스 생성(&lt;code&gt;fork&lt;/code&gt;/&lt;code&gt;vfork&lt;/code&gt;/&lt;code&gt;clone&lt;/code&gt;)은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/process/fork/"&gt;Fork&lt;/a&gt;
+ 문서 참고.&lt;/p&gt;
+&lt;h2 id="1-exec-계열--실행-이미지-교체"&gt;1. exec 계열 — 실행 이미지 교체&lt;/h2&gt;
+&lt;h3 id="1-1-exec의-본질"&gt;1-1. exec의 본질&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;exec&lt;/code&gt;는 &lt;strong&gt;새 프로세스를 만들지 않는다.&lt;/strong&gt; 현재 프로세스의 주소 공간(code/data/heap/stack)을 새 실행 파일의 이미지로 &lt;strong&gt;통째로 교체&lt;/strong&gt;하는 것이다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PID는 그대로 유지된다 (같은 프로세스)&lt;/li&gt;
+&lt;li&gt;성공하면 &lt;strong&gt;절대 리턴하지 않는다&lt;/strong&gt; — 기존 코드는 이미 사라졌으므로 돌아올 곳이 없다&lt;/li&gt;
+&lt;li&gt;리턴했다면 그것은 무조건 실패한 경우다 (&lt;code&gt;-1&lt;/code&gt; 반환, &lt;code&gt;errno&lt;/code&gt; 설정)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;execve&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/bin/ls&amp;#34;&lt;/span&gt;, argv, envp);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;perror&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;execve failed&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 여기 도달했다면 exec 실패
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;_exit&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;127&lt;/span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="1-2-exec-6형제-구분법"&gt;1-2. exec 6형제 구분법&lt;/h3&gt;
+&lt;p&gt;이름에 붙는 접미사로 구분한다. &lt;strong&gt;l vs v&lt;/strong&gt; (인자 전달 방식), &lt;strong&gt;e&lt;/strong&gt; (환경 지정), &lt;strong&gt;p&lt;/strong&gt; (PATH 탐색).&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/linux/process/signal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/process/signal/</guid><description>&lt;h1 id="linux-signal"&gt;Linux Signal&lt;/h1&gt;
+&lt;p&gt;시그널은 커널 또는 다른 프로세스가 특정 프로세스에게 보내는 &lt;strong&gt;비동기 알림&lt;/strong&gt;이다. 프로세스 제어(&lt;code&gt;wait&lt;/code&gt;와 &lt;code&gt;SIGCHLD&lt;/code&gt;), 종료 처리, 데몬의 설정 리로드 등 프로세스 관리와 밀접하게 얽혀 있다.&lt;/p&gt;
+&lt;h2 id="1-대표-시그널"&gt;1. 대표 시그널&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;시그널&lt;/th&gt;
+					&lt;th&gt;번호&lt;/th&gt;
+					&lt;th&gt;기본 동작&lt;/th&gt;
+					&lt;th&gt;발생 상황&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGHUP&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;1&lt;/td&gt;
+					&lt;td&gt;종료&lt;/td&gt;
+					&lt;td&gt;터미널 연결 끊김. 데몬에서는 관례적으로 &amp;ldquo;설정 리로드&amp;rdquo; 용도로 재활용&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGINT&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;2&lt;/td&gt;
+					&lt;td&gt;종료&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;Ctrl+C&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGQUIT&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;3&lt;/td&gt;
+					&lt;td&gt;종료+코어덤프&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;Ctrl+\&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGKILL&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;9&lt;/td&gt;
+					&lt;td&gt;종료&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;핸들링/무시/블록 불가.&lt;/strong&gt; 커널이 즉시 죽임&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGSEGV&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;11&lt;/td&gt;
+					&lt;td&gt;종료+코어덤프&lt;/td&gt;
+					&lt;td&gt;잘못된 메모리 접근&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGTERM&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;15&lt;/td&gt;
+					&lt;td&gt;종료&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;kill&lt;/code&gt; 기본값. &amp;ldquo;정리하고 종료해라&amp;quot;는 정중한 요청&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGCHLD&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;17&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;무시&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;자식이 종료/정지됨&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGSTOP&lt;/code&gt; / &lt;code&gt;SIGCONT&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;19/18&lt;/td&gt;
+					&lt;td&gt;정지/재개&lt;/td&gt;
+					&lt;td&gt;SIGSTOP도 핸들링/무시 불가&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;SIGUSR1&lt;/code&gt; / &lt;code&gt;SIGUSR2&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;10/12&lt;/td&gt;
+					&lt;td&gt;종료&lt;/td&gt;
+					&lt;td&gt;사용자 정의 용도&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;프로세스를 죽일 때의 매너: &lt;strong&gt;&lt;code&gt;SIGTERM&lt;/code&gt;을 먼저&lt;/strong&gt; 보내 정리 기회를 주고, 안 죽을 때만 &lt;code&gt;SIGKILL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SIGKILL&lt;/code&gt;/&lt;code&gt;SIGSTOP&lt;/code&gt;을 못 막게 한 이유: 어떤 프로세스든 관리자가 반드시 제어할 수 있어야 하므로&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-시그널-보내기--kill-raise"&gt;2. 시그널 보내기 — kill(), raise()&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;signal.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;kill&lt;/span&gt;(pid, SIGTERM); &lt;span style="color:#75715e"&gt;// 특정 프로세스에게
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;kill&lt;/span&gt;(&lt;span style="color:#f92672"&gt;-&lt;/span&gt;pgid, SIGTERM); &lt;span style="color:#75715e"&gt;// 음수: 프로세스 그룹 전체에게
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;kill&lt;/span&gt;(pid, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 시그널 0: 실제로 안 보내고 &amp;#34;프로세스 생존 확인&amp;#34;용
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;raise&lt;/span&gt;(SIGABRT); &lt;span style="color:#75715e"&gt;// 자기 자신에게 (= kill(getpid(), sig))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;이름과 달리 &lt;code&gt;kill()&lt;/code&gt;은 &amp;ldquo;죽이는 함수&amp;quot;가 아니라 &amp;ldquo;시그널 전달 함수&amp;quot;다&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kill(pid, 0)&lt;/code&gt;은 프로세스 존재 확인의 관용 표현 — 성공하면 살아있고, &lt;code&gt;errno == ESRCH&lt;/code&gt;면 없는 것&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="3-signal-vs-sigaction"&gt;3. signal() vs sigaction()&lt;/h2&gt;
+&lt;h3 id="3-1-signal--간단하지만-쓰지-말-것"&gt;3-1. signal() — 간단하지만 쓰지 말 것&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;signal&lt;/span&gt;(SIGINT, handler); &lt;span style="color:#75715e"&gt;// 간단하지만 동작이 구현마다 다름
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;역사적으로 System V 계열에서는 핸들러가 한 번 실행되면 &lt;code&gt;SIG_DFL&lt;/code&gt;로 리셋되는 등(one-shot), &lt;strong&gt;플랫폼마다 의미가 달랐다.&lt;/strong&gt; 이식성 있는 코드에서는 &lt;code&gt;SIG_IGN&lt;/code&gt;/&lt;code&gt;SIG_DFL&lt;/code&gt; 설정 정도에만 쓰고, 핸들러 등록은 &lt;code&gt;sigaction()&lt;/code&gt;을 쓰는 것이 원칙이다.&lt;/p&gt;</description></item></channel></rss>

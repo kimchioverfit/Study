@@ -1,0 +1,54 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/amodal_segmentation/>Amodal Segmentation</a></div><h1>7.Amodal SAM</h1></header><div class="doc-body post-body"><h1 id=amodal-sam>Amodal SAM</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/2604.20748>Amodal SAM: A Unified Amodal Segmentation Framework with Generalization</a>
+— Zhang et al., 2026</p><p>Bo Zhang et al. (Harbin Institute of Technology, Kuaishou Technology), <strong>2026</strong> (arXiv 2604.20748). 결론부터 아주 쉽게: <strong>"<a class=inline-link href=https://arxiv.org/abs/2304.02643>SAM(Segment Anything Model)</a>
+의 &lsquo;뭐든 프롬프트 하나로 분할해내는&rsquo; 능력을, 가려진 부분까지 예측하는 amodal segmentation에도 그대로 이식한 논문."</strong> 지금까지의 6개 논문은 전부 <strong>정해진 카테고리(자동차, 사람 등)로 학습된 모델</strong>이었다. Amodal SAM은 <strong>학습 때 한 번도 보지 못한 물체 종류(unseen category)와 낯선 배경(unseen context)</strong> 에서도 동작하는 것을 목표로 한, 이 계보의 가장 최근 결과물이다.</p><blockquote><p>전체 계보 속 위치는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/>Amodal Segmentation 개요</a>
+참고.</p></blockquote><h2 id=1-지금까지의-근본적-한계--closed-set>1. 지금까지의 근본적 한계 — Closed-set</h2><p><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/3.learning_to_see_the_invisible/>ORCNN</a>
+, <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/>KINS의 MVC</a>
+, <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/6.bcnet/>BCNet</a>
+까지 — 지금까지의 모든 방법은 <strong>&ldquo;학습 데이터에 있던 카테고리에서만 잘 동작한다&rdquo;</strong> 는 공통된 전제 위에 서 있었다.</p><pre tabindex=0><code>KINS로 학습한 모델 → &#34;자동차&#34;, &#34;사람&#34;, &#34;자전거&#34; 등 8개 카테고리는 잘 예측
+                   → 학습 때 못 본 &#34;택배 상자에 가려진 고양이&#34; 같은 조합은? → 성능 급락</code></pre><p>즉 지금까지의 발전은 전부 <strong>&ldquo;닫힌 세계(closed-set)&rdquo; 안에서 더 정교해지는 방향</strong>이었다. Amodal SAM은 여기서 <strong>&ldquo;열린 세계(open-world)에서도 되게 하자&rdquo;</strong> 로 목표 자체를 바꾼다.</p><h2 id=2-왜-하필-sam인가>2. 왜 하필 SAM인가</h2><p><strong>SAM(Segment Anything Model)</strong> 은 &ldquo;점 하나만 찍어줘도, 처음 보는 어떤 물체든 그럴듯하게 분할해내는&rdquo; 범용(generalist) segmentation 파운데이션 모델이다. 방대한 데이터로 학습되어 <strong>카테고리에 얽매이지 않는 일반화 능력</strong>이 핵심 장점이다.</p><p>이 논문의 전략: <strong>&ldquo;SAM이 이미 가진 &lsquo;뭐든 분할하는 능력&rsquo;은 최대한 그대로 살리고, 거기에 &lsquo;amodal(가려진 부분 예측)&rsquo; 능력만 얹자.&rdquo;</strong> SAM을 처음부터 새로 학습시키는 게 아니라, <strong>가볍게 확장(adapt)</strong> 하는 방향을 택한 것 — 이렇게 해야 SAM의 일반화 능력이 망가지지 않는다.</p><h2 id=3-세-가지-핵심-기술-요소>3. 세 가지 핵심 기술 요소</h2><h3 id=3-1-spatial-completion-adapter>3-1. Spatial Completion Adapter</h3><p>SAM 본체는 거의 그대로 둔 채, <strong>가려진 영역을 복원(reconstruction)하는 역할만 담당하는 가벼운 어댑터(adapter)</strong> 모듈을 추가로 붙인다.</p><ul><li>&ldquo;어댑터"라는 이름처럼, 크고 무거운 재학습이 아니라 <strong>작은 추가 모듈</strong>로 새 능력(가려진 부분 추론)을 얹는 방식 — SAM의 기존 일반화 능력을 보존하기 위한 설계</li></ul><h3 id=3-2-taos-target-aware-occlusion-synthesis>3-2. TAOS (Target-Aware Occlusion Synthesis)</h3><p>앞서 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/5.self-supervised_scene_de-occlusion/>Zhan et al.(2020)</a>
+이 보여준 &ldquo;인위적으로 가려서 학습 데이터를 만든다"는 아이디어를, <strong>다양하고 대상에 특화된(target-aware) 방식으로 대량 합성</strong>하는 파이프라인이다.</p><pre tabindex=0><code>문제: amodal 학습 데이터는 원래 라벨링 비용이 커서 절대적으로 부족하다
+해법: 다양한 물체 조합으로 &#34;가려진 상황&#34;을 합성 → 학습 데이터를 인위적으로 대량 확보</code></pre><ul><li>Amodal segmentation의 오래된 고질병(학습 데이터 부족)을 이 논문에서도 다시 정면으로 다루고 있다 — 다만 이번엔 &ldquo;특정 카테고리에 한정되지 않고 다양하게&rdquo; 합성한다는 점이 open-world 목표와 맞닿아 있다</li></ul><h3 id=3-3-새로운-학습-목표loss--일관성--위상-정규화>3-3. 새로운 학습 목표(loss) — 일관성 + 위상 정규화</h3><p>가려진 부분을 예측하다 보면 모양이 <strong>끊기거나 이상하게 뭉개질 위험</strong>이 있다. 이를 막기 위해:</p><ul><li><strong>Regional consistency(영역 일관성)</strong>: 예측한 가려진 영역이 주변과 자연스럽게 이어지도록 규제</li><li><strong>Topological regularization(위상 정규화)</strong>: 예측된 모양이 &ldquo;구멍이 뚫리거나 조각나는&rdquo; 등 기하학적으로 이상한 형태가 되지 않도록 구조적 제약을 건다</li></ul><h2 id=4-결과와-의의>4. 결과와 의의</h2><ul><li>표준 벤치마크(<a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/>COCOA</a>
+, <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/>KINS</a>
+등)에서 기존 방법들과 비슷하거나 더 나은 성능을 내면서도, <strong>학습 때 못 본 카테고리·낯선 장면에서도 강건하게 동작</strong>한다는 것이 핵심 성과</li><li>이 계보 전체를 놓고 보면: <em>&ldquo;문제 정의(2016) → 정답 데이터셋 확보(2017) → 실용적 구조(2019) → 대규모/실전 도메인(2019) → 라벨링 비용 해소(2020) → 가림 구조를 명시적으로 모델링(2021)&rdquo;</em> 까지 쌓아온 성과 위에, <strong>&ldquo;이제 정해진 카테고리를 벗어나 진짜 실전(open-world)에서 쓸 수 있게&rdquo;</strong> 라는 마지막 조각을 놓은 논문으로 볼 수 있다</li></ul><h2 id=5-참고>5. 참고</h2><ul><li>2026년 4월 공개된 비교적 최신 연구라, 커뮤니티의 장기적 평가(다른 연구들의 인용, 재현 실험 등)는 아직 축적되는 중이라는 점을 감안하고 참고할 것</li><li>SAM 자체의 구조(프롬프트 인코더, 이미지 인코더, 마스크 디코더)를 먼저 이해해두면 이 논문의 확장 지점이 훨씬 명확하게 보인다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

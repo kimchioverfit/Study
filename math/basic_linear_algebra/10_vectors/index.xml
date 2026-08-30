@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>10 vectors on Study Notes</title><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/</link><description>Recent content in 10 vectors on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/basis/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/basis/</guid><description>&lt;h1 id="basis"&gt;Basis&lt;/h1&gt;
+&lt;p&gt;기저(basis)는 어떤 벡터 공간을 생성하면서도,&lt;/p&gt;
+&lt;p&gt;서로 선형 독립인 벡터들의 집합이다.&lt;/p&gt;
+&lt;p&gt;즉, 기저는 공간을 표현하는 데 필요한 최소한의 뼈대라고 볼 수 있다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="정의"&gt;정의&lt;/h2&gt;
+&lt;p&gt;벡터 공간 $V$의 벡터 집합 $B = \{v_1, v_2, \dots, v_k\}$가 다음 두 조건을 만족하면 기저이다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$B$가 $V$를 생성한다.&lt;/li&gt;
+&lt;li&gt;$B$의 벡터들이 서로 선형 독립이다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;즉,&lt;/p&gt;
+&lt;div class="math-block"&gt;\[V = \mathrm{span}(v_1, v_2, \dots, v_k)\]&lt;/div&gt;&lt;p&gt;이면서 동시에 중복이 없어야 한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="왜-중요한가"&gt;왜 중요한가?&lt;/h2&gt;
+&lt;p&gt;기저가 있으면 공간의 모든 벡터를&lt;/p&gt;
+&lt;p&gt;기저 벡터들의 선형결합으로 유일하게 표현할 수 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/cross_product/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/cross_product/</guid><description>&lt;h1 id="-2-외적-cross-product"&gt;✅ 2. 외적 (Cross Product)&lt;/h1&gt;
+&lt;h3 id="-정의"&gt;📌 정의&lt;/h3&gt;
+&lt;p&gt;외적은 $ \mathbb{R}^3 $에서만 정의되며, 두 벡터 $ \vec{a}, \vec{b} \in \mathbb{R}^3 $에 대해 &lt;strong&gt;새로운 벡터&lt;/strong&gt;를 생성한다.&lt;/p&gt;
+&lt;p&gt;a × b =
+[
+a₂b₃ - a₃b₂,
+a₃b₁ - a₁b₃,
+a₁b₂ - a₂b₁
+]&lt;/p&gt;
+&lt;p&gt;또는 행렬식으로 표현:&lt;/p&gt;
+&lt;p&gt;a × b = det | i j k |
+| a₁ a₂ a₃ |
+| b₁ b₂ b₃ |&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-기하적-의미"&gt;📐 기하적 의미&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;결과는 $ a $, $ b $ 두 벡터에 &lt;strong&gt;수직인 벡터&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;방향은 오른손 법칙 (Right-hand rule)을 따름&lt;/li&gt;
+&lt;li&gt;크기는 두 벡터로 이루는 평행사변형의 넓이:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;|a × b| = |a||b|sin(θ)&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/dot_product/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/dot_product/</guid><description>&lt;h1 id="-1-내적-dot-product"&gt;✅ 1. 내적 (Dot Product)&lt;/h1&gt;
+&lt;h3 id="-정의"&gt;📌 정의&lt;/h3&gt;
+&lt;p&gt;두 벡터 $ \vec{a}, \vec{b} \in \mathbb{R}^n $에 대해:&lt;/p&gt;
+&lt;p&gt;a · b = a₁b₁ + a₂b₂ + &amp;hellip; + aₙbₙ&lt;/p&gt;
+&lt;p&gt;또는 기하적으로는:&lt;/p&gt;
+&lt;p&gt;a · b = |a||b|cos(θ)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$ θ $: 두 벡터 사이의 각도&lt;/li&gt;
+&lt;li&gt;$ |a| $, $ |b| $: 각 벡터의 크기&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-기하적-의미"&gt;📐 기하적 의미&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;양의 값&lt;/strong&gt;: 서로 0~90도&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;0&lt;/strong&gt;: 서로 수직 (직각)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;음의 값&lt;/strong&gt;: 90~180도&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-예제"&gt;🧮 예제&lt;/h3&gt;
+&lt;p&gt;a = [1, 2, 3]
+b = [4, -5, 6]&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/euclidean_vector_space/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/euclidean_vector_space/</guid><description>&lt;h1 id="-유클리디안-벡터-공간에서의-내적과-외적"&gt;📐 유클리디안 벡터 공간에서의 내적과 외적&lt;/h1&gt;
+&lt;h2 id="-유클리디안-벡터-공간-euclidean-vector-space"&gt;🔷 유클리디안 벡터 공간 (Euclidean Vector Space)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;실수 좌표 공간 $ \mathbb{R}^n $에서 정의되는 벡터 공간&lt;/li&gt;
+&lt;li&gt;거리, 각도, 길이 등을 측정할 수 있음&lt;/li&gt;
+&lt;li&gt;내적(dot product)과 외적(cross product)은 이 공간에서의 대표적인 연산&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-내적-vs-외적-비교-요약"&gt;⚖️ 내적 vs 외적 비교 요약&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;항목&lt;/th&gt;
+					&lt;th&gt;내적 (Dot Product)&lt;/th&gt;
+					&lt;th&gt;외적 (Cross Product)&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;결과&lt;/td&gt;
+					&lt;td&gt;스칼라 (실수)&lt;/td&gt;
+					&lt;td&gt;벡터&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;적용 차원&lt;/td&gt;
+					&lt;td&gt;$ \mathbb{R}^n $&lt;/td&gt;
+					&lt;td&gt;$ \mathbb{R}^3 $&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;직교 판별&lt;/td&gt;
+					&lt;td&gt;$ a · b = 0 $&lt;/td&gt;
+					&lt;td&gt;불가능&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;기하 의미&lt;/td&gt;
+					&lt;td&gt;각도 관련 (cosθ)&lt;/td&gt;
+					&lt;td&gt;넓이 관련 (sinθ)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;연산 목적&lt;/td&gt;
+					&lt;td&gt;유사도, 투영, 정사영&lt;/td&gt;
+					&lt;td&gt;수직 벡터, 면적 계산&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="-활용-분야"&gt;🧠 활용 분야&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;내적&lt;/strong&gt;: 기하학적 투영, 직교성 검사, 머신러닝(코사인 유사도), 신호처리&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;외적&lt;/strong&gt;: 물리학(토크, 회전력), 컴퓨터 그래픽스, 법선 벡터 계산, 3D 공간에서 수직 방향 추출&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-함께-보면-좋은-개념"&gt;🔗 함께 보면 좋은 개념&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/span/"&gt;Span&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/linear_independence/"&gt;Linear Independence&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/basis/"&gt;Basis&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/linear_independence/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/linear_independence/</guid><description>&lt;h1 id="linear-independence"&gt;Linear Independence&lt;/h1&gt;
+&lt;p&gt;선형 독립(linear independence)은&lt;/p&gt;
+&lt;p&gt;어떤 벡터 집합 안의 벡터들이 서로 중복되지 않는다는 뜻이다.&lt;/p&gt;
+&lt;p&gt;즉, 한 벡터를 나머지 벡터들의 선형결합으로 만들 수 없으면 선형 독립이라고 한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="정의"&gt;정의&lt;/h2&gt;
+&lt;p&gt;벡터 $v_1, v_2, \dots, v_k$에 대해&lt;/p&gt;
+&lt;div class="math-block"&gt;\[a_1 v_1 + a_2 v_2 + \cdots + a_k v_k = 0\]&lt;/div&gt;&lt;p&gt;을 만족하는 스칼라 $a_1, a_2, \dots, a_k$가&lt;/p&gt;
+&lt;div class="math-block"&gt;\[a_1 = a_2 = \cdots = a_k = 0\]&lt;/div&gt;&lt;p&gt;뿐이라면, 이 벡터들은 선형 독립이다.&lt;/p&gt;
+&lt;p&gt;반대로 0이 아닌 계수로도 위 식이 성립하면 선형 종속(linearly dependent)이다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/span/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/10_vectors/span/</guid><description>&lt;h1 id="span"&gt;Span&lt;/h1&gt;
+&lt;p&gt;생성집합(span)은 어떤 벡터들의 모든 선형결합으로 만들 수 있는 벡터들의 집합이다.&lt;/p&gt;
+&lt;p&gt;벡터 $v_1, v_2, \dots, v_k$가 있을 때,&lt;/p&gt;
+&lt;div class="math-block"&gt;\[\mathrm{span}(v_1, v_2, \dots, v_k)
+=
+\left\{
+a_1 v_1 + a_2 v_2 + \cdots + a_k v_k
+\;\middle|\;
+a_1, a_2, \dots, a_k \in \mathbb{R}
+\right\}\]&lt;/div&gt;&lt;p&gt;로 정의한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="의미"&gt;의미&lt;/h2&gt;
+&lt;p&gt;span은 주어진 벡터들로 어디까지 만들 수 있는지를 나타낸다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;한 벡터의 span: 직선&lt;/li&gt;
+&lt;li&gt;두 개의 독립인 벡터의 span: 평면&lt;/li&gt;
+&lt;li&gt;세 개의 독립인 벡터의 span: 3차원 공간&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;즉, span은 벡터들이 만들어내는 공간 자체라고 보면 된다.&lt;/p&gt;</description></item></channel></rss>

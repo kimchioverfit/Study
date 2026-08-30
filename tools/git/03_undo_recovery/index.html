@@ -1,0 +1,63 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/tools/git/>Git</a></div><h1>03 Undo Recovery</h1></header><div class="doc-body post-body"><h1 id=git-되돌리기--복구>Git 되돌리기 & 복구</h1><h2 id=6-되돌리기-restore--reset--revert>6. 되돌리기 (restore / reset / revert)</h2><table><thead><tr><th>명령어</th><th>되돌리는 대상</th><th>히스토리</th></tr></thead><tbody><tr><td><code>git restore &lt;file></code></td><td>working directory의 수정 취소</td><td>그대로</td></tr><tr><td><code>git reset --soft &lt;commit></code></td><td>커밋만 취소, 변경은 스테이징에 남김</td><td><strong>재작성</strong></td></tr><tr><td><code>git reset --mixed &lt;commit></code></td><td>커밋+스테이징 취소, 변경은 working에 남김 (기본값)</td><td><strong>재작성</strong></td></tr><tr><td><code>git reset --hard &lt;commit></code></td><td>커밋+스테이징+working 전부 삭제</td><td><strong>재작성</strong> ⚠️</td></tr><tr><td><code>git revert &lt;commit></code></td><td>해당 커밋을 되돌리는 <strong>새 커밋</strong> 생성</td><td>보존 (안전)</td></tr></tbody></table><blockquote><p><strong>핵심 구분</strong>: <code>reset</code>은 히스토리를 과거로 되감아 지운다(공유된 브랜치에 위험). <code>revert</code>는 &ldquo;취소하는 커밋"을 새로 쌓으므로 이미 push한 커밋을 안전하게 되돌릴 때 쓴다.</p></blockquote><h3 id=reset-soft--mixed--hard-가-건드리는-범위>reset &ndash;soft / &ndash;mixed / &ndash;hard 가 건드리는 범위</h3><pre class=mermaid>flowchart TD
+    C[&#34;대상 커밋으로 HEAD 이동 (셋 다 공통)&#34;]
+    C --&gt; S{&#34;어디까지 되돌리나?&#34;}
+    S --&gt;|&#34;--soft&#34;| A[&#34;Repository만 되감음&lt;br/&gt;Staging·Working 유지&#34;]
+    S --&gt;|&#34;--mixed (기본)&#34;| B[&#34;Repository + Staging 되감음&lt;br/&gt;Working 유지&#34;]
+    S --&gt;|&#34;--hard&#34;| D[&#34;Repository + Staging + Working 전부 삭제 ⚠️&#34;]</pre><ul><li><code>--soft</code>: &ldquo;커밋만 취소하고 바로 다시 커밋하고 싶다&rdquo; (메시지 재작성 등)</li><li><code>--mixed</code>: &ldquo;커밋과 add를 취소하고 파일 수정부터 다시&rdquo; (가장 흔함)</li><li><code>--hard</code>: &ldquo;전부 버리고 그 시점으로 완전 복귀&rdquo; — <strong>작업 내용이 사라지니 주의</strong></li></ul><h3 id=revert--히스토리를-지우지-않고-되돌리기>revert — 히스토리를 지우지 않고 되돌리기</h3><pre class=mermaid>gitGraph
+   commit id: &#34;A&#34;
+   commit id: &#34;B (버그 유입)&#34;
+   commit id: &#34;C&#34;
+   commit id: &#34;B-취소&#34; type: HIGHLIGHT</pre><ul><li>B를 없던 일로 만들지 않고, <strong>B의 변경을 반대로 적용하는 새 커밋</strong>을 맨 앞에 쌓는다.</li><li>이미 push되어 남들이 받아간 커밋을 되돌릴 때 안전한 유일한 방법.</li></ul><h2 id=7-임시-저장-stash>7. 임시 저장 (stash)</h2><table><thead><tr><th>명령어</th><th>설명</th></tr></thead><tbody><tr><td><code>git stash</code></td><td>작업 중인 변경을 임시 보관하고 깨끗한 상태로</td></tr><tr><td><code>git stash list</code></td><td>보관 목록</td></tr><tr><td><code>git stash pop</code></td><td>가장 최근 보관을 꺼내 적용 + 삭제</td></tr><tr><td><code>git stash apply</code></td><td>꺼내 적용하되 목록엔 남김</td></tr></tbody></table><h2 id=8-reflog--사라진-커밋-되살리기>8. reflog — &ldquo;사라진 커밋&rdquo; 되살리기</h2><p><code>reset --hard</code>나 잘못된 <a class=inline-link href=/Study/tools/git/04_rebase/>rebase</a>
+로 커밋이 사라진 것처럼 보여도, Git은 <strong>HEAD가 거쳐 간 모든 위치를 <code>reflog</code>에 기록</strong>해 둔다. 대부분의 &ldquo;망했다&rdquo; 상황은 여기서 복구된다.</p><h3 id=시나리오-실수로-git-reset---hard로-커밋-3개를-날림>시나리오: 실수로 <code>git reset --hard</code>로 커밋 3개를 날림</h3><pre class=mermaid>flowchart TD
+    A[&#34;작업: A-B-C-D-E (HEAD=E)&#34;] --&gt; B[&#34;실수로&lt;br/&gt;git reset --hard B&#34;]
+    B --&gt; C[&#34;git log엔 A-B만 보임&lt;br/&gt;C·D·E가 사라진 듯 😱&#34;]
+    C --&gt; D[&#34;git reflog 실행&#34;]
+    D --&gt; E[&#34;출력 예:&lt;br/&gt;e5f1a2 HEAD@{0}: reset: moving to B&lt;br/&gt;a1b2c3 HEAD@{1}: commit: E&lt;br/&gt;...E의 해시(a1b2c3) 확인&#34;]
+    E --&gt; F[&#34;git reset --hard a1b2c3&lt;br/&gt;(또는 git reset --hard HEAD@{1})&#34;]
+    F --&gt; G[&#34;A-B-C-D-E 복구 완료 ✅&#34;]</pre><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>git reflog                      <span style=color:#75715e># HEAD가 거쳐 간 이력 확인 (해시 + HEAD@{n})</span>
+</span></span><span style=display:flex><span>git reset --hard &lt;잃은 해시&gt;     <span style=color:#75715e># 그 시점으로 되돌리기</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 또는 브랜치로 안전하게 살리기</span>
+</span></span><span style=display:flex><span>git branch recovered &lt;잃은 해시&gt;</span></span></code></pre></div><blockquote><p><strong>핵심</strong>: 커밋은 <code>reset</code>/<code>rebase</code>로 &ldquo;가리키는 포인터만 바뀔 뿐&rdquo; 곧바로 삭제되지 않는다. reflog로 해시만 찾으면 되살릴 수 있다. (단, 아주 오래되면 gc로 정리될 수 있으니 발견 즉시 복구할 것.)</p></blockquote><p>이전: <a class=inline-link href=/Study/tools/git/02_branch_remote/>02. 브랜치 & 원격</a>
+· 다음: <a class=inline-link href=/Study/tools/git/04_rebase/>04. Rebase</a></p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

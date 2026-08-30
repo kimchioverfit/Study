@@ -1,0 +1,53 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Algorithm theory | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-section><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><section class=section-hero><div class=section-hero-copy><div class=eyebrow-row><a class=eyebrow-link href=/Study/>🗂 Archive</a>
+<span class=eyebrow-sep>/</span>
+<span class="eyebrow-link is-static">Algorithm theory</span></div><h1>Algorithm theory</h1></div><div class=section-stats><span class=stat-label>Entries</span>
+<span class=stat-value>12</span></div></section><section class=entry-grid><a class=entry-card href=/Study/algorithm/algorithm_theory/basic_technique/><h2>Basic Technique</h2><p>??TODO濡?愿由ы븷 留뚰븳 泥댄겕由ъ뒪?? ASCII / UNICODE 여부 확인 제어문자 무시 여부 확인 공백, (개행/탭)문자만 필요 여부 확인 반복 처리 관련 비트 또는 비트플래그 사용 고려 문자 여부 …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/bool_and_bit/><h2>Bool and Bit</h2><p>📌 불리언 및 비트 벡터 (Bool / Bit Vector) ✅ 팁 bool은 1바이트 = 8비트 사용 → 공간 비효율적 비트 벡터 (bit vector) 사용 시 메모리 8배 절약 가능</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/eratostenovo-sito/><h2>Eratostenovo sito</h2><p>에라토스 테네스의 체 소수를 효율적으로 구하는 방법
+소수를 판별할 범위만큼 배열을 할당하여,
+해당하는 값을 넣어주고, 이후에 하나씩 지워나가는 방법을 이용
+배열을 생성하여 초기화한다. 2부터 시작해서 특정 수의 배수 …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/matrix/><h2>Matrix</h2><p>📌 행렬 (Matrix) 💡 기술적 팁 Transpose 또는 Reverse 활용 같은 행이나 열을 반복 접근할 경우, flag 배열 또는 원소로 표시하여 반복 연산을 줄이기</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/min_heap_priority_queue/><h2>Min Heap Priority Queue</h2><p>Min Heap & Priority Queue 힙(Heap) 은 &ldquo;최솟값(또는 최댓값)을 O(1)에 조회하고, 삽입/삭제를 O(log N)에 처리"하는 완전 이진 트리 기반 자료구조. 우선 …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/palindrome/><h2>Palindrome</h2><p>📌 회문 (Palindrome) 🕐 시간 복잡도 최소 O(N): 전체 문자 확인이 필요 ✅ 해법 1: 해시맵 이용 bool isPalindromeMap(const std::string& s) { …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/permutation/><h2>Permutation</h2><p>📌 순열 (Permutation) 💡 팁 두 문자열이 순열 관계인지 확인하려면: sort() 후 비교 unordered_map으로 문자 빈도 수 비교</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/quick_select/><h2>Quick Select</h2><p>Quick Select 정렬되지 않은 배열에서 k번째로 작은(또는 큰) 원소를 찾는 알고리즘. 전체를 정렬하면 O(N log N)이지만, Quick Select는 평균 O(N) 에 찾는다.
+Quick Sort의 …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/string/><h2>String</h2><p>📌 문자열 (String) ✅ 체크 포인트 ASCII인지 UNICODE인지 확인 (보통 ASCII 기준 문제 출제) 대소문자 처리 고려 (예: 'A' vs 'a') 공백, 탭 등 공백 문자 처리 여부 확인 💡 팁 뒤 …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/study_process/><h2>Study Process</h2><p>Study process Data structure
+Array static dynamic Linked list single linked list double linked list circle linked list …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/topological_sort/><h2>Topological sort</h2><p>Topological Sort 위상 정렬
+정렬 알고리즘의 일종으로, 순서가 정해져 있는 일련의 작업을 차례대로 수행해야 할 때 사용할 수 있는 알고리즘
+조금 더 이론적인 설명은, 사이클이 없는 방향 그래프의 모든 노 …</p></a><a class=entry-card href=/Study/algorithm/algorithm_theory/union-find/><h2>Union Find</h2><p>Union Find Union : 서로 다른 두 개의 집합을 하나의 집합으로 만드는 것.
+Find : 하나의 원소가 어느 집합에 속해있는지 찾는 것.
+즉, Graph에서 두 노드가 같은 집합에 속해있는지 확인하는 것 …</p></a></section></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

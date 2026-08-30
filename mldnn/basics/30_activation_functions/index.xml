@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>30 activation functions on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/</link><description>Recent content in 30 activation functions on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/0.activation_function/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/0.activation_function/</guid><description>&lt;h1 id="activation-function"&gt;Activation Function&lt;/h1&gt;
+&lt;p&gt;활성함수란?&lt;/p&gt;
+&lt;p&gt;다른 말로는 비선형 함수&lt;/p&gt;
+&lt;p&gt;이걸 연산해줘야 비선형성을 통해 선형 연산으로는 구하지 못하는&lt;/p&gt;
+&lt;p&gt;해들을 구해낼 수 있음.&lt;/p&gt;
+&lt;p&gt;딥러닝에서는 활성함수라고 부른다.&lt;/p&gt;
+&lt;p&gt;용도에 따라서 다른 활성화 함수를 쓴다.&lt;/p&gt;
+&lt;h3 id="자주-쓰이는-활성화-함수"&gt;자주 쓰이는 활성화 함수&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;함수&lt;/th&gt;
+					&lt;th&gt;수식&lt;/th&gt;
+					&lt;th&gt;특징&lt;/th&gt;
+					&lt;th&gt;대표 사용처&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;ReLU&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$\max(0, x)$&lt;/td&gt;
+					&lt;td&gt;빠르고 단순. 음수는 0으로&lt;/td&gt;
+					&lt;td&gt;대부분의 &lt;strong&gt;은닉층&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Leaky ReLU&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$\max(\alpha x, x)$, $\alpha \ll 1$&lt;/td&gt;
+					&lt;td&gt;음수도 약간 통과 (죽은 ReLU 방지)&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;ReLU로 gradient가 사라질 때&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Sigmoid&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$\frac{1}{1 + e^{-x}}$&lt;/td&gt;
+					&lt;td&gt;0~1 출력, 미분값 작음 (vanishing gradient)&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;이진 분류 출력층&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Tanh&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$\frac{e^x - e^{-x}}{e^x + e^{-x}}$&lt;/td&gt;
+					&lt;td&gt;-1~1 출력, 중심이 0&lt;/td&gt;
+					&lt;td&gt;과거 은닉층 (지금은 ReLU가 더 많이 사용됨)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Softmax&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$\frac{e^{x_i}}{\sum_j e^{x_j}}$&lt;/td&gt;
+					&lt;td&gt;전체 합이 1인 확률 벡터 출력&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;다중 클래스 분류 출력층&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Swish&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$x \cdot \text{sigmoid}(x)$&lt;/td&gt;
+					&lt;td&gt;부드럽고 성능이 좋음 (구글 제안)&lt;/td&gt;
+					&lt;td&gt;성능 중요할 때 (→ 효율성 ↔ 정확도)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;GELU&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;$x \cdot \Phi(x)$ (정규 누적분포 기반)&lt;/td&gt;
+					&lt;td&gt;GPT 계열 모델에서 사용&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;Transformer 모델 등 고성능 모델&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/1.sigmoid/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/1.sigmoid/</guid><description>&lt;h1 id="sigmoid-함수에-대한-상세-설명"&gt;Sigmoid 함수에 대한 상세 설명&lt;/h1&gt;
+&lt;h2 id="-정의-수학식"&gt;📌 정의 (수학식)&lt;/h2&gt;
+&lt;p&gt;시그모이드 함수는 입력값을 부드럽게 0과 1 사이의 값으로 매핑하는 비선형 함수.&lt;/p&gt;
+\[
+\sigma(x) = \frac{1}{1 + e^{-x}}
+\]&lt;ul&gt;
+&lt;li&gt;입력 $ x \in \mathbb{R} $&lt;/li&gt;
+&lt;li&gt;출력 $ \sigma(x) \in (0, 1) $&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-특성"&gt;📌 특성&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;S자형 곡선 (S-shaped curve)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;$ \sigma(0) = 0.5 $&lt;/li&gt;
+&lt;li&gt;$ \lim_{x \to -\infty} \sigma(x) = 0 $, $ \lim_{x \to \infty} \sigma(x) = 1 $&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="시각적-예시"&gt;시각적 예시:&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1 | ●
+ | ●●
+ | ●●
+ | ●●
+ | ●●
+ 0.5 |----------●----------●----------&amp;gt; x
+ | ●●
+ | ●●
+ |●
+ 0 |&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="-미분"&gt;📌 미분&lt;/h2&gt;
+&lt;p&gt;시그모이드 함수의 도함수는 다음과 같습니다:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/2.softmax/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/2.softmax/</guid><description>&lt;h1 id="softmax-함수에-대한-상세-설명"&gt;Softmax 함수에 대한 상세 설명&lt;/h1&gt;
+&lt;h2 id="-정의-수학식"&gt;📌 정의 (수학식)&lt;/h2&gt;
+&lt;p&gt;Softmax 함수는 벡터 형태의 입력을 받아 각 요소를 0~1 사이의 값으로 변환하고, 전체 합이 1이 되도록 만드는 &lt;strong&gt;확률 분포 함수&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;주로 다중 클래스 분류(Multi-class Classification) 문제의 출력층에서 사용됩니다.&lt;/p&gt;
+\[
+\text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}
+\]&lt;ul&gt;
+&lt;li&gt;입력: 벡터 $ \mathbf{z} = [z_1, z_2, ..., z_K] $&lt;/li&gt;
+&lt;li&gt;출력: 확률 벡터 $ \mathbf{p} = [p_1, p_2, ..., p_K] $, 단 $ \sum_{i=1}^{K} p_i = 1 $&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-예시"&gt;📌 예시&lt;/h2&gt;
+&lt;p&gt;입력 벡터: $ z = [1.0, 2.0, 3.0] $&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/3.relu/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/3.relu/</guid><description>&lt;h1 id="relu-함수-rectified-linear-unit"&gt;ReLU 함수 (Rectified Linear Unit)&lt;/h1&gt;
+&lt;h2 id="-정의-수학식"&gt;📌 정의 (수학식)&lt;/h2&gt;
+&lt;p&gt;ReLU 함수는 입력값이 0보다 크면 그대로 출력하고, 0 이하이면 0을 출력하는 간단한 비선형 함수.&lt;/p&gt;
+\[
+f(x) = \max(0, x)
+\]&lt;hr&gt;
+&lt;h2 id="-그래프"&gt;📌 그래프&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; |
+ y | /
+ | /
+ | /
+ | /
+ |----●----------&amp;gt; x
+ | 
+ |&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="-미분"&gt;📌 미분&lt;/h2&gt;
+&lt;p&gt;ReLU 함수의 미분은 다음과 같습니다:&lt;/p&gt;
+\[
+f'(x) =
+\begin{cases}
+1 &amp; \text{if } x &gt; 0 \\
+0 &amp; \text{if } x \leq 0
+\end{cases}
+\]&lt;hr&gt;
+&lt;h2 id="-장점"&gt;📌 장점&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 계산이 간단하고 빠름&lt;/li&gt;
+&lt;li&gt;✅ Gradient Vanishing 문제 완화&lt;/li&gt;
+&lt;li&gt;✅ Sparse activation (많은 뉴런이 0이 되어 효율적)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-단점"&gt;📌 단점&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;❌ Dying ReLU 문제: 뉴런이 0만 출력하게 되는 경우가 있음&lt;/li&gt;
+&lt;li&gt;❌ 출력값이 음수로 가지 않기 때문에 중심이 0이 아님&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-활용"&gt;📌 활용&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;대부분의 CNN, MLP, Transformer 모델의 기본 활성화 함수로 사용됨&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/4.tanh/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/30_activation_functions/4.tanh/</guid><description>&lt;h1 id="tanh-함수-쌍곡-탄젠트-함수"&gt;tanh 함수 (쌍곡 탄젠트 함수)&lt;/h1&gt;
+&lt;h2 id="-정의-수학식"&gt;📌 정의 (수학식)&lt;/h2&gt;
+&lt;p&gt;tanh 함수는 입력값을 -1에서 1 사이로 매핑한다. Sigmoid와 유사하지만, 중심이 0이라는 장점이 있다.&lt;/p&gt;
+\[
+\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+\]&lt;hr&gt;
+&lt;h2 id="-그래프"&gt;📌 그래프&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1 | ●●●●●●●
+ | ●●●
+ | ●●●
+ | ●●●
+ | ●●●
+ 0 |--------●-------------●--------&amp;gt; x
+ | ●●●
+ | ●●●
+ | ●●●
+ -1 |●●●●●●●&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="-미분"&gt;📌 미분&lt;/h2&gt;
+\[
+\frac{d}{dx}\tanh(x) = 1 - \tanh^2(x)
+\]&lt;hr&gt;
+&lt;h2 id="-장점"&gt;📌 장점&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 출력 중심이 0이라 학습에 유리&lt;/li&gt;
+&lt;li&gt;✅ Sigmoid보다 gradient 흐름이 더 잘 유지됨&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-단점"&gt;📌 단점&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;❌ 여전히 Vanishing Gradient 문제 있음 (입력 크면 미분값 0에 수렴)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-활용"&gt;📌 활용&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;고전적인 RNN, MLP 등에서 자주 사용&lt;/li&gt;
+&lt;li&gt;현재는 ReLU가 더 보편적이나, 출력 중심을 0으로 유지하고 싶을 때 tanh 사용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;</description></item></channel></rss>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>20 matrix types on Study Notes</title><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/</link><description>Recent content in 20 matrix types on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/cofactor/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/cofactor/</guid><description>&lt;h1 id="-여인수cofactor와-행렬식-계산"&gt;📌 여인수(Cofactor)와 행렬식 계산&lt;/h1&gt;
+&lt;h2 id="-1-소행렬-minor"&gt;✅ 1. 소행렬 (Minor)&lt;/h2&gt;
+&lt;p&gt;행렬 $ A $에서 $ i $행 $ j $열 원소 $ a_{ij} $의 &lt;strong&gt;소행렬(minor)&lt;/strong&gt; $ M_{ij} $은&lt;br&gt;
+해당 행과 열을 제거하여 얻은 부분 행렬의 행렬식을 말한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-2-여인수-cofactor"&gt;✅ 2. 여인수 (Cofactor)&lt;/h2&gt;
+&lt;p&gt;여인수 $ C_{ij} $는 소행렬 $ M_{ij} $에 부호를 곱한 값:&lt;/p&gt;
+$$
+C_{ij} = (-1)^{i+j} \cdot \det(M_{ij})
+$$&lt;ul&gt;
+&lt;li&gt;부호는 체스판처럼 번갈아가며 $ +, - $ 반복&lt;/li&gt;
+&lt;li&gt;예: 3×3 행렬의 부호 행렬&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+\begin{bmatrix}&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/diagonal_matrix/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/diagonal_matrix/</guid><description>&lt;h1 id="-대각-행렬-diagonal-matrix"&gt;🔷 대각 행렬 (Diagonal Matrix)&lt;/h1&gt;
+&lt;h2 id="-정의"&gt;✅ 정의&lt;/h2&gt;
+&lt;p&gt;대각 행렬은 &lt;strong&gt;주대각선&lt;/strong&gt;(main diagonal, 왼쪽 위에서 오른쪽 아래 방향)에 있는 원소를 제외한 나머지 원소가 모두 0인 &lt;strong&gt;정방행렬&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;즉, 행렬 $ D = [d_{ij}] $ 가 다음 조건을 만족할 때:&lt;/p&gt;
+$$
+d_{ij} = 0 \quad \text{(for all } i \neq j \text{)}
+$$&lt;p&gt;그 행렬은 대각 행렬.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-예시"&gt;🧮 예시&lt;/h2&gt;
+&lt;p&gt;다음은 $ 3 \times 3 $ 대각 행렬의 예:&lt;/p&gt;
+$$
+D =
+\begin{bmatrix}
+5 &amp; 0 &amp; 0 \\
+0 &amp; -3 &amp; 0 \\
+0 &amp; 0 &amp; 2
+\end{bmatrix}
+$$&lt;ul&gt;
+&lt;li&gt;주대각선 원소는: 5, -3, 2&lt;/li&gt;
+&lt;li&gt;나머지 원소는 모두 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-일반-형태"&gt;🔢 일반 형태&lt;/h2&gt;
+&lt;p&gt;$ n \times n $ 대각 행렬은 다음과 같이 나타낼 수 있다:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/inverse_matrix/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/inverse_matrix/</guid><description>&lt;h1 id="-역행렬-inverse-matrix"&gt;🔄 역행렬 (Inverse Matrix)&lt;/h1&gt;
+&lt;h2 id="-정의"&gt;✅ 정의&lt;/h2&gt;
+&lt;p&gt;정방행렬 $ A $에 대해, 다음을 만족하는 행렬 $ A^{-1} $가 존재하면 이를 &lt;strong&gt;역행렬&lt;/strong&gt;이라고 한다:&lt;/p&gt;
+$$
+A A^{-1} = A^{-1} A = I
+$$&lt;ul&gt;
+&lt;li&gt;$ I $: 항등행렬 (Identity Matrix)&lt;/li&gt;
+&lt;li&gt;$ A^{-1} $: $ A $의 역행렬&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-역행렬이-존재하는-조건"&gt;📌 역행렬이 존재하는 조건&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;행렬 $ A $는 &lt;u&gt;&lt;strong&gt;정방행렬&lt;/strong&gt;&lt;/u&gt;이어야 한다. (행 = 열)&lt;/li&gt;
+&lt;li&gt;$ \det(A) \neq 0 $ 이어야 한다. (행렬식이 0이 아니어야 함)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-22-행렬의-역행렬-공식"&gt;🧮 2×2 행렬의 역행렬 공식&lt;/h2&gt;
+&lt;p&gt;행렬 $ A = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix} $ 의 역행렬은 다음과 같이 계산한다:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/symmetric_matrix/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/symmetric_matrix/</guid><description>&lt;h1 id="-대칭-행렬-symmetric-matrix"&gt;🔁 대칭 행렬 (Symmetric Matrix)&lt;/h1&gt;
+&lt;h2 id="-정의"&gt;✅ 정의&lt;/h2&gt;
+&lt;p&gt;대칭 행렬(Symmetric Matrix)은 **전치행렬(transpose)**과 자기 자신이 같은 &lt;strong&gt;정방행렬&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;즉, 행렬 $ A $가 다음을 만족하면:&lt;/p&gt;
+$$
+A^T = A
+$$&lt;p&gt;→ $ A $는 &lt;strong&gt;대칭 행렬&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-예시"&gt;🧮 예시&lt;/h2&gt;
+&lt;p&gt;다음은 대칭 행렬의 예:&lt;/p&gt;
+$$
+A =
+\begin{bmatrix}
+2 &amp; 3 &amp; 4 \\
+3 &amp; 5 &amp; 6 \\
+4 &amp; 6 &amp; 7
+\end{bmatrix}
+$$&lt;ul&gt;
+&lt;li&gt;$ A_{ij} = A_{ji} $ → 모든 원소가 대각선 기준으로 대칭&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-전치행렬과-비교"&gt;🔄 전치행렬과 비교&lt;/h2&gt;
+&lt;p&gt;전치행렬이란 행과 열을 뒤바꾸는 연산:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/triangular_matrix/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/20_matrix_types/triangular_matrix/</guid><description>&lt;h1 id="-삼각행렬-triangular-matrix"&gt;🔺 삼각행렬 (Triangular Matrix)&lt;/h1&gt;
+&lt;h2 id="-정의"&gt;✅ 정의&lt;/h2&gt;
+&lt;p&gt;삼각행렬은 &lt;strong&gt;정방행렬&lt;/strong&gt; 중에서 특정 방향의 원소가 모두 0인 행렬. 다음 두 가지 종류가 있다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;상삼각행렬 (Upper Triangular Matrix)&lt;/strong&gt;&lt;br&gt;
+→ 주대각선 아래의 원소가 모두 0&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;하삼각행렬 (Lower Triangular Matrix)&lt;/strong&gt;&lt;br&gt;
+→ 주대각선 위의 원소가 모두 0&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-상삼각행렬-upper-triangular-matrix"&gt;🔼 상삼각행렬 (Upper Triangular Matrix)&lt;/h2&gt;
+$$
+U =
+\begin{bmatrix}
+1 &amp; 2 &amp; 3 \\
+0 &amp; 5 &amp; 6 \\
+0 &amp; 0 &amp; 9
+\end{bmatrix}
+$$&lt;ul&gt;
+&lt;li&gt;$ U_{ij} = 0 $ for all $ i &gt; j $ (대각선 아래가 0)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-하삼각행렬-lower-triangular-matrix"&gt;🔽 하삼각행렬 (Lower Triangular Matrix)&lt;/h2&gt;
+$$
+L =
+\begin{bmatrix}
+4 &amp; 0 &amp; 0 \\
+7 &amp; 1 &amp; 0 \\
+2 &amp; 8 &amp; 6
+\end{bmatrix}
+$$&lt;ul&gt;
+&lt;li&gt;$ L_{ij} = 0 $ for all $ i &lt; j $ (대각선 위가 0)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-성질"&gt;📌 성질&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;행렬 곱&lt;/strong&gt;:&lt;/p&gt;</description></item></channel></rss>

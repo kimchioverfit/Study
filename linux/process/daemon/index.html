@@ -1,0 +1,85 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/linux/process/>Process</a></div><h1>Daemon</h1></header><div class="doc-body post-body"><h1 id=process-group-session-daemon>Process Group, Session, Daemon</h1><p>프로세스 그룹과 세션은 셸의 잡 컨트롤(<code>Ctrl+C</code>가 파이프라인 전체를 죽이는 원리)과 데몬화(daemonize)를 이해하는 데 필요한 개념이다.</p><h2 id=1-프로세스-그룹과-세션의-계층-구조>1. 프로세스 그룹과 세션의 계층 구조</h2><pre tabindex=0><code>Session (세션)  ── 제어 터미널(controlling terminal) 최대 1개와 연결
+ ├── Process Group A (foreground)   ← 터미널 입력/시그널을 받음
+ │    ├── ls
+ │    └── grep      (ls | grep 파이프라인 = 한 그룹)
+ └── Process Group B (background)
+      └── long_task &amp;</code></pre><table><thead><tr><th>개념</th><th>ID</th><th>설명</th></tr></thead><tbody><tr><td>프로세스 그룹</td><td>PGID</td><td>시그널을 한꺼번에 받는 단위. 셸은 파이프라인 하나를 한 그룹으로 묶는다</td></tr><tr><td>세션</td><td>SID</td><td>그룹들의 모음. 하나의 제어 터미널을 가질 수 있다</td></tr><tr><td>세션 리더</td><td>SID == PID</td><td>세션을 만든 프로세스 (보통 로그인 셸)</td></tr></tbody></table><ul><li><code>Ctrl+C</code>를 누르면 터미널 드라이버가 <strong>foreground 프로세스 그룹 전체</strong>에 <code>SIGINT</code>를 보낸다 — <code>ls | grep</code>이 한꺼번에 죽는 이유</li><li><code>kill -TERM -PGID</code> (음수 PID)로 그룹 전체에 시그널을 보낼 수 있다 (<a class=inline-link href=/Study/linux/process/signal/>Signal</a>
+2장)</li></ul><h2 id=2-관련-함수>2. 관련 함수</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;unistd.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>pid_t</span> <span style=color:#a6e22e>getpgrp</span>(<span style=color:#66d9ef>void</span>);            <span style=color:#75715e>// 내 프로세스 그룹 ID
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span>   <span style=color:#a6e22e>setpgid</span>(<span style=color:#66d9ef>pid_t</span> pid, <span style=color:#66d9ef>pid_t</span> pgid);  <span style=color:#75715e>// 프로세스 그룹 변경/생성
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pid_t</span> <span style=color:#a6e22e>getsid</span>(<span style=color:#66d9ef>pid_t</span> pid);        <span style=color:#75715e>// 세션 ID 조회
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pid_t</span> <span style=color:#a6e22e>setsid</span>(<span style=color:#66d9ef>void</span>);             <span style=color:#75715e>// 새 세션 생성 (데몬화의 핵심)
+</span></span></span></code></pre></div><h3 id=setpgid--셸이-잡-컨트롤을-구현하는-방법>setpgid() — 셸이 잡 컨트롤을 구현하는 방법</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>// 셸이 파이프라인 실행 시: 첫 자식의 PID를 그룹 ID로 삼아 묶는다
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>setpgid</span>(child_pid, pipeline_leader_pid);</span></span></code></pre></div><h3 id=setsid--새-세션-만들기>setsid() — 새 세션 만들기</h3><p>호출한 프로세스가 <strong>새 세션의 리더 + 새 그룹의 리더</strong>가 되고, <strong>제어 터미널과의 연결이 완전히 끊긴다.</strong></p><ul><li>제약: <strong>이미 프로세스 그룹 리더인 프로세스는 호출할 수 없다</strong> (<code>EPERM</code>) — 그래서 데몬화할 때 fork를 먼저 해서 &ldquo;리더가 아닌 자식"을 만든 뒤 자식이 setsid를 호출한다</li></ul><h2 id=3-데몬daemon-만들기--double-fork-패턴>3. 데몬(Daemon) 만들기 — double fork 패턴</h2><p>데몬은 터미널 없이 백그라운드에서 도는 서비스 프로세스다. 전통적인 데몬화 절차:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;unistd.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;sys/stat.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;fcntl.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>daemonize</span>(<span style=color:#66d9ef>void</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 1차 fork: 부모 종료 → 자식은 &#34;그룹 리더가 아닌&#34; 상태가 됨
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>fork</span>() <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>) <span style=color:#a6e22e>_exit</span>(<span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 새 세션 생성 → 제어 터미널과 완전 분리
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>setsid</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 2차 fork: 세션 리더도 아니게 만듦
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>//           → 이후 터미널 디바이스를 열어도 제어 터미널로 붙잡는 일이 없음
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>fork</span>() <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>) <span style=color:#a6e22e>_exit</span>(<span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 환경 정리
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>umask</span>(<span style=color:#ae81ff>0</span>);                     <span style=color:#75715e>// 상속받은 umask 초기화
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>chdir</span>(<span style=color:#e6db74>&#34;/&#34;</span>);                   <span style=color:#75715e>// 마운트 해제를 막지 않도록 루트로 이동
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 표준 입출력을 /dev/null로 교체 (터미널 fd를 끊음)
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> fd <span style=color:#f92672>=</span> <span style=color:#a6e22e>open</span>(<span style=color:#e6db74>&#34;/dev/null&#34;</span>, O_RDWR);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dup2</span>(fd, STDIN_FILENO);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dup2</span>(fd, STDOUT_FILENO);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dup2</span>(fd, STDERR_FILENO);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (fd <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>2</span>) <span style=color:#a6e22e>close</span>(fd);
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><h3 id=각-단계가-필요한-이유>각 단계가 필요한 이유</h3><table><thead><tr><th>단계</th><th>이유</th></tr></thead><tbody><tr><td>1차 <code>fork</code> + 부모 종료</td><td>① 셸에게는 명령이 끝난 것처럼 보임 ② 자식은 그룹 리더가 아니게 되어 <code>setsid()</code> 호출 자격이 생김 ③ 부모가 죽었으므로 고아가 되어 init(systemd)의 자식으로 편입</td></tr><tr><td><code>setsid()</code></td><td>제어 터미널과 분리 — 터미널이 닫혀도 <code>SIGHUP</code>을 받지 않음</td></tr><tr><td>2차 <code>fork</code></td><td>세션 리더 자격까지 버림 — 세션 리더는 터미널 디바이스를 열면 그것이 제어 터미널로 붙어버릴 수 있는데(System V 계열), 그 가능성을 원천 차단</td></tr><tr><td><code>chdir("/")</code></td><td>데몬이 어떤 디렉토리를 cwd로 물고 있으면 그 파일시스템을 umount 할 수 없게 됨</td></tr><tr><td>표준 fd 교체</td><td>끊어진 터미널에 쓰다가 <code>SIGPIPE</code>/에러가 나는 것을 방지. 로그는 파일이나 <code>syslog()</code>로</td></tr></tbody></table><ul><li>glibc에는 이를 대충 해주는 <code>daemon(nochdir, noclose)</code> 함수도 있지만, double fork를 생략하는 등 완전하지 않아 직접 구현하는 경우가 많다</li></ul><h2 id=4-현대의-관점--systemd-시대의-데몬>4. 현대의 관점 — systemd 시대의 데몬</h2><p>systemd 환경에서는 <strong>위 전통 방식이 오히려 권장되지 않는다.</strong></p><table><thead><tr><th>전통 데몬 (SysV 스타일)</th><th>systemd 방식 (new-style)</th></tr></thead><tbody><tr><td>스스로 double fork로 데몬화</td><td><strong>데몬화하지 않고 포그라운드로 실행</strong> — systemd가 프로세스 관리</td></tr><tr><td>PID 파일로 중복 실행 방지</td><td>systemd가 프로세스를 직접 추적 (PID 파일 불필요)</td></tr><tr><td><code>syslog()</code>로 로그</td><td>stdout/stderr에 그냥 출력 → journald가 수집</td></tr><tr><td><code>SIGHUP</code>으로 설정 리로드</td><td><code>ExecReload=</code> 지시자로 정의</td></tr></tbody></table><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-ini data-lang=ini><span style=display:flex><span><span style=color:#75715e># /etc/systemd/system/myapp.service</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>[Service]</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>Type</span><span style=color:#f92672>=</span><span style=color:#e6db74>simple            # 포그라운드 실행을 전제</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ExecStart</span><span style=color:#f92672>=</span><span style=color:#e6db74>/usr/bin/myapp</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>Restart</span><span style=color:#f92672>=</span><span style=color:#e6db74>on-failure     # 죽으면 자동 재시작</span></span></span></code></pre></div><p>즉 새로 작성하는 서비스라면 데몬화 코드를 넣지 말고 포그라운드 프로그램으로 만들어 서비스 매니저(systemd, 임베디드라면 BusyBox init + start-stop-daemon 등)에게 맡기는 것이 현대적 설계다. double fork 패턴은 &ldquo;왜 그렇게 했는지"를 이해하는 것이 중요한 고전 기법으로 남아 있다.</p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

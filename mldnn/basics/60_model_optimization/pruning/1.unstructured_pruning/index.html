@@ -1,0 +1,60 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/basics/60_model_optimization/pruning/>Pruning</a></div><h1>1.Unstructured Pruning</h1></header><div class="doc-body post-body"><h1 id=1unstructured-pruning>1.Unstructured Pruning</h1><p>딥러닝 모델의 weight(가중치) 중</p><p><u>값이 작거나 중요도가 낮은 개별 요소</u>들을 <strong>제거</strong>하여</p><p>희소(sparse) 구조를 만드는 경량화 기법</p><hr><h3 id=모델-저장--추론>모델 저장 & 추론</h3><p>weight가 0인 값이 많은 sparse tensor 형태이므로, 저장 용량은 작아짐</p><p>⚠️ 하지만 PyTorch, TensorFlow 등에서는 기본적으로 sparse 연산을 최적화하지 않음</p><p>→ 추론 속도는 그대로, 모델 크기만 감소</p><p>따라서 ONNX + TensorRT, AMPERE GPU, custom inference engine 등에서 진짜 속도 향상을 체감 가능</p><hr><h3 id=sample>Sample</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn.utils.prune <span style=color:#66d9ef>as</span> prune
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn <span style=color:#66d9ef>as</span> nn
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 간단한 모델</span>
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Sequential(
+</span></span><span style=display:flex><span>    nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>512</span>, <span style=color:#ae81ff>256</span>),
+</span></span><span style=display:flex><span>    nn<span style=color:#f92672>.</span>ReLU(),
+</span></span><span style=display:flex><span>    nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>10</span>)
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 첫 번째 Linear 레이어에 대해 30% 비구조화 pruning 적용</span>
+</span></span><span style=display:flex><span>prune<span style=color:#f92672>.</span>l1_unstructured(model[<span style=color:#ae81ff>0</span>], name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;weight&#34;</span>, amount<span style=color:#f92672>=</span><span style=color:#ae81ff>0.3</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 마스크 확인 (1: 유지, 0: 제거)</span>
+</span></span><span style=display:flex><span>print(model[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>weight_mask)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 영구적으로 weight만 남기고 pruning mask 제거</span>
+</span></span><span style=display:flex><span>prune<span style=color:#f92672>.</span>remove(model[<span style=color:#ae81ff>0</span>], <span style=color:#e6db74>&#39;weight&#39;</span>)</span></span></code></pre></div></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

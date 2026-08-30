@@ -1,0 +1,59 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/generative_model/>Generative Model</a></div><h1>Auto Encoding Variational Bayes</h1></header><div class="doc-body post-body"><h1 id=auto-encoding-variational-bayes-vae>Auto-Encoding Variational Bayes (VAE)</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/1312.6114>Auto-Encoding Variational Bayes</a>
+— Kingma & Welling, ICLR 2014</p><p>Kingma & Welling, 2013. <strong>VAE(Variational Autoencoder)</strong> 를 처음 제안한 논문. 결론부터 아주 쉽게: <strong>&ldquo;압축했다가 복원하는 오토인코더인데, 압축한 결과를 딱 하나의 점이 아니라 &lsquo;이 근처 어딘가&rsquo;라는 확률 구름으로 만들어서 — 그 구름에서 아무 데나 찍어도 그럴듯한 새 데이터를 만들 수 있게 한 모델&rdquo;</strong> 이다.</p><h2 id=1-먼저-오토인코더autoencoder부터>1. 먼저, 오토인코더(Autoencoder)부터</h2><p>오토인코더는 두 부분으로 이루어진다.</p><pre tabindex=0><code>입력(예: 고양이 사진) → [Encoder] → 압축된 벡터(z) → [Decoder] → 복원된 사진</code></pre><ul><li><strong>Encoder</strong>: 큰 이미지를 작은 벡터 <code>z</code>로 압축 (예: 784차원 이미지 → 20차원 벡터)</li><li><strong>Decoder</strong>: 그 작은 벡터를 다시 원래 이미지로 복원</li><li>학습 목표는 단순하다: <strong>&ldquo;입력과 복원 결과가 최대한 똑같게&rdquo;</strong></li></ul><p>이 작은 벡터 <code>z</code>가 사는 공간을 <strong>잠재 공간(latent space)</strong> 이라 부른다. 잘 학습되면 이 공간엔 &ldquo;고양이다움&rdquo;, &ldquo;표정&rdquo;, &ldquo;각도&rdquo; 같은 의미가 압축되어 있다고 기대한다.</p><h2 id=2-그런데-일반-오토인코더로는-새로운-것을-못-만든다>2. 그런데 일반 오토인코더로는 &ldquo;새로운 것"을 못 만든다</h2><p>여기서 하고 싶은 것: 잠재 공간에서 <strong>아무 점이나 하나 골라 Decoder에 넣으면 새로운 고양이 사진이 나오면 좋겠다.</strong> 이게 되면 &ldquo;생성 모델"이 된다.</p><p>하지만 일반 오토인코더는 이게 잘 안 된다. 왜냐하면:</p><ul><li>Encoder는 학습 데이터 각각을 잠재 공간의 <strong>딱 하나의 점</strong>으로만 찍어 넣는다</li><li>학습은 &ldquo;그 점들을 Decoder가 잘 복원하는지"만 신경 쓴다 — <strong>점과 점 사이에 뭐가 있어야 하는지는 아무도 신경 쓰지 않는다</strong></li><li>그 결과 점들이 듬성듬성, 아무렇게나 흩어진다. 점과 점 <strong>사이의 빈 공간</strong>에서 하나 뽑아 Decoder에 넣으면 의미 없는 잡음이 나온다</li></ul><pre tabindex=0><code>일반 오토인코더의 잠재 공간 (점들이 듬성듬성, 사이는 보장이 없음)
+
+     ●고양이1        ●강아지1
+              (빈 공간 = 여기서 뽑으면 이상한 게 나옴)
+         ●고양이2
+
+VAE의 잠재 공간 (각 데이터가 &#39;구름&#39;을 만들고, 구름끼리 겹치며 매끈하게 이어짐)
+
+    ░░●░░  ░░●░░
+   ░░░░░░░░░░░░░░   ← 구름 사이 어디를 찍어도 그럴듯한 결과
+    ░░●░░  ░░●░░</code></pre><h2 id=3-vae의-핵심-아이디어--점-대신-확률-구름>3. VAE의 핵심 아이디어 — 점 대신 &ldquo;확률 구름&rdquo;</h2><p>VAE는 Encoder가 하나의 점을 뱉는 대신, <strong>평균(μ)과 분산(σ²)</strong> 을 뱉게 만든다. 즉 &ldquo;정확히 여기"가 아니라 &ldquo;이 평균 근처, 이 정도 퍼짐으로 존재한다"는 <strong>확률분포</strong>를 출력한다.</p><pre tabindex=0><code>입력 → [Encoder] → μ(평균), σ(표준편차)  →  z를 이 분포에서 샘플링  → [Decoder] → 복원</code></pre><p>이렇게 하면 학습 중에 매번 <strong>z가 μ 주변에서 흔들리며 샘플링</strong>되므로, Decoder는 &ldquo;정확히 이 점 하나"가 아니라 <strong>그 주변 전체를 잘 복원하도록</strong> 강제된다. 자연히 데이터들의 구름이 서로 겹치고 이어지면서 잠재 공간 전체가 매끈해진다 — 그래서 아무 점이나 찍어도 그럴듯한 출력이 나온다.</p><h2 id=4-학습시키는-두-가지-목표-loss>4. 학습시키는 두 가지 목표 (Loss)</h2><p>VAE는 두 가지를 동시에 잘하도록 학습한다. 이걸 논문에서는 <strong>ELBO(Evidence Lower Bound)</strong> 를 최대화한다고 표현하는데, 풀어보면 다음 두 항의 균형이다.</p>$$\text{ELBO} = \underbrace{\mathbb{E}[\log p(x|z)]}_{\text{복원을 잘하기}} - \underbrace{D_{KL}(q(z|x) \,\|\, p(z))}_{\text{구름을 정돈하기}}$$<table><thead><tr><th>항</th><th>쉬운 말</th><th>안 하면 생기는 문제</th></tr></thead><tbody><tr><td><strong>복원 손실 (Reconstruction Loss)</strong></td><td>&ldquo;압축했다가 풀었을 때 원본과 비슷해야 한다&rdquo;</td><td>이것만 있으면 일반 오토인코더와 같아짐 — 점들이 제멋대로 흩어짐</td></tr><tr><td><strong>KL Divergence</strong></td><td>&ldquo;각 데이터의 확률 구름이 표준정규분포(평균 0, 분산 1)에 가깝게, 너무 멀리 벗어나거나 너무 뾰족(사실상 점)해지지 말아라&rdquo;</td><td>이것만 있으면 모든 구름이 원점에 뭉쳐서 복원을 포기함</td></tr></tbody></table><p><strong>둘의 줄다리기가 핵심이다:</strong></p><ul><li>복원 손실만 신경 쓰면 → Encoder가 σ를 거의 0으로 만들어 사실상 &ldquo;점"으로 되돌아가려 한다 (일반 오토인코더로 퇴화)</li><li>KL 항이 이를 막는다 — &ldquo;구름을 너무 뾰족하게 만들지 마라, 표준정규분포 크기 정도는 퍼져 있어라"라고 규제(regularize)한다</li><li>그 결과 구름들이 적당히 퍼지고 서로 겹치면서, 잠재 공간 전체가 매끈하고 의미 있는 공간이 된다</li></ul><h2 id=5-reparameterization-trick--이-논문의-진짜-기여>5. Reparameterization Trick — 이 논문의 진짜 기여</h2><p>&ldquo;확률분포에서 샘플링한다"는 아이디어 자체는 간단하지만, 문제가 하나 있다. <strong>샘플링(랜덤)은 미분이 안 되므로, 역전파(backpropagation)로 Encoder를 학습시킬 수가 없다.</strong></p><p>이 논문이 제시한 해법이 <strong>reparameterization trick</strong>이다.</p><pre tabindex=0><code>❌ 이렇게 샘플링하면 미분 불가:
+z = sample from N(μ, σ²)          // μ, σ에서 랜덤 추출 — 이 과정 자체가 미분 안 됨
+
+✅ 이렇게 바꾸면 미분 가능:
+ε = sample from N(0, 1)            // 랜덤성을 별도의 고정 분포로 분리
+z = μ + σ × ε                      // 이제 z는 μ, σ에 대해 완전히 미분 가능한 수식</code></pre><ul><li>핵심은 <strong>&ldquo;랜덤한 부분&rdquo;(ε)과 &ldquo;학습되는 부분&rdquo;(μ, σ)을 분리</strong>한 것이다</li><li>ε은 그냥 표준정규분포에서 뽑은 고정된 노이즈 취급 — 여기엔 미분이 필요 없다</li><li><code>z = μ + σ × ε</code> 이 수식은 순수하게 μ, σ에 대한 함수이므로 <strong>역전파가 그대로 통과</strong>한다</li><li>이 트릭 덕분에 &ldquo;확률분포를 학습하는 모델"을 일반적인 신경망 학습(경사하강법)으로 통째로 학습시킬 수 있게 됐다 — 이게 이 논문이 유명한 진짜 이유다</li></ul><h2 id=6-정리--한-문장씩>6. 정리 — 한 문장씩</h2><table><thead><tr><th>질문</th><th>답</th></tr></thead><tbody><tr><td>이 논문이 뭘 하려는가</td><td>오토인코더를 <strong>생성 모델</strong>로 만들기 (잠재 공간에서 샘플링 → 새 데이터 생성)</td></tr><tr><td>어떻게</td><td>Encoder가 점 대신 <strong>분포(μ, σ)</strong> 를 출력하게 함</td></tr><tr><td>왜 그게 되는가</td><td>복원 손실 + KL 규제의 줄다리기로 잠재 공간이 <strong>매끈하고 촘촘하게</strong> 채워짐</td></tr><tr><td>학습이 안 막히는 이유</td><td><strong>reparameterization trick</strong>으로 샘플링 과정을 미분 가능하게 재구성</td></tr><tr><td>결과물</td><td>Decoder만 떼어서 <code>z ~ N(0,1)</code>을 랜덤하게 넣으면 <strong>새로운 그럴듯한 데이터</strong>가 나옴</td></tr></tbody></table><h2 id=7-참고--이후-발전>7. 참고 — 이후 발전</h2><ul><li>VAE의 &ldquo;너무 매끈하게 만들려다 결과물이 흐릿(blurry)해진다"는 한계는 이후 GAN, Diffusion 모델 등이 다른 방식으로 접근하게 되는 동기가 된다</li><li>Encoder가 뱉는 (μ, σ)는 실무에서 보통 <code>log(σ²)</code>를 출력하도록 구현한다 — σ가 항상 양수여야 하는데 신경망 출력은 음수도 나올 수 있어서, log 공간에서 다루고 나중에 <code>exp</code>를 씌운다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

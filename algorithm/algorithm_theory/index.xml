@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Algorithm theory on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/</link><description>Recent content in Algorithm theory on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/basic_technique/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/basic_technique/</guid><description>&lt;!-- hugo: content --&gt;
+&lt;hr&gt;
+&lt;h2 id="todo濡愿由ы븷-留뚰븳-泥댄겕由ъ뒪"&gt;??TODO濡?愿由ы븷 留뚰븳 泥댄겕由ъ뒪??&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; ASCII / UNICODE 여부 확인&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 제어문자 무시 여부 확인&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 공백, (개행/탭)문자만 필요 여부 확인&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 반복 처리 관련 비트 또는 비트플래그 사용 고려&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 문자 여부 판단 관련 비트 벡터 사용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/bool_and_bit/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/bool_and_bit/</guid><description>&lt;h1 id="-불리언-및-비트-벡터-bool--bit-vector"&gt;📌 불리언 및 비트 벡터 (Bool / Bit Vector)&lt;/h1&gt;
+&lt;h3 id="-팁"&gt;✅ 팁&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;bool&lt;/code&gt;은 1바이트 = 8비트 사용 → 공간 비효율적&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;비트 벡터 (bit vector)&lt;/strong&gt; 사용 시 메모리 8배 절약 가능&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/eratostenovo-sito/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/eratostenovo-sito/</guid><description>&lt;h1 id="에라토스-테네스의-체"&gt;에라토스 테네스의 체&lt;/h1&gt;
+&lt;p&gt;소수를 효율적으로 구하는 방법&lt;/p&gt;
+&lt;p&gt;소수를 판별할 범위만큼 배열을 할당하여,&lt;/p&gt;
+&lt;p&gt;해당하는 값을 넣어주고, 이후에 하나씩 지워나가는 방법을 이용&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;배열을 생성하여 초기화한다.&lt;/li&gt;
+&lt;li&gt;2부터 시작해서 특정 수의 배수에 해당하는 수를 모두 지운다.
+(지울 때 자기자신은 지우지 않고, 이미 지워진 수는 건너뛴다.)&lt;/li&gt;
+&lt;li&gt;2부터 시작하여 남아있는 수를 모두 출력한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 에라토스테네스의 체 함수
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sieveOfEratosthenes&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 소수를 체크하기 위한 boolean 배열 생성
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; isPrime(n &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, true);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 0과 1은 소수가 아님
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; isPrime[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; isPrime[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;*&lt;/span&gt; i &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; n; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isPrime[i]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// i의 배수를 모두 소수가 아니라고 표시
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; j &lt;span style="color:#f92672"&gt;=&lt;/span&gt; i &lt;span style="color:#f92672"&gt;*&lt;/span&gt; i; j &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; n; j &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; i) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; isPrime[j] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 소수 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;소수: &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; n; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isPrime[i]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; i &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 메인 함수
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;n을 입력하세요: &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cin &lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; n;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sieveOfEratosthenes(n);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/matrix/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/matrix/</guid><description>&lt;h1 id="-행렬-matrix"&gt;📌 행렬 (Matrix)&lt;/h1&gt;
+&lt;h3 id="-기술적-팁"&gt;💡 기술적 팁&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Transpose&lt;/strong&gt; 또는 &lt;strong&gt;Reverse&lt;/strong&gt; 활용&lt;/li&gt;
+&lt;li&gt;같은 행이나 열을 반복 접근할 경우, &lt;strong&gt;flag 배열 또는 원소로 표시하여&lt;/strong&gt; 반복 연산을 줄이기&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/min_heap_priority_queue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/min_heap_priority_queue/</guid><description>&lt;h1 id="min-heap--priority-queue"&gt;Min Heap &amp;amp; Priority Queue&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;힙(Heap)&lt;/strong&gt; 은 &amp;ldquo;최솟값(또는 최댓값)을 O(1)에 조회하고, 삽입/삭제를 O(log N)에 처리&amp;quot;하는 완전 이진 트리 기반 자료구조. &lt;strong&gt;우선순위 큐(Priority Queue)&lt;/strong&gt; 는 이 힙으로 구현하는 것이 표준이다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;여기서의 힙은 자료구조 힙이다. malloc이 쓰는 메모리 영역 힙(&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/memory/memory/"&gt;Linux/Memory&lt;/a&gt;
+)과는 이름만 같고 무관하다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-구조와-성질"&gt;1. 구조와 성질&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Min Heap 성질&lt;/strong&gt;: 모든 노드에 대해 &lt;code&gt;부모 ≤ 자식&lt;/code&gt;. (Max Heap은 반대)&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+ / \
+ 3 2
+ / \ / \
+ 7 4 5 9&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;완전 이진 트리&lt;/strong&gt;이므로 배열 하나로 표현 가능 — 포인터 없이 인덱스 계산만으로 이동&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;배열: [1, 3, 2, 7, 4, 5, 9] (0-indexed)
+
+parent(i) = (i - 1) / 2
+left(i) = 2*i + 1
+right(i) = 2*i + 2&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;루트(arr[0])가 항상 최솟값 → &lt;strong&gt;조회 O(1)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;힙은 &amp;ldquo;전체가 정렬된 상태&amp;quot;가 아니다. 보장은 오직 부모-자식 간 대소뿐 (형제끼리는 순서 없음)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-핵심-연산"&gt;2. 핵심 연산&lt;/h2&gt;
+&lt;h3 id="2-1-push--sift-up-olog-n"&gt;2-1. push — sift-up, O(log N)&lt;/h3&gt;
+&lt;p&gt;배열 끝에 넣고, 부모보다 작으면 계속 위로 교환한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/palindrome/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/palindrome/</guid><description>&lt;h1 id="-회문-palindrome"&gt;📌 회문 (Palindrome)&lt;/h1&gt;
+&lt;h3 id="-시간-복잡도"&gt;🕐 시간 복잡도&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;최소 O(N): 전체 문자 확인이 필요&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-해법-1-해시맵-이용"&gt;✅ 해법 1: 해시맵 이용&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isPalindromeMap&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;string&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;unordered_map&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;char&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; freq;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;char&lt;/span&gt; c : s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;isalpha(c)) freq[std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;tolower(c)]&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; oddCount &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; p : freq) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (p.second &lt;span style="color:#f92672"&gt;%&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) oddCount&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (oddCount &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="-해법-2-비트-벡터-이용-공간-최적화"&gt;✅ 해법 2: 비트 벡터 이용 (공간 최적화)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isPalindromePermutation&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;string&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; bitVector &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;char&lt;/span&gt; c : s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;isalpha(c)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; index &lt;span style="color:#f92672"&gt;=&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;tolower(c) &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; bitVector &lt;span style="color:#f92672"&gt;^=&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; index); &lt;span style="color:#75715e"&gt;// 해당 비트를 XOR 연산으로 토글
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; bitVector &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;||&lt;/span&gt; (bitVector &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; (bitVector &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;)) &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="-설명"&gt;🔍 설명&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;bitVector는 int형(32bit)으로 충분&lt;/strong&gt;한다. 알파벳은 소문자 기준 26자이므로 32비트 내에 모두 저장 가능한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;초기 상태&lt;/strong&gt;는 &lt;code&gt;00000000 00000000 00000000 00000000&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;예를 들어 문자열에 &lt;code&gt;'b'&lt;/code&gt;가 있다면:
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;'b' - 'a' = 1&lt;/code&gt; → &lt;code&gt;1 &amp;lt;&amp;lt; 1 = 0b10&lt;/code&gt; → &lt;code&gt;bitVector ^= 0b10&lt;/code&gt;로 해당 비트를 1로 설정&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;동일한 문자가 다시 등장하면 XOR로 해당 비트가 다시 꺼집니다 (즉, 짝수 번 등장하면 0).&lt;/li&gt;
+&lt;li&gt;결국 &lt;strong&gt;bitVector가 0&lt;/strong&gt;이면 모든 문자가 짝수 번 등장한 것.&lt;/li&gt;
+&lt;li&gt;하지만 문자열 길이가 홀수이면 &lt;strong&gt;1개의 문자는 홀수번 등장&lt;/strong&gt;해도 회문 가능 → 이때는 &lt;code&gt;bitVector&lt;/code&gt;에 &lt;strong&gt;1개의 비트만 켜져 있어야 함&lt;/strong&gt;.
+&lt;ul&gt;
+&lt;li&gt;이를 판별하는 조건이 &lt;code&gt;bitVector &amp;amp; (bitVector - 1) == 0&lt;/code&gt;. (1비트만 켜져 있으면 참)&lt;/li&gt;
+&lt;li&gt;이게 어렵다면: 문자열 길이가 홀수면 &lt;code&gt;bitVector == 1&lt;/code&gt;, 짝수면 &lt;code&gt;bitVector == 0&lt;/code&gt;을 각각 확인해도 됩니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;시간 복잡도&lt;/strong&gt;는 &lt;code&gt;O(N)&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isPalindromePermutation&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;string&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; bitVector &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;char&lt;/span&gt; c : s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;isalpha(c)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; index &lt;span style="color:#f92672"&gt;=&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;tolower(c) &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; bitVector &lt;span style="color:#f92672"&gt;^=&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; index);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; bitVector &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;||&lt;/span&gt; (bitVector &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; (bitVector &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;)) &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;짝수 길이 → 모든 비트가 0&lt;/li&gt;
+&lt;li&gt;홀수 길이 → 하나의 비트만 1일 수 있음&lt;/li&gt;
+&lt;li&gt;시간 복잡도: O(N)&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/permutation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/permutation/</guid><description>&lt;h1 id="-순열-permutation"&gt;📌 순열 (Permutation)&lt;/h1&gt;
+&lt;h3 id="-팁"&gt;💡 팁&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;두 문자열이 순열 관계인지 확인하려면:
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sort()&lt;/code&gt; 후 비교&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unordered_map&lt;/code&gt;으로 문자 빈도 수 비교&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/quick_select/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/quick_select/</guid><description>&lt;h1 id="quick-select"&gt;Quick Select&lt;/h1&gt;
+&lt;p&gt;정렬되지 않은 배열에서 &lt;strong&gt;k번째로 작은(또는 큰) 원소&lt;/strong&gt;를 찾는 알고리즘. 전체를 정렬하면 O(N log N)이지만, Quick Select는 &lt;strong&gt;평균 O(N)&lt;/strong&gt; 에 찾는다.&lt;/p&gt;
+&lt;p&gt;Quick Sort의 partition 아이디어를 그대로 쓰되, &lt;strong&gt;양쪽을 모두 재귀하지 않고 k가 속한 쪽 한 곳만 파고드는 것&lt;/strong&gt;이 핵심 차이다.&lt;/p&gt;
+&lt;h2 id="1-아이디어"&gt;1. 아이디어&lt;/h2&gt;
+&lt;p&gt;Quick Sort의 partition을 한 번 수행하면 pivot은 &lt;strong&gt;자기의 최종 정렬 위치&lt;/strong&gt;에 놓인다.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;partition 후: [ pivot보다 작은 것들 ] pivot [ pivot보다 큰 것들 ]
+ ↑
+ 인덱스 p 확정&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;p == k&lt;/code&gt; → pivot이 곧 k번째 원소. 끝&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;p &amp;gt; k&lt;/code&gt; → 왼쪽 구간만 다시 탐색&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;p &amp;lt; k&lt;/code&gt; → 오른쪽 구간만 다시 탐색&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Quick Sort는 양쪽을 모두 재귀해서 O(N log N)이지만, Quick Select는 매번 한쪽만 보므로 평균적으로 &lt;code&gt;N + N/2 + N/4 + ... = 2N&lt;/code&gt; → &lt;strong&gt;O(N)&lt;/strong&gt;.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/string/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/string/</guid><description>&lt;h1 id="-문자열-string"&gt;📌 문자열 (String)&lt;/h1&gt;
+&lt;h3 id="-체크-포인트"&gt;✅ 체크 포인트&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; ASCII인지 UNICODE인지 확인 (보통 ASCII 기준 문제 출제)&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 대소문자 처리 고려 (예: &lt;code&gt;'A'&lt;/code&gt; vs &lt;code&gt;'a'&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 공백, 탭 등 공백 문자 처리 여부 확인&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-팁"&gt;💡 팁&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;뒤에서부터 처리 (backward)&lt;/strong&gt; 방식이 유리한 경우가 있음&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/study_process/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/study_process/</guid><description>&lt;h1 id="study-process"&gt;Study process&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Data structure&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Array
+&lt;ul&gt;
+&lt;li&gt;static&lt;/li&gt;
+&lt;li&gt;dynamic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Linked list
+&lt;ul&gt;
+&lt;li&gt;single linked list&lt;/li&gt;
+&lt;li&gt;double linked list&lt;/li&gt;
+&lt;li&gt;circle linked list&lt;/li&gt;
+&lt;li&gt;insert, delete, search &amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stack
+&lt;ul&gt;
+&lt;li&gt;array based stack&lt;/li&gt;
+&lt;li&gt;linked list based stack&lt;/li&gt;
+&lt;li&gt;push, pop, peek &amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Queue
+&lt;ul&gt;
+&lt;li&gt;array based queue&lt;/li&gt;
+&lt;li&gt;linked list based queue&lt;/li&gt;
+&lt;li&gt;circular queue&lt;/li&gt;
+&lt;li&gt;priority queue&lt;/li&gt;
+&lt;li&gt;enqueue, dequeue &amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hash table
+&lt;ul&gt;
+&lt;li&gt;hash fucntion &amp;amp; collision&lt;/li&gt;
+&lt;li&gt;hash set, hash map&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Basic algorithm&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sort
+&lt;ul&gt;
+&lt;li&gt;bubble sort&lt;/li&gt;
+&lt;li&gt;select sort&lt;/li&gt;
+&lt;li&gt;insert sort&lt;/li&gt;
+&lt;li&gt;merge sort (Divide and conquer)&lt;/li&gt;
+&lt;li&gt;quick sort (Divide and conquer)&lt;/li&gt;
+&lt;li&gt;heap sort&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Search
+&lt;ul&gt;
+&lt;li&gt;linear search&lt;/li&gt;
+&lt;li&gt;binary search (Divide and conquer)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Intermediate algorithm&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/topological_sort/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/topological_sort/</guid><description>&lt;h1 id="topological-sort"&gt;Topological Sort&lt;/h1&gt;
+&lt;img src="https://kimchioverfit.github.io/Study/imgs/0-1.png" alt="0-1" width="500"/&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;위상 정렬&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;정렬 알고리즘의 일종으로, 순서가 정해져 있는 일련의 작업을 차례대로 수행해야 할 때 사용할 수 있는 알고리즘&lt;/p&gt;
+&lt;p&gt;조금 더 이론적인 설명은, 사이클이 없는 방향 그래프의 모든 노드를 &amp;lsquo;방향성에 거스르지 않도록 순서대로 나열하는 것&amp;rsquo;을 의미&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;진입차수와 진출차수&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;위상 정렬 알고리즘을 살펴보기 위해서는 먼저 진입차수와 진출차수에 대한 개념을 알아야한다. 쉬운 개념이기에 아래 그림만으로도 충분히 이해할 수 있다고 생각한다.&lt;/p&gt;
+&lt;p&gt;진입차수 (Indegree) : 특정한 노드로 들어오는 간선의 개수&lt;/p&gt;
+&lt;p&gt;진출차수 (Outdegree) : 특정한 노드에서 나가는 간선의 개수&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/union-find/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/algorithm_theory/union-find/</guid><description>&lt;h1 id="union-find"&gt;Union Find&lt;/h1&gt;
+&lt;p&gt;Union : 서로 다른 두 개의 집합을 하나의 집합으로 만드는 것.&lt;/p&gt;
+&lt;p&gt;Find : 하나의 원소가 어느 집합에 속해있는지 찾는 것.&lt;/p&gt;
+&lt;p&gt;즉, Graph에서 두 노드가 같은 집합에 속해있는지 확인하는 것이다.&lt;/p&gt;
+&lt;img src="https://kimchioverfit.github.io/Study/imgs/Union_find-1.png" alt="Union_find-1" width="300"/&gt;
+&lt;img src="https://kimchioverfit.github.io/Study/imgs/Union_find-2.png" alt="Union_find-2" width="300"/&gt;
+&lt;p&gt;이를 구현하기 위해서는 Parent vector, rank(depth) vector 가 필요하다.&lt;/p&gt;</description></item></channel></rss>

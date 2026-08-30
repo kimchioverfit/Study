@@ -1,0 +1,49 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class="nav-link is-active" href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_cs/>Basic CS</a></div><h1>Build</h1></header><div class="doc-body post-body"><h1 id=build>Build</h1><p>소스코드부터 실행 파일 생성 까지의 전체 과정</p><p><strong>Compile</strong> + <strong>Link</strong> + etc</p><hr><p>Build 의 구성 요소</p><ol><li>Preprocessing</li><li>Compile</li><li>Assemble</li><li>Link</li></ol><hr><h3 id=process>Process</h3><pre tabindex=0><code>[소스코드] → (전처리) → (컴파일) → [오브젝트파일]  
+                        ↓  
+          (링크 + 라이브러리 결합)  
+                        ↓  
+               [실행 파일 생성]</code></pre><hr><h3 id=1-preprocessing>1. Preprocessing</h3><p>C/C++ 에서 주로 진행됨.
+#include, #define 등의 전처리 지시문을 처리하는 과정</p><h3 id=2-compile>2. Compile</h3><p>.cpp 또는 .c파일을 obj파일로 변환
+이 단계에서 문법 오류 찾음</p><h3 id=3-assemble>3. Assemble</h3><p>일부 언어만 해당, 현대 컴파일러는 자동으로 처리함</p><h3 id=4-link>4. Link</h3><p>obj 파일과 lib, dll 등을 묶어 바이너리파일을 생성.</p><p>Link 단계의 주요 작업</p><table><thead><tr><th>기능</th><th>설명</th></tr></thead><tbody><tr><td><strong>심볼 결합</strong></td><td>여러 파일에 흩어진 함수, 전역 변수 등을 서로 연결</td></tr><tr><td><strong>주소 재배치</strong></td><td>코드와 데이터의 실제 메모리 주소를 계산 및 할당</td></tr><tr><td><strong>라이브러리 병합</strong></td><td>정적 또는 동적 라이브러리에서 필요한 코드만 가져옴</td></tr><tr><td><strong>섹션 병합</strong></td><td>코드(.text), 데이터(.data), 초기화 안 된 데이터(.bss) 섹션을 통합</td></tr><tr><td><strong>실행 헤더 생성</strong></td><td>운영체제가 실행할 수 있도록 실행 포맷(PE/ELF) 구성</td></tr></tbody></table><p><strong>Linking Process</strong></p><ol><li>입력 오브젝트파일 (.o) 로딩, 컴파일러가 생성한 기계어 파일 읽고 분석<br></li><li>심볼 테이블 분석<ul><li>각 오브젝트 파일은 정의된 함수와 정의되지 않은 심볼을 가짐</li><li>링커는 이들을 모아서 <strong><code>글로벌 심볼 테이블</code></strong> 을 만들고,<ul><li>정의된 심볼 매칭</li><li>미정의된 참조를 올바른 정의에 연결</li><li>중복 심볼이나 다중 정의는 링크 에러 발생<br></li></ul></li></ul></li><li>주소 결정 (Address binding)<ul><li>각 함수와 데이터의 실제 메모리 주소 또는 오프셋을 결정</li><li>여기서 실제 재배치(Relocation) 발생<br></li></ul></li><li>라이브러리 연결<ul><li>정적 라이브러리 (.a, .lib) : 필요한 부분을 복사하여 바이너리 파일에 포함.</li><li>동적 라이브러리 (.so, .dll) : 실행 시 참조만 설정하고, 라이브러리 본체는 로딩 시 운영체제가 해결.<br></li></ul></li><li>출력 바이너리 생성</li></ol><hr><h3 id=-정적-링크-vs-동적-링크>⚙️ 정적 링크 vs 동적 링크</h3><table><thead><tr><th>항목</th><th>정적 링크 (Static)</th><th>동적 링크 (Dynamic)</th></tr></thead><tbody><tr><td>수행 시점</td><td>컴파일/링크 시 포함</td><td>실행 시 운영체제가 로딩</td></tr><tr><td>실행파일 크기</td><td>큼 (모든 코드 포함)</td><td>작음 (라이브러리 참조만)</td></tr><tr><td>배포 용이성</td><td>좋음 (외부 필요 없음)</td><td>라이브러리 배포 필요</td></tr><tr><td>성능</td><td>약간 빠름 (로드 불필요)</td><td>약간 느릴 수 있음 (동적 로딩 필요)</td></tr><tr><td>예</td><td><code>libc.a</code> 포함 → 실행 파일 내 삽입</td><td><code>libc.so</code> 참조 → 실행 시 <code>ld-linux</code>가 로딩</td></tr><tr><td>정보 은닉성</td><td>❌ 낮음 (코드 포함됨)</td><td>✅ 높음 (API만 노출 가능)</td></tr><tr><td>역공학 난이도</td><td>❌ 낮음</td><td>✅ 높음</td></tr><tr><td>라이선스 보호</td><td>❌ 어려움</td><td>✅ 가능 (DLL 인증 등)</td></tr><tr><td>보안 강화 전략 적용 가능성</td><td>❌ 제한적</td><td>✅ 자유롭게 가능</td></tr><tr><td>유지보수 및 교체</td><td>❌ 재빌드 필요</td><td>✅ DLL 교체만으로 가능</td></tr></tbody></table></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

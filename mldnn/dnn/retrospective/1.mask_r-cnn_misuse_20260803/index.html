@@ -1,0 +1,86 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/retrospective/>Retrospective</a></div><h1>1.Mask R CNN Misuse 20260803</h1></header><div class="doc-body post-body"><h1 id=회고--단일-물체-segmentation에-mask-r-cnn을-계속-쓴-건>회고 — 단일 물체 segmentation에 Mask R-CNN을 계속 쓴 건</h1><blockquote><p>2026-08-03 / 결론: Semantic segmentation으로 교체해서 해결됨.
+관련 정리: <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a></p></blockquote><h2 id=1-무슨-일이-있었나>1. 무슨 일이 있었나</h2><ul><li>처음엔 화면에 여러 물체가 있었고, 인스턴스를 분리해야 했다. → <strong>Mask R-CNN 선택. 이 판단 자체는 옳았다.</strong></li><li>이후 모델을 분리하면서 이 모델이 맡는 태스크가 <strong>&ldquo;중앙의 큰 물체 1개를 segmentation&rdquo;</strong> 으로 바뀌었다.</li><li>그런데 모델은 그대로 뒀다. 이유는 하나였다 — <em>&ldquo;성능이 나름 괜찮아서&rdquo;</em>.</li><li>운영 중에 object box가 <strong>왼쪽으로 shift되는 케이스</strong>가 나왔다. 매번은 아니고 <strong>간헐적</strong>, 대신 <strong>방향은 항상 왼쪽</strong>.</li><li>1차 조치로 <strong>backbone을 ResNet → ConvNeXt로 교체</strong>했다. → 안 잡혔다.</li><li>그 다음 RPN을 의심했다. → <strong>격리 실험은 하지 않았다.</strong></li><li>최종적으로는 원인을 특정해서 고친 게 아니라, <strong>Semantic segmentation 모델로 갈아타서 문제가 사라졌다.</strong></li></ul><p>여기서 짚어둘 것 — <strong>근본 원인은 지금도 확정되지 않았다.</strong>
+semantic segmentation으로 바꾼 건 RPN을 고친 게 아니라 <strong>박스 단계 전체를 삭제한 것</strong>이라,
+범인이 RPN이었는지 그 뒤(RoIAlign / FPN level assignment / box decode)였는지는 구분되지 않은 채 덮였다.
+컴포넌트를 세 번 갈아치웠고(backbone → RPN 의심 → 모델 전체), 그중 어느 것도 &ldquo;이게 원인이다"를 증명한 적이 없다.</p><p>마지막 줄이 이 회고의 전부다. 문제를 푼 게 아니라 <strong>문제가 애초에 존재하지 않아도 되는 구조로 바꾼 것</strong>이고, 그렇다면 그 구조는 훨씬 전에 바꿨어야 했다.</p><h2 id=2-진짜-실수는-왼쪽-shift가-아니었다>2. 진짜 실수는 &ldquo;왼쪽 shift"가 아니었다</h2><h3 id=실수-1--태스크가-바뀌었는데-모델-선택을-재검토하지-않았다>실수 1 — 태스크가 바뀌었는데 모델 선택을 재검토하지 않았다</h3><p>Mask R-CNN을 고른 근거는 <strong>&ldquo;인스턴스가 여러 개다&rdquo;</strong> 였다.
+모델을 분리하면서 그 전제가 사라졌는데, <strong>전제만 사라지고 결론은 살아남았다.</strong></p><blockquote><p>요구사항이 바뀌면 그 요구사항 위에 세워진 모든 결정이 자동으로 만료돼야 한다.
+나는 만료 처리를 안 하고 관성으로 끌고 갔다.</p></blockquote><h3 id=실수-2--성능이-괜찮다를-유지의-근거로-썼다>실수 2 — &ldquo;성능이 괜찮다"를 유지의 근거로 썼다</h3><p>&ldquo;괜찮다"는 건 <strong>비교 대상이 있을 때만 성립하는 말</strong>인데, 나한텐 비교 대상이 없었다.
+단순한 baseline(U-Net / DeepLab 급)을 한 번도 돌려보지 않았으니, 내가 알고 있던 건
+&ldquo;Mask R-CNN이 절대 기준으로 쓸 만하다"가 전부였고 <strong>&ldquo;Mask R-CNN이 더 낫다"는 한 번도 검증한 적이 없다.</strong></p><p>새 태스크로 바뀐 시점에 baseline 하나만 돌려봤으면, 그날 끝났을 문제다.</p><h3 id=실수-3--필요-없는-중간-표현bounding-box을-파이프라인에-남겨뒀다>실수 3 — 필요 없는 중간 표현(bounding box)을 파이프라인에 남겨뒀다</h3><p>물체가 1개고 항상 중앙에 있으면, box는 <strong>정보를 더하지 않는다.</strong>
+그런데 Mask R-CNN에서 mask는 box에 종속돼서 나온다.</p><pre tabindex=0><code>Mask R-CNN :  image → RPN → box → RoIAlign → 28x28 mask → box 좌표로 되돌리기 → 최종 mask
+Semantic    :  image → mask</code></pre><p>즉 나는 <strong>최종 출력에 아무 기여도 안 하는 단계를 하나 넣어두고, 그 단계의 오차를 최종 결과가 그대로 물려받게</strong> 만들어놨던 거다.
+box가 왼쪽으로 밀리면 mask도 같이 밀린다. 오차의 원인이 아니라 <strong>오차의 증폭 경로</strong>를 내가 직접 만든 셈.</p><h3 id=실수-4--근본-전제를-의심하기-전에-증상부터-디버깅했다>실수 4 — 근본 전제를 의심하기 전에 증상부터 디버깅했다</h3><p>&ldquo;왜 하필 왼쪽으로 밀릴까"는 재밌는 질문이었고, 그래서 거기에 시간을 썼다.
+하지만 그 앞에 물었어야 할 질문은 이거였다:</p><blockquote><p><strong>&ldquo;그래서 이 박스가 왜 필요한데?&rdquo;</strong></p></blockquote><p>답이 &ldquo;필요 없는데"였으면 디버깅 자체가 불필요한 작업이었다. 실제로 그랬고.</p><h3 id=실수-5--에러를-눈으로-봤지-분포로-재지-않았다>실수 5 — 에러를 눈으로 봤지 분포로 재지 않았다</h3><p>&ldquo;왼쪽으로 밀린다"는 눈으로 본 인상이었다. 다음을 확인하지 않았다:</p><ul><li><code>dy</code>도 같이 편향돼 있었나? (좌+상이면 원인 계열이 완전히 다르다 — scale/정렬 문제)</li><li>박스 전체가 평행이동했나, 오른쪽 변만 짧았나?</li><li>편차가 상수 픽셀이었나, 좌표에 비례했나, 물체 크기에 비례했나?</li></ul><p>그나마 하나는 알고 있었다 — <strong>간헐적이었고, 발생할 땐 항상 왼쪽이었다.</strong> 그런데 이 사실을 읽지 않았다.
+이 조합 하나만으로도 다음이 정리된다:</p><ul><li><strong>배제:</strong> 상수 오프셋 버그 계열(패딩, resize ratio 되돌리기, flip 좌표 규약). <strong>이런 건 100% 재현된다.</strong></li><li><strong>지목:</strong> 이산적인 선택/할당 메커니즘. 후보가 두 군데에 걸쳐 있다.<ul><li><em>RPN 쪽</em> — 앵커 커버리지 한계(큰 물체가 최대 앵커 근처라 IoU가 아슬아슬), NMS 동점 처리(점수가 near-tie면 인덱스 빠른 앵커가 이기고, 그 순서는 래스터 = <strong>좌상단 우선</strong>), <code>pre_nms_top_n</code> 절단</li><li><em>박스헤드 쪽</em> — <strong>FPN level assignment.</strong> 할당 레벨은 box area의 이산 함수라, 물체 크기가 경계 근처면 프레임마다 P5↔P6를 오간다. 그러면 RoIAlign 정렬 오차 크기가 stride 32 ↔ 64로 <strong>점프</strong>한다. &ldquo;간헐적인데 방향은 항상 원점 쪽"에 가장 잘 맞는 시그니처다.</li></ul></li></ul><p><strong>증상은 이미 손에 있었는데 해석을 안 한 것</strong>이다. 데이터를 더 모을 필요도 없었다.</p><h3 id=실수-6--원인을-격리하지-않고-컴포넌트를-갈아치웠다>실수 6 — 원인을 격리하지 않고 컴포넌트를 갈아치웠다</h3><p>이게 이번 건의 진짜 패턴이다.</p><table><thead><tr><th>시도</th><th>비용</th><th>원인 규명</th></tr></thead><tbody><tr><td>backbone ResNet → ConvNeXt</td><td>재학습 + 레시피 재튜닝</td><td>❌</td></tr><tr><td>RPN 의심</td><td>시간</td><td>❌ (실험 없음)</td></tr><tr><td>모델 전체 → semantic seg</td><td>파이프라인 재구축</td><td>❌ (증상만 소멸)</td></tr></tbody></table><p>세 번 다 <strong>&ldquo;바꿔보고 되는지 본다&rdquo;</strong> 였고, 세 번 다 비용은 커졌는데 증명은 없었다.</p><p>특히 아까운 게 첫 번째다. <strong>backbone을 바꿨는데 안 잡혔다는 것 자체가 데이터였다.</strong>
+표현력을 올렸는데도 그대로면 병목은 feature quality가 아니라 <strong>그 위의 기하/이산화 단계</strong>라는 쪽으로 기운다.
+(레시피를 재튜닝했는지에 따라 강도는 달라지지만) 그때 이 결과를 읽었으면 탐색 범위가 확 줄었다.
+<strong>실패한 실험의 결과도 읽어야 실험이다. 안 읽으면 그냥 비용이다.</strong></p><p>그리고 결정적 실험은 10줄이었다:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># RPN을 건너뛰고 GT box를 그대로 proposal로 넣어 box/mask head만 태운다</span>
+</span></span><span style=display:flex><span>detections <span style=color:#f92672>=</span> model<span style=color:#f92672>.</span>roi_heads(features, [gt_boxes], image_shapes)
+</span></span><span style=display:flex><span><span style=color:#75715e># 여전히 왼쪽으로 밀린다 → RPN이 아니다 (RoIAlign / level assignment / decode)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 멀쩡하다                → RPN이다 (앵커, NMS, top_n)</span></span></span></code></pre></div><p>backbone 재학습보다 몇 백 배 싼 실험을, 몇 백 배 비싼 것보다 <strong>나중에</strong> 떠올렸다.</p><h2 id=3-기술적으로-왜-이-태스크에-mask-r-cnn이-안-맞았나>3. 기술적으로, 왜 이 태스크에 Mask R-CNN이 안 맞았나</h2><p>정리해두는 이유는 다음에 같은 유혹이 왔을 때 근거로 쓰려고.</p><table><thead><tr><th>구성 요소</th><th>다물체 상황에서의 역할</th><th>단일 중앙 물체에서는</th></tr></thead><tbody><tr><td>RPN</td><td>후보 영역 생성</td><td>순수 오버헤드 + 오차 유입 지점</td></tr><tr><td>NMS / score threshold</td><td>중복 제거</td><td>튜닝해야 할 불필요한 자유도</td></tr><tr><td>Box head</td><td>인스턴스 위치 회귀</td><td>mask를 종속시키는 병목</td></tr><tr><td>RoIAlign</td><td>인스턴스별 feature 정렬</td><td>정렬 오차만 추가</td></tr><tr><td>Mask head (28x28)</td><td>인스턴스별 mask</td><td><strong>해상도 상한이 됨</strong></td></tr></tbody></table><p>특히 두 가지가 컸다:</p><ol><li><p><strong>Mask head 해상도.</strong> 보통 28x28을 box 크기로 확대해서 쓴다. 물체가 작을 땐 문제없지만
+<strong>큰 물체일수록 확대 배율이 커져서 경계가 뭉개진다.</strong> Semantic segmentation은 full resolution으로 뽑으니 이 상한이 없다.
+→ 물체가 커진 순간부터 Mask R-CNN은 구조적으로 불리해졌다.</p></li><li><p><strong>큰 물체는 FPN 상위 레벨에 할당된다.</strong> 예전엔 작은 물체가 많아 P2/P3(stride 4<del>8)를 썼는데,
+지금은 큰 물체 하나라 P5/P6(stride 32</del>64)로 간다.
+<strong>정렬/양자화 오차는 stride에 비례하므로, 예전엔 2<del>4px라 안 보이던 게 16</del>32px가 된다.</strong>
+&ldquo;예전엔 괜찮았는데 지금 이상하다"의 상당 부분이 여기서 설명된다. 모델이 갑자기 나빠진 게 아니라,
+<strong>입력 분포가 바뀌면서 원래 있던 약점이 드러난 것</strong>이다.</p></li></ol><h2 id=4-그래도-mask-r-cnn이-맞는-경우-반대로도-실수하지-않기-위해>4. 그래도 Mask R-CNN이 맞는 경우 (반대로도 실수하지 않기 위해)</h2><p>이번 결론을 &ldquo;Mask R-CNN 나쁨"으로 일반화하면 그것도 같은 종류의 실수다.</p><ul><li>인스턴스가 <strong>여러 개</strong>이고 <strong>서로 겹칠 수 있을 때</strong></li><li><strong>개수를 세야</strong> 할 때</li><li>인스턴스마다 <strong>다른 속성/클래스</strong>를 붙여야 할 때</li></ul><p>→ 이때는 semantic segmentation으론 애초에 안 된다. <strong>인스턴스 분리가 필요한가</strong>가 유일한 판단 기준이고,
+이번 케이스는 그 답이 &ldquo;아니오"로 바뀐 순간에 모델도 같이 바뀌었어야 했다.</p><h2 id=5-다음부터-지킬-것>5. 다음부터 지킬 것</h2><p><strong>(a) 요구사항 변경 = 아키텍처 재평가 트리거</strong>
+태스크 스펙이 바뀌면 &ldquo;모델 그대로 써도 되나?&ldquo;를 <strong>명시적 단계로</strong> 밟는다. 조용히 넘어가지 않는다.</p><p><strong>(b) 모델 선택 근거를 한 줄이라도 남긴다</strong>
+<code>"인스턴스 여러 개 → Mask R-CNN"</code> 처럼 <strong>전제와 결론을 같이</strong> 적어둔다.
+그래야 전제가 깨졌을 때 결론도 같이 무효화된다. 근거 없는 선택은 만료 시점을 알 수 없다.</p><p><strong>(c) 새 태스크에는 항상 가장 단순한 baseline 먼저</strong>
+복잡한 모델은 <strong>baseline을 이겼을 때만</strong> 쓴다. &ldquo;기존 걸 그대로 쓴다"는 baseline이 아니다.</p><p><strong>(d) 파이프라인 각 단계에 질문한다 — &ldquo;이거 빼면 뭐가 안 되지?&rdquo;</strong>
+답이 안 나오면 제거 후보다. 특히 <strong>중간 표현</strong>은 오차를 다음 단계로 넘기므로 비용이 공짜가 아니다.</p><p><strong>(e) 에러는 눈이 아니라 분포로 본다</strong>
+<code>dx</code>, <code>dy</code> 히스토그램 → 평균이 0이 아닌가 / 좌표에 비례하나 / 크기에 비례하나 / 상시인가 간헐적인가.
+<strong>측정 전에 가설을 세우지 않는다.</strong> 특히 <strong>상시 발생 vs 간헐 발생</strong>은 공짜로 얻는 정보인데 배제력이 제일 크다
+(상시 = 상수 오프셋 버그 / 간헐 = 이산적 선택·할당).</p><p><strong>(f) 컴포넌트를 바꾸기 전에 격리부터 한다 — 싼 실험 순서로</strong>
+&ldquo;바꿔보고 되는지 본다"는 디버깅이 아니라 도박이다. 순서는 항상:
+<strong>① 입력을 고정해 구간을 이분한다(GT box를 proposal로 주입) → ② 범인 구간이 좁혀지면 → ③ 그때 교체.</strong>
+재학습이 필요한 조치(backbone 교체 등)는 <strong>가장 마지막</strong>이다.
+그리고 <strong>실패한 조치의 결과도 반드시 해석한다.</strong> 안 읽으면 그건 실험이 아니라 그냥 지출이다.</p><p><strong>(g) 디버깅 타임박스를 둔다</strong>
+정해둔 시간 안에 원인을 못 좁히면 질문을 바꾼다:
+<del>&ldquo;이 컴포넌트가 왜 틀리지?"</del> → <strong>&ldquo;이 컴포넌트가 꼭 있어야 하나?&rdquo;</strong></p><h2 id=6-한-줄-요약>6. 한 줄 요약</h2><blockquote><p>모델은 태스크에 종속돼야 하는데, <strong>태스크가 바뀐 뒤에도 나는 모델을 상수로 뒀다.</strong>
+그리고 그 상수를 지키느라, <strong>원인을 격리하지 않은 채 컴포넌트만 세 번 갈아치웠다.</strong>
+문제를 푸는 것보다 <strong>문제가 생기지 않는 구조로 바꾸는 게</strong> 먼저고,
+바꾸기 전에 <strong>어디가 문제인지 증명하는 게</strong> 그보다 먼저다.</p></blockquote><p><em>(부기: 결과적으로 태스크에 맞는 구조로 갔으니 결론은 옳았다. 다만 그 결론에 도달한 경로에는 근거가 없었고, 근거 없이 맞힌 건 다음번에 재현되지 않는다.)</em></p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

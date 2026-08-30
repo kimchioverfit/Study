@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>language core on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/</link><description>Recent content in language core on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_c++/language_core/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/constexpr/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/language_core/constexpr/</guid><description>&lt;h1 id="constexpr"&gt;Constexpr&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;constexpr&lt;/code&gt;은 &amp;ldquo;이 값/함수는 &lt;strong&gt;컴파일 타임에 평가될 수 있다&lt;/strong&gt;&amp;ldquo;는 표시다. 결론부터: &lt;strong&gt;const는 &amp;ldquo;안 바꾼다&amp;quot;는 약속이고, constexpr은 &amp;ldquo;컴파일 타임에 값이 확정된다&amp;quot;는 보장&lt;/strong&gt;이다. 이 둘은 다른 개념이다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;constexpr 함수/변수를 헤더에 둘 때의 ODR 문제와 암시적 inline 규칙은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_c&amp;#43;&amp;#43;/language_core/inline/"&gt;Inline&lt;/a&gt;
+ 문서에서 다룬다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-const-vs-constexpr"&gt;1. const vs constexpr&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;runtime_val&lt;/span&gt;() { &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;42&lt;/span&gt;; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; runtime_val(); &lt;span style="color:#75715e"&gt;// ✅ OK — 런타임에 정해지는 상수 (&amp;#34;한 번 정해지면 안 바꿈&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;constexpr&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; b &lt;span style="color:#f92672"&gt;=&lt;/span&gt; runtime_val(); &lt;span style="color:#75715e"&gt;// ❌ 컴파일 에러 — 컴파일 타임에 값을 알 수 없음
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;constexpr&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; c &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;42&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// ✅ OK — 컴파일 타임 상수
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;구분&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;const&lt;/code&gt;&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;constexpr&lt;/code&gt;&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;의미&lt;/td&gt;
+					&lt;td&gt;초기화 후 &lt;strong&gt;수정 불가&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;컴파일 타임에 값 확정&lt;/strong&gt; (+ 자동으로 const)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;초기값&lt;/td&gt;
+					&lt;td&gt;런타임 값도 가능&lt;/td&gt;
+					&lt;td&gt;컴파일 타임 상수식만&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;배열 크기, 템플릿 인자, &lt;code&gt;case&lt;/code&gt; 라벨&lt;/td&gt;
+					&lt;td&gt;초기값에 따라 될 수도/안 될 수도&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;항상 가능&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;constexpr&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; N &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; arr[N]; &lt;span style="color:#75715e"&gt;// ✅ 배열 크기
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;array&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, N&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; arr2; &lt;span style="color:#75715e"&gt;// ✅ 템플릿 인자
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;배열 크기 등 &amp;ldquo;컴파일 타임 상수가 필요한 자리&amp;quot;에 쓸 값이라면 const가 아니라 constexpr로 선언하는 것이 의도를 정확히 드러낸다&lt;/li&gt;
+&lt;li&gt;C의 &lt;code&gt;#define N 8&lt;/code&gt; 매크로 상수를 대체하는 현대 C++ 방식이기도 하다 — 타입이 있고, 스코프를 따르고, 디버거에 보인다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-constexpr-함수--이중-성격"&gt;2. constexpr 함수 — 이중 성격&lt;/h2&gt;
+&lt;p&gt;constexpr 함수는 &amp;ldquo;컴파일 타임 &lt;strong&gt;전용&lt;/strong&gt;&amp;ldquo;이 아니다. &lt;strong&gt;인자가 컴파일 타임 상수면 컴파일 타임에, 아니면 일반 함수처럼 런타임에&lt;/strong&gt; 평가된다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/extern/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/language_core/extern/</guid><description>&lt;h1 id="extern-c"&gt;extern &amp;ldquo;C&amp;rdquo;&lt;/h1&gt;
+&lt;p&gt;extern에 대해 시작하기에 앞서,&lt;/p&gt;
+&lt;p&gt;우선 cpp에 대해서 복습해보자.&lt;/p&gt;
+&lt;p&gt;cpp는 overload, override 를 지원한다.&lt;/p&gt;
+&lt;p&gt;parameter type이나 수가 다른 경우 static polymophysm (Overload)이다.&lt;/p&gt;
+&lt;p&gt;return type 이 달라질 수 있는것이 dynamic polymophysm (Override)이다.&lt;/p&gt;
+&lt;p&gt;(물론 둘 다 함수 내용은 다르게 가능)&lt;/p&gt;
+&lt;p&gt;여기서, Overload 가 문제된다.&lt;/p&gt;
+&lt;p&gt;우선, Override의 경우 c++에서 symbol로 저장될 때&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;_ZN4Base3fooEv ; Base::foo()
+_ZN7Derived3fooEv ; Derived::foo()&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이런형태로 저장되지만,&lt;/p&gt;
+&lt;p&gt;Overload의 경우&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;_Z3fooi(foo(int))
+_Zefood(foo(double))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이런 식으로, 저장되게 된다.&lt;/p&gt;
+&lt;p&gt;여기까지는 정상적인 동작이지만, C에서 이를 활용해야 하는 경우 문제가 발생한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/inline/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/language_core/inline/</guid><description>&lt;h1 id="inline"&gt;Inline&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;inline&lt;/code&gt;은 이름 때문에 가장 오해가 많은 키워드다. 결론부터: &lt;strong&gt;현대 C++에서 inline의 실제 의미는 &amp;ldquo;인라인 확장 힌트&amp;quot;가 아니라 &amp;ldquo;여러 번역 단위에 같은 정의가 있어도 하나로 취급하라&amp;rdquo;(ODR 완화)다.&lt;/strong&gt; 최적화는 컴파일러가 inline 키워드와 무관하게 알아서 한다.&lt;/p&gt;
+&lt;h2 id="1-전제--odr-one-definition-rule"&gt;1. 전제 — ODR (One Definition Rule)&lt;/h2&gt;
+&lt;p&gt;프로그램 전체에서 하나의 함수/변수는 &lt;strong&gt;정의가 정확히 한 번&lt;/strong&gt;이어야 한다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// util.h
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;add&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; b) { &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; a &lt;span style="color:#f92672"&gt;+&lt;/span&gt; b; } &lt;span style="color:#75715e"&gt;// 정의를 헤더에 둠
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// a.cpp, b.cpp 둘 다 util.h를 include
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// → add의 정의가 두 번역 단위에 존재
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// → 링크 에러: multiple definition of `add(int, int)`
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;헤더는 여러 .cpp에 include되므로, &lt;strong&gt;헤더에 (비-inline) 정의를 쓰면 링크가 깨진다&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;그래서 전통적으로 헤더에는 선언만, 정의는 .cpp에 두는 것이 규칙이었다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-inline의-진짜-의미--odr-완화"&gt;2. inline의 진짜 의미 — ODR 완화&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// util.h
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;inline&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;add&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; b) { &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; a &lt;span style="color:#f92672"&gt;+&lt;/span&gt; b; } &lt;span style="color:#75715e"&gt;// ✅ 어느 .cpp에 몇 번 include돼도 OK
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;inline&lt;/code&gt;이 붙으면: &lt;strong&gt;&amp;ldquo;이 정의는 여러 번역 단위에 나타나도 된다. 모두 동일하며, 링커야, 하나만 골라 써라.&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/polymorphism/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/language_core/polymorphism/</guid><description>&lt;h1 id="polymorphism"&gt;Polymorphism&lt;/h1&gt;
+&lt;p&gt;다형성에는 크게 2가지가 있다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Static&lt;/li&gt;
+&lt;li&gt;Dynamic&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="1-static-polymorphism"&gt;1. Static Polymorphism&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Overloading&lt;/li&gt;
+&lt;li&gt;Template&lt;/li&gt;
+&lt;li&gt;CRTP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;등이 여기에 속한다.&lt;/p&gt;
+&lt;p&gt;Runtime Overhead가 없는 형태이고, Vtable과 관계없다.
+즉, Compile time에 결정된다는 이야기.&lt;/p&gt;
+&lt;p&gt;질문 : Template는 동적으로 type이 결정되는거 아닌가요?
+답 : 아니다. Template function은 무조건 compile time에 type을 알 수 있을때만 쓸 수 있다.
+그래서 type이 변할 수 있는 변수는 parameter로 쓸 수 없음.&lt;/p&gt;
+&lt;h3 id="2-dynamic-polymorphism"&gt;2. Dynamic Polymorphism&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;override&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Runtime 에 어떤 함수를 쓸 지 결정되는 것들.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/static/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/language_core/static/</guid><description>&lt;h1 id="static"&gt;Static&lt;/h1&gt;
+&lt;p&gt;static은 어디에 존재하느냐에 따라 다양한 의미를 가진다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;함수/블록 내부에서 static (지역 정적 변수)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;수명: 함수가 끝나도 파괴되지 않고, 프로그램이 종료될 때까지 유지됨.&lt;/p&gt;
+&lt;p&gt;초기화: 처음 그 줄이 실행될 때 딱 &lt;strong&gt;한 번만 초기화됨.&lt;/strong&gt; (C++11부터 스레드 안전 보장)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;foo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;static&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; x &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 한 번만 초기화
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; x&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; x &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;foo();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;foo();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;foo();&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위와 같이 호출 시 출력은 101, 102, 103임.&lt;/p&gt;
+&lt;p&gt;이렇게 동작하는 이유는 , static 선언 시 다른 변수들처럼 stack 영역에 저장되는 것이 아니라,&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/language_core/type_size/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/language_core/type_size/</guid><description>&lt;h1 id="type-size"&gt;Type size&lt;/h1&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;타입&lt;/th&gt;
+					&lt;th&gt;크기 (바이트)&lt;/th&gt;
+					&lt;th&gt;비고&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;bool&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;1&lt;/td&gt;
+					&lt;td&gt;논리값 (&lt;code&gt;true&lt;/code&gt;/&lt;code&gt;false&lt;/code&gt;)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;char&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;1&lt;/td&gt;
+					&lt;td&gt;문자 1글자 (ASCII 등)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;short&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;2&lt;/td&gt;
+					&lt;td&gt;16비트 정수&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;int&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;4&lt;/td&gt;
+					&lt;td&gt;32비트 정수&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;long&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;4 (Windows), 8 (Linux)&lt;/td&gt;
+					&lt;td&gt;플랫폼 차이 있음&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;long long&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;8&lt;/td&gt;
+					&lt;td&gt;64비트 정수&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;float&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;4&lt;/td&gt;
+					&lt;td&gt;32비트 부동소수점&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;double&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;8&lt;/td&gt;
+					&lt;td&gt;64비트 부동소수점&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;long double&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;8~16&lt;/td&gt;
+					&lt;td&gt;컴파일러에 따라 다름&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;void*&lt;/code&gt; (포인터)&lt;/td&gt;
+					&lt;td&gt;8&lt;/td&gt;
+					&lt;td&gt;64비트 주소값&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</description></item></channel></rss>

@@ -1,0 +1,58 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/math/basic_linear_algebra/20_matrix_types/>20 matrix types</a></div><h1>Triangular matrix</h1></header><div class="doc-body post-body"><h1 id=-삼각행렬-triangular-matrix>🔺 삼각행렬 (Triangular Matrix)</h1><h2 id=-정의>✅ 정의</h2><p>삼각행렬은 <strong>정방행렬</strong> 중에서 특정 방향의 원소가 모두 0인 행렬. 다음 두 가지 종류가 있다:</p><ul><li><p><strong>상삼각행렬 (Upper Triangular Matrix)</strong><br>→ 주대각선 아래의 원소가 모두 0</p></li><li><p><strong>하삼각행렬 (Lower Triangular Matrix)</strong><br>→ 주대각선 위의 원소가 모두 0</p></li></ul><hr><h2 id=-상삼각행렬-upper-triangular-matrix>🔼 상삼각행렬 (Upper Triangular Matrix)</h2>$$
+U =
+\begin{bmatrix}
+1 & 2 & 3 \\
+0 & 5 & 6 \\
+0 & 0 & 9
+\end{bmatrix}
+$$<ul><li>$ U_{ij} = 0 $ for all $ i > j $ (대각선 아래가 0)</li></ul><hr><h2 id=-하삼각행렬-lower-triangular-matrix>🔽 하삼각행렬 (Lower Triangular Matrix)</h2>$$
+L =
+\begin{bmatrix}
+4 & 0 & 0 \\
+7 & 1 & 0 \\
+2 & 8 & 6
+\end{bmatrix}
+$$<ul><li>$ L_{ij} = 0 $ for all $ i < j $ (대각선 위가 0)</li></ul><hr><h2 id=-성질>📌 성질</h2><ol><li><p><strong>행렬 곱</strong>:</p><ul><li>두 상삼각행렬의 곱 → 상삼각행렬</li><li>두 하삼각행렬의 곱 → 하삼각행렬</li></ul></li><li><p><strong>행렬식 계산 간단</strong>:</p><ul><li>삼각행렬의 행렬식은 <strong>대각선 원소의 곱</strong></li><li>예: $ \det(U) = 1 \cdot 5 \cdot 9 = 45 $</li></ul></li><li><p><strong>역행렬 조건</strong>:</p><ul><li>대각선에 0이 없으면 역행렬 존재하며, 역행렬도 삼각형 구조를 유지</li></ul></li><li><p><a class=inline-link href=/Study/math/basic_linear_algebra/30_methods/lu_decomposition/>&lsquo;LU 분해 (LU Decomposition)&rsquo;</a>
+:</p><ul><li>임의의 행렬 $ A $를 하삼각행렬 $ L $과 상삼각행렬 $ U $의 곱으로 분해:<br>$ A = LU $</li></ul></li></ol><hr><h2 id=-활용-분야>🧠 활용 분야</h2><ul><li><strong>선형 방정식 해법 간소화</strong>: 전진 대입, 후진 대입</li><li><strong>가우스 소거법</strong> 과정 중 상/하삼각행렬 형태로 정리</li><li><strong>LU 분해</strong>를 통한 효율적 계산</li><li><strong>수치해석, 컴퓨터 그래픽스, 공학 계산 등</strong>에서 광범위하게 활용</li></ul><hr><h2 id=-참고>🔧 참고</h2><ul><li>모든 대각행렬은 상삼각행렬이자 하삼각행렬이다.</li><li>대칭행렬과는 다르며, 삼각구조는 계산 효율성과 직접적인 관련이 있음.</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

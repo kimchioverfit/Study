@@ -1,0 +1,60 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/amodal_segmentation/>Amodal Segmentation</a></div><h1>4.Amodal Instance Segmentation with KINS Dataset</h1></header><div class="doc-body post-body"><h1 id=amodal-instance-segmentation-with-kins-dataset>Amodal Instance Segmentation With KINS Dataset</h1><p>📄 논문: <a class=inline-link href=https://openaccess.thecvf.com/content_CVPR_2019/html/Qi_Amodal_Instance_Segmentation_With_KINS_Dataset_CVPR_2019_paper.html>Amodal Instance Segmentation With KINS Dataset</a>
+— Qi et al., CVPR 2019 · <a class=inline-link href=https://github.com/qqlu/Amodal-Instance-Segmentation-through-KINS-Dataset>데이터셋/코드</a></p><p>Lu Qi et al., <strong>CVPR 2019</strong>. 결론부터 아주 쉽게: <strong>&ldquo;자율주행 사진(KITTI)에 가려진 부분까지 라벨링한 대규모 데이터셋 KINS를 만들고, 여러 단계의 특징(feature)을 한꺼번에 활용해서 가려진 부분을 더 잘 맞추는 MVC 구조를 제안한 논문.&rdquo;</strong> 앞선 COCOA(5,000장, 일반 사진)보다 훨씬 크고, 실전 위험이 직결되는 <strong>자율주행 도메인</strong>에 amodal segmentation을 처음 본격적으로 적용했다.</p><blockquote><p>전체 계보 속 위치는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/>Amodal Segmentation 개요</a>
+참고.</p></blockquote><h2 id=1-왜-자율주행에서-amodal이-특히-중요한가>1. 왜 자율주행에서 amodal이 특히 중요한가</h2><p>도로 사진에서는 가림(occlusion)이 일상적이다.</p><pre tabindex=0><code>[도로 사진 예시]
+
+  큰 트럭 뒤에 절반 가려진 보행자
+       ↓
+  &#34;보이는 부분만&#34; 인식하면 → 다리 두 개만 보고 &#34;이게 뭐지?&#34; 헷갈릴 수 있음
+  &#34;전체 모양(amodal)&#34;까지 예측하면 → &#34;사람 한 명이 트럭 뒤에서 나오려 한다&#34;를 미리 파악 가능</code></pre><p>자율주행차가 <strong>가려서 일부만 보이는 보행자/차량의 전체 형태와 위치</strong>를 미리 알아야 급정거·회피 판단을 더 빨리, 더 안전하게 내릴 수 있다. 즉 amodal segmentation이 학문적 흥미를 넘어 <strong>안전과 직결되는 실전 문제</strong>가 된다.</p><h2 id=2-핵심-기여-1--kins-데이터셋>2. 핵심 기여 1 — KINS 데이터셋</h2><p><strong>KINS (KITTI INStance dataset)</strong>: 자율주행 데이터셋으로 유명한 <strong>KITTI</strong>에 amodal instance 라벨을 새로 추가한 것.</p><ul><li>차량, 보행자, 자전거 등 <strong>8개 카테고리</strong>에 대해 픽셀 단위 instance 라벨을 대규모로 라벨링</li><li>실제 도로 위 사진이라 <strong>자연스러운(인위적이지 않은) 가림 패턴</strong>이 풍부함 — <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/>Li & Malik(2016)</a>
+의 인위적 합성 가림, COCOA의 일반 스냅샷과는 다른, 실전에 가까운 데이터</li><li>이후 amodal segmentation 연구의 <strong>주요 벤치마크</strong>로 자리잡음 — <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/6.bcnet/>BCNet(2021)</a>
+을 포함한 다수의 후속 논문이 KINS로 성능을 검증</li></ul><h2 id=3-핵심-기여-2--mvc-multi-viewlevel-coding>3. 핵심 기여 2 — MVC (Multi-view/level Coding)</h2><p>이 논문의 모델 구조 이름이 <strong>MVC</strong>다. 아이디어를 아주 쉽게 풀면:</p><blockquote><p>&ldquo;가려진 부분을 맞추려면, 딱 한 종류의 정보만 봐서는 부족하다. 여러 층위(level)의 정보를 같이 봐야 한다.&rdquo;</p></blockquote><pre tabindex=0><code>낮은 레벨 정보: 이 픽셀 근처의 색깔/질감 (지엽적)
+   +
+중간 레벨 정보: 이 물체의 부분들이 어떻게 이어지는지 (부분-전체 관계)
+   +
+높은 레벨 정보: 이게 &#34;자동차&#34;라는 걸 알면 자동차의 전형적인 전체 형태를 안다 (카테고리 지식)
+   ↓
+이 세 가지를 결합(coding)해서 가려진 부분의 모양을 추론</code></pre><ul><li>여러 recognition level의 특징을 하나의 멀티태스크 프레임워크로 결합해서, <strong>amodal 마스크와 modal(visible) 마스크를 동시에</strong> 더 정확히 예측하도록 학습</li><li>&ldquo;그냥 마스크 헤드 하나 더 붙이자&rdquo;(<a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/3.learning_to_see_the_invisible/>ORCNN</a>
+)는 접근보다 한 단계 더 정교하게, <strong>어떤 정보를 어떻게 결합해야 가려진 부분을 더 잘 맞히는지</strong>에 집중한 구조</li></ul><h2 id=4-의의와-한계>4. 의의와 한계</h2><p><strong>의의</strong>:</p><ul><li>amodal segmentation을 <strong>자율주행이라는 실전 응용</strong>과 직접 연결</li><li>KINS는 이후 연구들의 표준 벤치마크가 되어, &ldquo;COCOA에서만 잘 되는 방법"이 아니라 &ldquo;실제 도로 상황에서도 되는 방법"인지 검증하는 기준을 제공</li></ul><p><strong>한계</strong>: KINS든 COCOA든 여전히 <strong>사람이 직접 amodal 마스크를 라벨링</strong>해야 했다 — 라벨링 비용이 크다는 근본적 문제는 그대로 남아 있었다. 이 문제를 정면으로 다룬 것이 바로 다음 논문 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/5.self-supervised_scene_de-occlusion/>Zhan et al.(2020)의 self-supervised 접근</a>
+이다.</p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

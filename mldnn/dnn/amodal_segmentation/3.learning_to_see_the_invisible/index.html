@@ -1,0 +1,53 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/amodal_segmentation/>Amodal Segmentation</a></div><h1>3.Learning to See the Invisible</h1></header><div class="doc-body post-body"><h1 id=learning-to-see-the-invisible-orcnn>Learning to See the Invisible (ORCNN)</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/1804.08864>Learning to See the Invisible: End-to-End Trainable Amodal Instance Segmentation</a>
+— Follmann et al., WACV 2019</p><p>Patrick Follmann et al., <strong>WACV 2019</strong>. 결론부터 아주 쉽게: <strong>"<a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a>
+에 예측 브랜치 몇 개만 더 붙여서, 사진 한 장 넣으면 한 번에 &lsquo;보이는 부분&rsquo;, &lsquo;가려진 부분&rsquo;, &lsquo;전체 모양&rsquo; 세 가지 마스크를 동시에 뱉어내는 구조를 만든 논문.</strong> 앞선 두 논문이 &ldquo;문제 정의"와 &ldquo;데이터셋"에 집중했다면, 이 논문은 <strong>처음으로 실용적으로 갖다 쓸 수 있는 end-to-end 모델</strong>을 내놓았다.</p><blockquote><p>전체 계보 속 위치는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/>Amodal Segmentation 개요</a>
+참고. 이 구조는 일반적인 Mask R-CNN 기반 instance segmentation 구현과 가장 유사한 형태라, Mask R-CNN을 다뤄본 적이 있다면 가장 친숙하게 느껴질 논문이다.</p></blockquote><h2 id=1-이-논문-이전까지의-아쉬운-점>1. 이 논문 이전까지의 아쉬운 점</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/>Li & Malik(2016)</a>
+: 문제는 정의했지만 실전에 바로 쓰기엔 구조가 투박함</li><li><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/>Zhu et al.(2017)</a>
+: COCOA라는 좋은 데이터셋은 만들었지만, &ldquo;이 데이터로 어떤 모델 구조를 학습시켜야 하는가"는 별개 문제로 남아 있었음</li></ul><p>즉 <strong>&ldquo;제대로 된 정답 데이터가 생겼으니, 이걸로 실제로 쓸 만한 모델을 학습시켜보자&rdquo;</strong> 가 이 논문의 동기다.</p><h2 id=2-핵심-아이디어--mask-r-cnn에-브랜치-추가>2. 핵심 아이디어 — Mask R-CNN에 브랜치 추가</h2><p><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a>
+은 원래 물체마다 <strong>박스(box) + 클래스(class) + 마스크(mask)</strong> 세 가지를 예측하는 구조다. ORCNN은 여기에 <strong>마스크 예측 부분을 확장</strong>해서 한 물체당 다음 세 종류의 마스크를 동시에 뱉게 만든다.</p><pre tabindex=0><code>                          ┌─→ Visible mask  (눈에 보이는 부분만)
+Mask R-CNN 기존 구조 ──▶ ROI ─┼─→ Invisible mask (가려서 안 보이는 부분)
+   (박스+클래스는 그대로)    └─→ Amodal mask  (visible + invisible = 물체의 전체 모양)</code></pre><ul><li><strong>Amodal mask = Visible mask ∪ Invisible mask</strong> — 전체 모양은 결국 &ldquo;보이는 부분"과 &ldquo;안 보이는 부분"을 합친 것이라는 아주 직관적인 관계로 정의된다</li><li>세 마스크를 <strong>한 번의 forward pass</strong>로 동시에 예측 — Li&amp;Malik의 방식처럼 별도의 우회 학습 절차가 필요 없다. &ldquo;end-to-end trainable"이라는 표현이 여기서 나온다</li></ul><h2 id=3-왜-이게-실용적인가>3. 왜 이게 &ldquo;실용적"인가</h2><ul><li>기존 Mask R-CNN 파이프라인(백본 → RPN → ROI Head)을 거의 그대로 재사용하고, <strong>마스크 헤드만 세 갈래로 늘린 것</strong>이라 구현·학습 난이도가 낮다</li><li>실무에서 Mask R-CNN을 이미 써봤다면 구조를 이해하고 갖다 쓰기 가장 쉬운 amodal 모델</li><li>COCOA 데이터셋에서 기존 baseline(= Li&amp;Malik 방식)보다 큰 폭으로 성능을 앞섬</li></ul><h2 id=4-추가-기여--새-데이터셋-2종>4. 추가 기여 — 새 데이터셋 2종</h2><ul><li><strong>D2S amodal</strong>: 산업/제품 이미지 도메인의 amodal 데이터셋</li><li><strong>COCOA cls</strong>: COCOA를 클래스 라벨까지 포함해 정리한 버전</li></ul><p>COCOA가 처음엔 &ldquo;클래스 구분 없이 전경/배경&rdquo; 수준이었다면, 후속 데이터셋들은 실제 카테고리(사람, 자동차 등)별로 정리되며 점점 실전 벤치마크에 가까워진다.</p><h2 id=5-의의와-한계>5. 의의와 한계</h2><p><strong>의의</strong>: &ldquo;brain-storming 수준의 아이디어"에서 &ldquo;Mask R-CNN 위에 브랜치 붙이면 바로 쓸 수 있는 실용적 구조"로 분야를 한 단계 끌어올렸다.</p><p><strong>한계</strong>: 여전히 이미지 하나, 카테고리가 고정된 <strong>닫힌 학습 데이터(closed-set)</strong> 범위 안에서만 잘 동작한다 — 학습 때 못 본 물체 종류나 상황엔 약하다. 이 한계는 계보의 마지막 논문 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/7.amodal_sam/>Amodal SAM(2026)</a>
+이 정면으로 다룬다. 한편 자율주행처럼 <strong>훨씬 대규모·고위험 상황</strong>에서의 amodal 학습은 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/>KINS 데이터셋(Qi et al., 2019)</a>
+이 이어받는다.</p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,47 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_cs/data_structure/>Data Structure</a></div><h1>Deque</h1></header><div class="doc-body post-body"><h1 id=deque>Deque</h1><p>Queue도 기본적으로 Deque 의 래퍼임.</p><p>명시성때문에 큐를 쓰는거지, 덱이 그냥 어느상황에서든 나음</p><table><thead><tr><th>컨테이너</th><th>메모리 구조</th><th>비고</th></tr></thead><tbody><tr><td><code>vector</code></td><td>✅ 연속적</td><td>빠른 임의 접근, 캐시 효율 ↑</td></tr><tr><td><code>deque</code></td><td>❌ 불연속</td><td>양쪽 삽입/삭제 빠름</td></tr><tr><td><code>queue</code></td><td>❌ 불연속</td><td>기본적으로 <code>deque</code> 사용</td></tr></tbody></table><table><thead><tr><th>항목</th><th><code>vector</code></th><th><code>deque</code></th></tr></thead><tbody><tr><td>메모리 구조</td><td>✅ <strong>완전 연속된 메모리</strong></td><td>❌ <strong>불연속 블록 구조</strong></td></tr><tr><td>순차 접근</td><td>✅ 매우 빠름 (CPU 캐시 친화적)</td><td>⛔ 상대적으로 느림 (블록 간 이동 비용)</td></tr><tr><td>예: <code>for (auto x : container)</code></td><td>빠름</td><td>느릴 수 있음</td></tr></tbody></table><p>💡 CPU 관점
+vector: 인접한 요소들을 CPU 캐시 라인에 한 번에 불러오기 가능 → prefetch 최적화</p><p>deque: 블록 단위로 메모리를 따로 할당받기 때문에, 블록 경계마다 캐시 미스 발생 가능</p><p>📌 정리
+순차 읽기+랜덤 접근이면 vector,
+양방향 삽입/삭제 많으면 deque,
+중간 삽입/삭제가 핵심이면 list (단, iterator 기반이어야 이점 있음).</p><p>벡터는 삽입 삭제 시 전체를 시프트 하는 비용이 발생하는데,</p><p>덱은 그렇지 않게 하기 위해서 메모리 상에서 불연속적으로 두는 것임.</p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

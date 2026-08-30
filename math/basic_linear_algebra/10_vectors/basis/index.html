@@ -1,0 +1,69 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/math/basic_linear_algebra/10_vectors/>10 vectors</a></div><h1>Basis</h1></header><div class="doc-body post-body"><h1 id=basis>Basis</h1><p>기저(basis)는 어떤 벡터 공간을 생성하면서도,</p><p>서로 선형 독립인 벡터들의 집합이다.</p><p>즉, 기저는 공간을 표현하는 데 필요한 최소한의 뼈대라고 볼 수 있다.</p><hr><h2 id=정의>정의</h2><p>벡터 공간 $V$의 벡터 집합 $B = \{v_1, v_2, \dots, v_k\}$가 다음 두 조건을 만족하면 기저이다.</p><ol><li>$B$가 $V$를 생성한다.</li><li>$B$의 벡터들이 서로 선형 독립이다.</li></ol><p>즉,</p><div class=math-block>\[V = \mathrm{span}(v_1, v_2, \dots, v_k)\]</div><p>이면서 동시에 중복이 없어야 한다.</p><hr><h2 id=왜-중요한가>왜 중요한가?</h2><p>기저가 있으면 공간의 모든 벡터를</p><p>기저 벡터들의 선형결합으로 유일하게 표현할 수 있다.</p><p>즉,</p><div class=math-block>\[v = a_1 v_1 + a_2 v_2 + \cdots + a_k v_k\]</div><p>표현이 하나로 결정된다.</p><p>이 점이 기저의 가장 중요한 성질이다.</p><hr><h2 id=예시-1-의-표준기저>예시 1: $\mathbb{R}^2$의 표준기저</h2><div class=math-block>\[e_1 =
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\quad
+e_2 =
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}\]</div><p>는 $\mathbb{R}^2$의 기저이다.</p><p>왜냐하면</p><ol><li>모든 벡터</li></ol><div class=math-block>\[\begin{bmatrix}
+x\\
+y
+\end{bmatrix}\]</div><p>를</p><div class=math-block>\[x e_1 + y e_2\]</div><p>로 쓸 수 있고,
+2. 두 벡터는 선형 독립이기 때문이다.</p><hr><h2 id=예시-2-기저가-아닌-경우>예시 2: 기저가 아닌 경우</h2><div class=math-block>\[v_1 =
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\quad
+v_2 =
+\begin{bmatrix}
+2\\
+0
+\end{bmatrix}\]</div><p>는 선형 종속이므로 기저가 아니다.</p><p>이 두 벡터는 $x$축 방향만 만들 수 있고,</p><p>$\mathbb{R}^2$ 전체를 생성하지도 못한다.</p><hr><h2 id=생성집합-선형-독립과의-관계>생성집합, 선형 독립과의 관계</h2><p>기저는 아래 두 조건을 동시에 만족해야 한다.</p><ul><li><a class=inline-link href=/Study/math/basic_linear_algebra/10_vectors/span/>Span</a>
+: 공간 전체를 만들어야 함</li><li><a class=inline-link href=/Study/math/basic_linear_algebra/10_vectors/linear_independence/>Linear Independence</a>
+: 중복이 없어야 함</li></ul><p>즉,</p><ul><li>생성만 하고 중복이 있으면 기저가 아님</li><li>독립이지만 공간 전체를 만들지 못해도 기저가 아님</li></ul><hr><h2 id=차원과의-관계>차원과의 관계</h2><p>어떤 벡터 공간의 모든 기저는 같은 개수의 벡터를 가진다.</p><p>그 개수를 그 공간의 차원(dimension)이라고 한다.</p><p>예를 들어</p><ul><li>$\mathbb{R}^2$의 차원은 2</li><li>$\mathbb{R}^3$의 차원은 3</li></ul><p>이다.</p><p>즉, 차원은 그 공간을 표현하는 데 필요한 독립 벡터의 개수라고 볼 수 있다.</p><hr><h2 id=기저를-구하는-방법>기저를 구하는 방법</h2><p>보통 여러 벡터가 주어졌을 때</p><ol><li>공간을 생성하는지 확인하고</li><li>선형 종속인 벡터를 제거한다.</li></ol><p>실제로는 가우스 소거법을 많이 사용한다.</p><p>관련 문서:</p><ul><li><a class=inline-link href=/Study/math/basic_linear_algebra/30_methods/gaussian_elimination/>Gaussian Elimination</a></li></ul><hr><h2 id=요약>요약</h2><ul><li>기저는 생성집합이면서 선형 독립인 벡터 집합</li><li>공간의 모든 벡터를 유일하게 표현하게 해줌</li><li>기저 벡터의 개수는 차원과 같음</li><li>선형대수의 핵심 구조를 이해하는 기본 개념</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

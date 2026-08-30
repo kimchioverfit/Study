@@ -1,0 +1,61 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/tools/git/>Git</a></div><h1>02 Branch Remote</h1></header><div class="doc-body post-body"><h1 id=git-브랜치--원격-저장소>Git 브랜치 & 원격 저장소</h1><h2 id=4-브랜치-branch--switch--merge>4. 브랜치 (branch / switch / merge)</h2><table><thead><tr><th>명령어</th><th>설명</th></tr></thead><tbody><tr><td><code>git branch</code></td><td>브랜치 목록</td></tr><tr><td><code>git branch &lt;name></code></td><td>새 브랜치 생성</td></tr><tr><td><code>git switch &lt;name></code></td><td>브랜치 이동 (구버전: <code>git checkout &lt;name></code>)</td></tr><tr><td><code>git switch -c &lt;name></code></td><td>브랜치 생성 + 이동</td></tr><tr><td><code>git branch -d &lt;name></code></td><td>브랜치 삭제 (병합된 것만)</td></tr><tr><td><code>git branch -D &lt;name></code></td><td>브랜치 강제 삭제</td></tr><tr><td><code>git merge &lt;name></code></td><td>현재 브랜치에 <code>&lt;name></code>을 병합</td></tr></tbody></table><h3 id=fast-forward-vs-병합-커밋>Fast-forward vs 병합 커밋</h3><pre class=mermaid>gitGraph
+   commit id: &#34;A&#34;
+   commit id: &#34;B&#34;
+   branch feature
+   checkout feature
+   commit id: &#34;C&#34;
+   commit id: &#34;D&#34;
+   checkout main
+   merge feature id: &#34;M&#34;</pre><ul><li><code>main</code>이 B 이후 갈라진 적 없다면 merge는 포인터만 앞으로 옮긴다 (<strong>fast-forward</strong>, 커밋 안 생김).</li><li><code>main</code>도 따로 나아갔다면 위처럼 두 갈래를 잇는 <strong>병합 커밋 <code>M</code></strong> 이 생긴다.</li><li>병합 커밋 없이 일직선으로 정리하고 싶다면 merge 대신 <a class=inline-link href=/Study/tools/git/04_rebase/>04. Rebase</a>
+를 쓴다.</li></ul><h2 id=5-원격-저장소-remote--push--pull>5. 원격 저장소 (remote / push / pull)</h2><table><thead><tr><th>명령어</th><th>설명</th></tr></thead><tbody><tr><td><code>git remote -v</code></td><td>연결된 원격 저장소 확인</td></tr><tr><td><code>git remote add origin &lt;url></code></td><td>원격 저장소 등록</td></tr><tr><td><code>git push origin &lt;branch></code></td><td>로컬 커밋을 원격에 업로드</td></tr><tr><td><code>git push -u origin &lt;branch></code></td><td>업스트림 지정 후 push (이후엔 <code>git push</code>만)</td></tr><tr><td><code>git fetch</code></td><td>원격 변경을 가져오기만 함 (병합 X)</td></tr><tr><td><code>git pull</code></td><td><code>fetch</code> + <code>merge</code> (또는 <code>--rebase</code>)</td></tr></tbody></table><blockquote><p><code>git pull</code> = <code>git fetch</code> + <code>git merge</code>. 히스토리를 깔끔하게 유지하려면 <code>git pull --rebase</code>를 쓰기도 한다 (<a class=inline-link href=/Tools/Git/04_Rebase.md#git-pull---rebase--%ec%9b%90%ea%b2%a9%ea%b3%bc-%eb%8f%99%ea%b8%b0%ed%99%94%ed%95%a0-%eb%95%8c>04. Rebase</a>
+참고).</p></blockquote><h3 id=fetch-vs-pull>fetch vs pull</h3><pre class=mermaid>flowchart LR
+    R[(&#34;Remote&lt;br/&gt;origin/main&#34;)]
+    subgraph 로컬
+      RT[&#34;원격 추적 브랜치&lt;br/&gt;origin/main&#34;]
+      LB[&#34;내 브랜치&lt;br/&gt;main&#34;]
+    end
+    R --&gt;|git fetch| RT
+    RT --&gt;|merge / rebase| LB
+    R --&gt;|&#34;git pull (= fetch + merge)&#34;| LB</pre><ul><li><code>fetch</code>는 원격 내용을 <strong>가져와 원격 추적 브랜치에만</strong> 반영한다 — 내 작업 브랜치는 건드리지 않아 안전하게 먼저 확인할 수 있다.</li><li><code>pull</code>은 그 fetch 결과를 곧바로 내 브랜치에 병합까지 한다.</li></ul><p>다음: <a class=inline-link href=/Study/tools/git/03_undo_recovery/>03. 되돌리기 & 복구</a></p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,76 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_c++/idioms/>Idioms</a></div><h1>Emplace vs Push back</h1></header><div class="doc-body post-body"><h1 id=emplace_back-vs-push_back>emplace_back vs push_back</h1><p><code>vector</code>에 원소를 추가하는 두 함수의 차이. 결론부터: <strong>push_back은 &ldquo;완성된 객체를 받아서&rdquo; 넣고, emplace_back은 &ldquo;생성자 인자를 받아서&rdquo; 컨테이너 내부 메모리에 직접 생성한다.</strong> 차이가 나는 상황은 생각보다 좁고, emplace에만 있는 함정도 있다.</p><blockquote><p>전제 개념: 복사/이동 생성자와 그 자동 생성 규칙은 <a class=inline-link href=/Study/basic_c++/idioms/rule_of_five_zero/>Rule of Three/Five/Zero</a>
+참고.</p></blockquote><h2 id=1-동작-차이>1. 동작 차이</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Item</span> {
+</span></span><span style=display:flex><span>    Item(<span style=color:#66d9ef>int</span> id, std<span style=color:#f92672>::</span>string name);   <span style=color:#75715e>// 생성자
+</span></span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span>Item<span style=color:#f92672>&gt;</span> v;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>v.push_back(Item(<span style=color:#ae81ff>1</span>, <span style=color:#e6db74>&#34;a&#34;</span>));    <span style=color:#75715e>// ① 임시 Item 생성 → ② vector 내부로 이동(또는 복사) → ③ 임시 소멸
+</span></span></span><span style=display:flex><span>v.emplace_back(<span style=color:#ae81ff>1</span>, <span style=color:#e6db74>&#34;a&#34;</span>);       <span style=color:#75715e>// 인자를 그대로 전달받아 vector 내부 메모리에서 곧바로 생성 (1회)
+</span></span></span></code></pre></div><ul><li><code>push_back(const T&)</code> / <code>push_back(T&&)</code> — <strong>T 자체</strong>만 받는다. 호출부에서 이미 T가 만들어져 있어야 함</li><li><code>emplace_back(Args&&... args)</code> — <strong>아무 인자나</strong> 받아서 (perfect forwarding) 내부에서 <code>T(args...)</code>를 호출</li></ul><p>즉 emplace_back은 &ldquo;임시 객체 생성 + 이동 + 소멸&rdquo; 한 사이클을 절약할 수 있다.</p><p><strong>perfect forwarding이란</strong>: <code>Args&&...</code> 템플릿 인자로 받은 값을 <code>std::forward</code>로 넘겨, 호출부의 lvalue/rvalue 성질을 그대로 유지한 채 생성자까지 전달하는 기법. 덕분에 emplace_back은 T의 어떤 생성자와도 연결된다.</p><h2 id=2-언제-차이가-나고-언제-안-나나>2. 언제 차이가 나고, 언제 안 나나</h2><p><strong>차이 없음 — 이미 만들어진 객체를 넣을 때:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>Item <span style=color:#a6e22e>item</span>(<span style=color:#ae81ff>1</span>, <span style=color:#e6db74>&#34;a&#34;</span>);
+</span></span><span style=display:flex><span>v.push_back(item);              <span style=color:#75715e>// 복사
+</span></span></span><span style=display:flex><span>v.emplace_back(item);           <span style=color:#75715e>// 똑같이 복사 (emplace라고 마법처럼 이동되지 않음)
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>v.push_back(std<span style=color:#f92672>::</span>move(item));   <span style=color:#75715e>// 이동
+</span></span></span><span style=display:flex><span>v.emplace_back(std<span style=color:#f92672>::</span>move(item));<span style=color:#75715e>// 똑같이 이동
+</span></span></span></code></pre></div><p>이미 T인 것을 넘기면 emplace_back도 결국 복사/이동 생성자를 호출한다. <strong>성능 동일.</strong></p><p><strong>차이 있음 — 생성자 인자를 넘길 때:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>v.push_back({<span style=color:#ae81ff>2</span>, <span style=color:#e6db74>&#34;b&#34;</span>});     <span style=color:#75715e>// 임시 생성 → 이동 (이동이 저렴한 타입이면 차이 미미)
+</span></span></span><span style=display:flex><span>v.emplace_back(<span style=color:#ae81ff>2</span>, <span style=color:#e6db74>&#34;b&#34;</span>);    <span style=color:#75715e>// 내부에서 직접 생성 — 임시/이동 없음
+</span></span></span></code></pre></div><table><thead><tr><th>상황</th><th>push_back</th><th>emplace_back</th></tr></thead><tbody><tr><td>완성된 객체 (lvalue)</td><td>복사 1회</td><td>복사 1회 (동일)</td></tr><tr><td>완성된 객체 (<code>std::move</code>)</td><td>이동 1회</td><td>이동 1회 (동일)</td></tr><tr><td>생성자 인자 전달</td><td>임시 생성 + 이동 1회</td><td><strong>직접 생성 1회</strong></td></tr><tr><td>이동 불가/고비용 타입 + 인자 전달</td><td>임시 생성 + <strong>복사</strong></td><td><strong>직접 생성 1회</strong> — 차이 극대화</td></tr></tbody></table><ul><li>이동이 싼 타입(<code>string</code>, <code>vector</code> 등 포인터 몇 개 스왑)이면 실측 차이는 거의 없다</li><li>이동 생성자가 없거나(레거시 클래스, <a class=inline-link href=/Study/basic_c++/idioms/rule_of_five_zero/>소멸자만 선언해서 이동이 사라진 경우</a>
+) 이동이 비싼 타입일 때 emplace의 이득이 커진다</li></ul><h2 id=3-emplace_back만-할-수-있는-것>3. emplace_back만 할 수 있는 것</h2><p><strong>explicit 생성자 호출.</strong> push_back은 인자 → T의 <strong>암시적 변환</strong>이 필요하므로 explicit 생성자로는 컴파일되지 않는다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>std<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span>std<span style=color:#f92672>::</span>unique_ptr<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;&gt;</span> v;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>v.push_back(<span style=color:#66d9ef>new</span> <span style=color:#66d9ef>int</span>(<span style=color:#ae81ff>42</span>));      <span style=color:#75715e>// ❌ 컴파일 에러 — unique_ptr(T*)는 explicit
+</span></span></span><span style=display:flex><span>v.emplace_back(<span style=color:#66d9ef>new</span> <span style=color:#66d9ef>int</span>(<span style=color:#ae81ff>42</span>));   <span style=color:#75715e>// ✅ 컴파일됨 — 내부에서 unique_ptr(p) 직접 호출
+</span></span></span></code></pre></div><p>단, 이게 곧 함정이기도 하다 (4-2 참고).</p><h2 id=4-emplace의-함정>4. emplace의 함정</h2><h3 id=4-1-의도하지-않은-생성자-매칭>4-1. 의도하지 않은 생성자 매칭</h3><p>emplace는 인자를 &ldquo;그럴듯한 생성자"에 그냥 연결해버린다. 코드만 봐서는 무엇이 만들어지는지 불분명해진다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>std<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span>std<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;&gt;</span> vv;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>vv.push_back({<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>20</span>});    <span style=color:#75715e>// {10, 20} — 원소 2개짜리 vector (initializer_list)
+</span></span></span><span style=display:flex><span>vv.emplace_back(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>20</span>);   <span style=color:#75715e>// vector(10, 20) — &#34;20이 10개&#34; 짜리 vector!
+</span></span></span></code></pre></div><p>같은 인자처럼 보여도 <strong>push_back은 initializer_list 생성</strong>, <strong>emplace_back은 (count, value) 생성자</strong>로 해석된다. emplace를 쓸 때는 어느 생성자에 매칭되는지 항상 의식해야 한다.</p><h3 id=4-2-raw-pointer--emplace--예외-시-leak>4-2. raw pointer + emplace = 예외 시 leak</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>std<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span>std<span style=color:#f92672>::</span>unique_ptr<span style=color:#f92672>&lt;</span>Widget<span style=color:#f92672>&gt;&gt;</span> v;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>v.emplace_back(<span style=color:#66d9ef>new</span> Widget());   <span style=color:#75715e>// ⚠️ 위험
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// emplace_back 내부에서 재할당이 일어나다 bad_alloc이 던져지면?
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// → new Widget()은 이미 실행됐지만 아직 unique_ptr에 안 들어감 → leak
+</span></span></span></code></pre></div><ul><li><code>new</code>의 결과가 unique_ptr로 감싸지기 <strong>전에</strong> 예외가 발생할 틈이 있다</li><li>애초에 push_back이 이걸 컴파일 에러로 막아주는 것(explicit)은 보호 장치인데, emplace가 그 장치를 우회한다</li><li><strong>올바른 방법</strong>: <code>v.push_back(std::make_unique&lt;Widget>())</code> — 자원이 항상 스마트 포인터 안에서 태어나게 한다 (<a class=inline-link href=/Study/basic_c++/memory/smart_pointer/>Smart Pointer</a>
+의 make 함수 원칙과 동일)</li></ul><h3 id=4-3-재할당-시엔-어차피-이동복사가-일어난다>4-3. 재할당 시엔 어차피 이동/복사가 일어난다</h3><p>emplace_back은 &ldquo;새 원소의 생성"만 절약한다. capacity가 부족해 <strong>재할당</strong>이 일어나면 기존 원소 전체가 새 버퍼로 이동(또는 복사)되는 건 push_back과 똑같다.</p><ul><li>이동 생성자가 <code>noexcept</code>가 아니면 vector는 강한 예외 보장을 위해 <strong>복사로 폴백</strong>한다 — 이동 생성자에 <code>noexcept</code>를 붙여야 하는 실전 이유 (<a class=inline-link href=/Study/basic_c/noexcept/>Noexcept</a>
+참고)</li><li>원소 수를 알면 <code>reserve()</code>가 emplace vs push 선택보다 훨씬 큰 성능 차이를 만든다</li></ul><h2 id=5-정리--실전-가이드>5. 정리 — 실전 가이드</h2><table><thead><tr><th>상황</th><th>권장</th></tr></thead><tbody><tr><td>생성자 인자를 바로 넘길 수 있음</td><td><code>emplace_back(args...)</code> — 임시 객체 절약</td></tr><tr><td>이미 만들어진 객체를 넣음</td><td><code>push_back(x)</code> / <code>push_back(std::move(x))</code> — emplace와 성능 동일, 의도가 명확</td></tr><tr><td><code>{...}</code> 집합 초기화로 넣고 싶음</td><td><code>push_back({...})</code> — emplace는 initializer_list를 못 받음</td></tr><tr><td><code>unique_ptr</code> 등 자원 소유 타입</td><td><code>push_back(std::make_unique&lt;T>(...))</code> — raw <code>new</code> + emplace 금지</td></tr><tr><td>성능이 정말 중요한 루프</td><td>emplace/push 고민 전에 <strong><code>reserve()</code> 먼저</strong></td></tr></tbody></table><ul><li><code>map</code>/<code>set</code> 계열에도 같은 관계가 있다: <code>insert(make_pair(k, v))</code> vs <code>emplace(k, v)</code>, 그리고 map 전용 <code>try_emplace(k, v)</code> (키가 이미 있으면 value 인자의 생성/이동조차 하지 않음)</li><li>C++17부터 <code>emplace_back</code>은 삽입된 원소의 <strong>참조를 반환</strong>한다: <code>auto& ref = v.emplace_back(1, "a");</code></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,58 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_cs/memory/>Memory</a></div><h1>Fragmentation</h1></header><div class="doc-body post-body"><h1 id=memory-fragmentation-메모리-단편화>Memory Fragmentation (메모리 단편화)</h1><p>할당과 해제를 반복하다 보면 메모리가 조각나서, <strong>총 여유 공간은 충분한데 정작 원하는 할당은 실패</strong>하는 상태가 된다. <a class=inline-link href=/Study/basic_cs/memory/memory_layout/>Memory_Layout</a>
+의 heap 대가 중 하나이며, 장기 실행하는 임베디드/서버 시스템에서 특히 치명적이다.</p><h2 id=1-외부-단편화-external-fragmentation>1. 외부 단편화 (External Fragmentation)</h2><p><strong>할당된 블록들 &ldquo;사이"에 생기는 자잘한 구멍</strong> 때문에, 여유 총량은 충분해도 연속된 큰 블록이 없는 상태.</p><pre tabindex=0><code>초기:     [________________ 여유 100KB ________________]
+
+할당:     [ A 20K ][ B 20K ][ C 20K ][ D 20K ][ 여유 20K ]
+
+B, D 해제: [ A 20K ][빈 20K ][ C 20K ][빈 20K ][ 여유 20K ]
+
+malloc(50K) → 실패!  (여유 총합 60KB지만 연속 공간은 최대 20KB)</code></pre><ul><li>원인: 해제 순서가 할당 순서와 다르기 때문. 수명이 제각각인 블록들이 섞이면 필연적으로 발생한다</li><li>오래 돌수록 악화된다 — &ldquo;일주일 돌리면 malloc이 실패하기 시작하는 장비"의 전형적 원인</li></ul><h2 id=2-내부-단편화-internal-fragmentation>2. 내부 단편화 (Internal Fragmentation)</h2><p><strong>할당된 블록 &ldquo;안"에서</strong> 실제 쓰는 크기보다 크게 받아서 낭비되는 부분.</p><pre tabindex=0><code>malloc(5) 요청 →  실제로는 16B 블록 지급
+[ 5B 사용 |    11B 낭비 (블록 내부)    ]</code></pre><ul><li>원인: 할당자는 관리 효율을 위해 <strong>정해진 크기 단위(size class)로 반올림</strong>해서 준다 (glibc malloc은 최소 청크 + 16B 정렬, 커널 buddy는 2^n 페이지 단위)</li><li>구조체 멤버 정렬(padding)로 인한 낭비도 같은 부류다 — <a class=inline-link href=/Study/basic_c++/memory/structure_optimize/>Structure_Optimize</a>
+참고</li><li>외부 단편화와의 구분: <strong>외부는 블록 사이의 낭비(합치면 쓸 수 있는데 흩어져 있음), 내부는 블록 안의 낭비(이미 지급되어 누구도 못 씀)</strong></li></ul><table><thead><tr><th>구분</th><th>위치</th><th>원인</th><th>완화책</th></tr></thead><tbody><tr><td>외부 단편화</td><td>블록들 사이</td><td>할당/해제 순서 뒤섞임</td><td>병합, 압축, 페이징, 풀 할당</td></tr><tr><td>내부 단편화</td><td>블록 내부</td><td>고정 단위 반올림, 정렬</td><td>size class 세분화, 구조체 패킹</td></tr></tbody></table><h2 id=3-할당자allocator는-어떻게-싸우는가>3. 할당자(allocator)는 어떻게 싸우는가</h2><h3 id=3-1-free-list와-배치-전략>3-1. Free list와 배치 전략</h3><p>할당자는 해제된 블록들을 free list로 관리하고, 요청이 오면 배치 전략으로 고른다.</p><table><thead><tr><th>전략</th><th>방식</th><th>특성</th></tr></thead><tbody><tr><td>First fit</td><td>처음 만나는 충분한 블록</td><td>빠름. 앞쪽에 자잘한 조각 누적</td></tr><tr><td>Best fit</td><td>가장 딱 맞는 블록</td><td>낭비 최소 같지만, <strong>쓸모없이 작은 자투리</strong>를 양산</td></tr><tr><td>Next fit</td><td>지난 위치부터 탐색</td><td>조각을 전체에 고르게 퍼뜨림</td></tr></tbody></table><p>어느 전략도 외부 단편화를 없애지는 못한다 — 완화 수단일 뿐이다.</p><h3 id=3-2-병합-coalescing>3-2. 병합 (Coalescing)</h3><p>해제 시 <strong>인접 블록이 이미 free면 하나로 합친다.</strong></p><pre tabindex=0><code>[ A ][빈 20K][ B 해제됨 20K ][ C ]
+              ↓ 병합
+[ A ][      빈 40K          ][ C ]</code></pre><p>glibc malloc(ptmalloc)은 경계 태그(boundary tag)로 앞뒤 블록 상태를 확인해 즉시 병합하고, 크기별 bin(fastbin/smallbin/largebin)으로 free 블록을 분류해 탐색을 줄인다.</p><h3 id=3-3-buddy-system--커널의-방식>3-3. Buddy System — 커널의 방식</h3><p>리눅스 커널은 페이지 프레임을 2^n 단위 &ldquo;버디&rdquo; 쌍으로 관리한다 (<a class=inline-link href=/Study/linux/memory/memory/>Linux Memory</a>
+4장).</p><ul><li>큰 블록을 반씩 쪼개서 할당하고, 해제 시 <strong>자기 버디(쌍둥이 블록)가 free면 재귀적으로 병합</strong> — 병합 대상 탐색이 O(1)</li><li>대신 2^n 반올림으로 인한 <strong>내부 단편화</strong>를 감수한다 (33KB 요청 → 64KB 지급)</li><li>그 낭비를 줄이려고 커널은 자주 쓰는 작은 객체들을 <strong>slab allocator</strong>로 따로 관리한다 — 같은 크기 객체 전용 캐시라서 내부/외부 단편화가 모두 최소화됨</li></ul><h3 id=3-4-페이징--외부-단편화의-구조적-해결>3-4. 페이징 — 외부 단편화의 구조적 해결</h3><p>가상 메모리 페이징은 &ldquo;<strong>물리 메모리가 연속일 필요 자체를 없애서</strong>&rdquo; 물리 단계의 외부 단편화를 해결한다 — 가상으로 연속인 100MB가 물리적으로는 흩어진 4KB 페이지들이어도 된다.</p><p>단, 이것으로 끝이 아니다:</p><ul><li><strong>프로세스 heap 안의(가상 주소 공간 내부의) 외부 단편화는 그대로 남는다</strong> — malloc이 조각내는 것은 가상 주소 공간이기 때문</li><li>페이지 단위(4KB) 반올림이라는 내부 단편화가 새로 생긴다</li><li>커널이 물리적으로 <strong>연속인</strong> 큰 메모리를 요구하는 경우(DMA 버퍼, huge page)에는 물리 단편화가 여전히 문제다 — <code>kmalloc</code> vs <code>vmalloc</code> 구분(<a class=inline-link href=/Study/linux/memory/memory/>Linux Memory</a>
+)이 존재하는 이유</li></ul><h2 id=4-임베디드장기-실행-시스템에서의-실전-대응>4. 임베디드/장기 실행 시스템에서의 실전 대응</h2><p>단편화는 &ldquo;고치는&rdquo; 것이 아니라 <strong>설계로 회피하는</strong> 것이다. C/C++ heap은 GC 언어와 달리 압축(compaction, 살아있는 블록을 옮겨 붙이기)이 불가능하다 — 포인터가 주소를 직접 들고 있어서 블록을 옮길 수 없기 때문이다.</p><table><thead><tr><th>전략</th><th>방법</th></tr></thead><tbody><tr><td><strong>메모리 풀 (pool allocator)</strong></td><td>부팅 시 큰 블록을 미리 확보하고, <strong>고정 크기 슬롯</strong>으로 잘라 재사용. 같은 크기만 오가므로 외부 단편화가 원리적으로 0 — 임베디드의 정석. 동작 원리와 구현은 <a class=inline-link href=/Study/basic_cs/memory/memory_pool/>Memory_Pool</a>
+별도 정리</td></tr><tr><td><strong>초기 일괄 할당</strong></td><td>필요한 메모리를 시작 시점에 전부 할당하고 런타임 중 malloc/free 금지 (항공/차량 등 안전 규격 코딩 표준의 단골 규칙)</td></tr><tr><td>수명별 분리</td><td>수명이 같은 객체끼리 같은 arena에서 할당 → 한꺼번에 해제 (arena/region allocator)</td></tr><tr><td>realloc 반복 지양</td><td>조금씩 키우는 <code>realloc</code> 루프는 조각 양산 — 2배 성장 전략이나 사전 reserve 사용</td></tr><tr><td>관측</td><td>glibc <code>malloc_stats()</code>/<code>malloc_info()</code>, <code>/proc/[pid]/smaps</code>로 단편화 정도 확인</td></tr></tbody></table><p>C++에서는 <code>std::pmr::monotonic_buffer_resource</code> / <code>std::pmr::unsynchronized_pool_resource</code>(C++17)가 풀/아레나 전략의 표준 구현이다 — 사용법은 <a class=inline-link href=/Study/basic_cs/memory/memory_pool/>Memory_Pool</a>
+6장 참고.</p><h2 id=5-요약>5. 요약</h2><ul><li><strong>외부 단편화</strong> = 블록 사이 구멍 (총량은 되는데 연속 공간이 없음), <strong>내부 단편화</strong> = 지급된 블록 안의 낭비 (반올림/정렬)</li><li>유저 공간 할당자는 free list + 병합 + size class로, 커널은 buddy + slab으로 완화한다</li><li>페이징은 물리 외부 단편화를 구조적으로 없애지만, heap 내부의 단편화와 페이지 반올림 낭비는 남는다</li><li>C/C++은 압축이 불가능하므로, 장기 실행 시스템은 <strong>메모리 풀/사전 할당으로 단편화가 생길 여지 자체를 설계에서 제거</strong>하는 것이 정답이다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

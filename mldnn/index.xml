@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ML&amp;DNN on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/</link><description>Recent content in ML&amp;DNN on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/overview/</guid><description>&lt;h1 id="computer-vision--deep-learning-study-overview"&gt;Computer Vision &amp;amp; Deep Learning Study Overview&lt;/h1&gt;
+&lt;h2 id="1-low-level-segmentation--region-proposal"&gt;1. Low-level Segmentation / Region Proposal&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Efficient Graph-Based Segmentation&lt;/li&gt;
+&lt;li&gt;Selective Search&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="2-backbone-evolution"&gt;2. Backbone Evolution&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/2.alexnet/"&gt;AlexNet&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;VGG&lt;/li&gt;
+&lt;li&gt;ResNet&lt;/li&gt;
+&lt;li&gt;EfficientNet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="3-object-detection"&gt;3. Object Detection&lt;/h2&gt;
+&lt;h3 id="31-classical--two-stage"&gt;3.1 Classical / Two-stage&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;OverFeat&lt;/li&gt;
+&lt;li&gt;R-CNN&lt;/li&gt;
+&lt;li&gt;Fast R-CNN&lt;/li&gt;
+&lt;li&gt;Faster R-CNN&lt;/li&gt;
+&lt;li&gt;FPN&lt;/li&gt;
+&lt;li&gt;Mask R-CNN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="32-one-stage"&gt;3.2 One-stage&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;SSD&lt;/li&gt;
+&lt;li&gt;YOLO&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="33-improvement"&gt;3.3 Improvement&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;RetinaNet (Focal Loss)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="34-anchor-free"&gt;3.4 Anchor-free&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;FCOS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="35-transformer-based"&gt;3.5 Transformer-based&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DETR&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="4-segmentation"&gt;4. Segmentation&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;U-Net&lt;/li&gt;
+&lt;li&gt;DeepLab&lt;/li&gt;
+&lt;li&gt;Mask R-CNN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="5-modern-vision--foundation-models"&gt;5. Modern Vision / Foundation Models&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ViT&lt;/li&gt;
+&lt;li&gt;Swin Transformer&lt;/li&gt;
+&lt;li&gt;SAM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="6-overall-flow"&gt;6. Overall Flow&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;flowchart TD
+ A[Low-level segmentation / region proposal] --&amp;gt; A1[Efficient Graph-Based Segmentation]
+ A --&amp;gt; A2[Selective Search]
+
+ A2 --&amp;gt; B[Backbone CNN evolution]
+ B --&amp;gt; B1[AlexNet]
+ B1 --&amp;gt; B2[VGG]
+ B2 --&amp;gt; B3[ResNet]
+ B3 --&amp;gt; B4[EfficientNet]
+
+ B4 --&amp;gt; C[Object Detection]
+
+ C --&amp;gt; C1[&amp;#34;OverFeat\nsliding window&amp;#34;]
+ C --&amp;gt; C2[R-CNN family]
+ C2 --&amp;gt; D1[R-CNN]
+ D1 --&amp;gt; D2[Fast R-CNN]
+ D2 --&amp;gt; D3[Faster R-CNN]
+ D3 --&amp;gt; D4[FPN]
+ D4 --&amp;gt; D5[Mask R-CNN]
+
+ C --&amp;gt; C3[One-stage detectors]
+ C3 --&amp;gt; E1[SSD]
+ C3 --&amp;gt; E2[YOLO]
+ C3 --&amp;gt; E3[&amp;#34;RetinaNet\nFocal Loss&amp;#34;]
+
+ C --&amp;gt; C4[Anchor-free]
+ C4 --&amp;gt; F1[FCOS]
+
+ C --&amp;gt; C5[Transformer detection]
+ C5 --&amp;gt; G1[DETR]
+
+ B4 --&amp;gt; H[Segmentation]
+ H --&amp;gt; H1[U-Net]
+ H --&amp;gt; H2[DeepLab]
+ H --&amp;gt; H3[Mask R-CNN]
+
+ G1 --&amp;gt; I[Modern Vision]
+ I --&amp;gt; I1[ViT]
+ I1 --&amp;gt; I2[Swin Transformer]
+ I --&amp;gt; I3[SAM]&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="7-recommended-study-order"&gt;7. Recommended Study Order&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Efficient Graph-Based Segmentation&lt;/li&gt;
+&lt;li&gt;Selective Search&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/2.alexnet/"&gt;AlexNet&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;VGG&lt;/li&gt;
+&lt;li&gt;ResNet&lt;/li&gt;
+&lt;li&gt;EfficientNet&lt;/li&gt;
+&lt;li&gt;OverFeat&lt;/li&gt;
+&lt;li&gt;R-CNN&lt;/li&gt;
+&lt;li&gt;Fast R-CNN&lt;/li&gt;
+&lt;li&gt;Faster R-CNN&lt;/li&gt;
+&lt;li&gt;FPN&lt;/li&gt;
+&lt;li&gt;Mask R-CNN&lt;/li&gt;
+&lt;li&gt;SSD / YOLO&lt;/li&gt;
+&lt;li&gt;RetinaNet&lt;/li&gt;
+&lt;li&gt;FCOS&lt;/li&gt;
+&lt;li&gt;DETR&lt;/li&gt;
+&lt;li&gt;U-Net / DeepLab&lt;/li&gt;
+&lt;li&gt;ViT / Swin Transformer&lt;/li&gt;
+&lt;li&gt;SAM (optional)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id="8-key-axes-to-understand"&gt;8. Key Axes to Understand&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Region proposal vs sliding window&lt;/li&gt;
+&lt;li&gt;Two-stage vs One-stage detection&lt;/li&gt;
+&lt;li&gt;Anchor-based vs Anchor-free&lt;/li&gt;
+&lt;li&gt;CNN vs Transformer&lt;/li&gt;
+&lt;li&gt;Semantic vs Instance segmentation&lt;/li&gt;
+&lt;li&gt;Multi-scale feature (FPN)&lt;/li&gt;
+&lt;li&gt;Class imbalance (Focal Loss)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/terms/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/terms/</guid><description>&lt;h1 id="terms"&gt;Terms&lt;/h1&gt;
+&lt;h3 id="flatten"&gt;Flatten&lt;/h3&gt;
+&lt;p&gt;Projection 과 완전히 다른 개념이니 혼동 주의&lt;/p&gt;
+&lt;p&gt;다차원 벡터를 1D array 형태로 바꾸는거임.&lt;/p&gt;
+&lt;p&gt;Fully connected layer에 넣기 위해서 1D로 바꾸는건데,&lt;/p&gt;
+&lt;p&gt;이후 사용하기 위해서는 정보가 추가로 필요함 (예를들어, 2D image를 1D array로 바꾸게되면 가로세로 정보없으면 알 수 없으니)&lt;/p&gt;
+&lt;p&gt;Flatten을 주로 하는 이유는, 예전 ML 에서 연산이 무거운 경우 cache localty 때문에 flatten 이용해서 연산을 빠르게 했었다.&lt;/p&gt;
+&lt;p&gt;요새는 GPU 가 2D Conv layer 같은걸로 처리해버리기 때문에, FC layer를 넣을때를 제외하고는 안쓰인다.&lt;/p&gt;</description></item></channel></rss>

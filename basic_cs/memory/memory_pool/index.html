@@ -1,0 +1,98 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_cs/memory/>Memory</a></div><h1>Memory Pool</h1></header><div class="doc-body post-body"><h1 id=memory-pool-메모리-풀>Memory Pool (메모리 풀)</h1><p>큰 메모리 블록을 <strong>미리 확보해두고, 고정 크기 슬롯으로 잘라서 빌려주고 돌려받는</strong> 커스텀 할당자. <a class=inline-link href=/Study/basic_cs/memory/fragmentation/>단편화</a>
+의 실전 해법이자, 실시간/임베디드 시스템에서 malloc을 대체하는 정석 패턴이다.</p><h2 id=1-왜-필요한가--malloc의-3가지-약점>1. 왜 필요한가 — malloc의 3가지 약점</h2><p>일반 할당자(<code>malloc</code>/<code>new</code>)는 범용이라는 대가로 다음을 포기한다 (<a class=inline-link href=/Study/basic_cs/memory/memory_layout/>Memory_Layout</a>
+3-2 참고):</p><table><thead><tr><th>malloc의 약점</th><th>결과</th></tr></thead><tbody><tr><td>free list <strong>탐색</strong> — 실행 시간이 그때그때 다름</td><td>실시간 시스템에서 <strong>WCET(최악 실행 시간) 보장 불가</strong></td></tr><tr><td>할당/해제 반복 시 <a class=inline-link href=/Study/basic_cs/memory/fragmentation/>외부 단편화</a>
+누적</td><td>장기 실행 기기에서 어느 날 갑자기 할당 실패</td></tr><tr><td>내부 lock — 멀티스레드 경합</td><td>우선순위 역전, 지연 스파이크 (<a class=inline-link href=/Study/linux/process/fork/>fork/lock 문제</a>
+의 그 lock)</td></tr></tbody></table><p>메모리 풀은 이 셋을 전부 뒤집는다: <strong>O(1) 결정적 할당, 단편화 0, (스레드별 풀이면) lock 0.</strong></p><h2 id=2-동작-원리--고정-슬롯--free-list>2. 동작 원리 — 고정 슬롯 + free list</h2><p>핵심 아이디어: <strong>모든 슬롯이 같은 크기</strong>이므로 &ldquo;맞는 블록 찾기"라는 문제 자체가 사라진다.</p><pre tabindex=0><code>초기화: 큰 블록을 슬롯 N개로 자르고, 빈 슬롯끼리 리스트로 엮음
+
+ free_head → [슬롯0] → [슬롯1] → [슬롯2] → [슬롯3] → NULL
+              (빈 슬롯 자체의 앞부분을 next 포인터로 재활용 — 별도 메타데이터 0)
+
+할당: free_head에서 하나 뽑기        해제: 리스트 앞에 도로 끼우기
+ free_head → [슬롯1] → ...           free_head → [슬롯0] → [슬롯1] → ...
+ (반환: 슬롯0)                        (포인터 조작 2회 — O(1))</code></pre><ul><li>할당 = 리스트 head 뽑기, 해제 = head에 끼우기 — 둘 다 <strong>포인터 몇 번 조작으로 끝 (O(1), 탐색 없음)</strong></li><li>빈 슬롯의 메모리 앞부분을 next 포인터로 쓰므로 관리 오버헤드도 사실상 0</li><li>같은 크기만 오가므로 <a class=inline-link href=/Study/basic_cs/memory/fragmentation/>외부 단편화</a>
+가 <strong>원리적으로 발생 불가</strong></li></ul><h3 id=최소-구현-예제>최소 구현 예제</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>typedef</span> <span style=color:#66d9ef>struct</span> Pool {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span>  <span style=color:#f92672>*</span>free_head;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>size_t</span> slot_size;          <span style=color:#75715e>// 최소 sizeof(void*) 이상
+</span></span></span><span style=display:flex><span>} Pool;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>pool_init</span>(Pool <span style=color:#f92672>*</span>p, <span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span>buf, <span style=color:#66d9ef>size_t</span> slot_size, <span style=color:#66d9ef>size_t</span> nslots) {
+</span></span><span style=display:flex><span>    p<span style=color:#f92672>-&gt;</span>slot_size <span style=color:#f92672>=</span> slot_size;
+</span></span><span style=display:flex><span>    p<span style=color:#f92672>-&gt;</span>free_head <span style=color:#f92672>=</span> buf;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>c <span style=color:#f92672>=</span> buf;                             <span style=color:#75715e>// 슬롯들을 리스트로 엮기
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>size_t</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> nslots <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>; i<span style=color:#f92672>++</span>)
+</span></span><span style=display:flex><span>        <span style=color:#f92672>*</span>(<span style=color:#66d9ef>void</span> <span style=color:#f92672>**</span>)(c <span style=color:#f92672>+</span> i <span style=color:#f92672>*</span> slot_size) <span style=color:#f92672>=</span> c <span style=color:#f92672>+</span> (i <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>*</span> slot_size;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>(<span style=color:#66d9ef>void</span> <span style=color:#f92672>**</span>)(c <span style=color:#f92672>+</span> (nslots <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>*</span> slot_size) <span style=color:#f92672>=</span> NULL;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>pool_alloc</span>(Pool <span style=color:#f92672>*</span>p) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span>slot <span style=color:#f92672>=</span> p<span style=color:#f92672>-&gt;</span>free_head;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (slot) p<span style=color:#f92672>-&gt;</span>free_head <span style=color:#f92672>=</span> <span style=color:#f92672>*</span>(<span style=color:#66d9ef>void</span> <span style=color:#f92672>**</span>)slot;   <span style=color:#75715e>// head 하나 뽑기
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> slot;                               <span style=color:#75715e>// 고갈 시 NULL
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>pool_free</span>(Pool <span style=color:#f92672>*</span>p, <span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span>slot) {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>(<span style=color:#66d9ef>void</span> <span style=color:#f92672>**</span>)slot <span style=color:#f92672>=</span> p<span style=color:#f92672>-&gt;</span>free_head;             <span style=color:#75715e>// head 앞에 끼우기
+</span></span></span><span style=display:flex><span>    p<span style=color:#f92672>-&gt;</span>free_head <span style=color:#f92672>=</span> slot;
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>// 사용: 정적 버퍼 위에 풀 구성 — heap을 아예 안 거침 (.bss에 잡힘)
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>static</span> <span style=color:#66d9ef>char</span> buf[<span style=color:#ae81ff>64</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>256</span>];                     <span style=color:#75715e>// 64B 슬롯 × 256개
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>static</span> Pool pkt_pool;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>pool_init</span>(<span style=color:#f92672>&amp;</span>pkt_pool, buf, <span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>256</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span>pkt <span style=color:#f92672>=</span> <span style=color:#a6e22e>pool_alloc</span>(<span style=color:#f92672>&amp;</span>pkt_pool);
+</span></span><span style=display:flex><span><span style=color:#75715e>/* ... */</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>pool_free</span>(<span style=color:#f92672>&amp;</span>pkt_pool, pkt);</span></span></code></pre></div><h2 id=3-대가--무엇을-포기하는가>3. 대가 — 무엇을 포기하는가</h2><table><thead><tr><th>제약</th><th>설명 / 대응</th></tr></thead><tbody><tr><td><strong>고정 크기</strong></td><td>슬롯보다 작은 요청은 <a class=inline-link href=/Study/basic_cs/memory/fragmentation/>내부 단편화</a>
+(슬롯 안 낭비), 큰 요청은 불가 → 크기별 풀 여러 개 운용 (64B/256B/1KB 풀 등 — glibc의 size class, 커널 slab과 같은 발상)</td></tr><tr><td><strong>용량 고정</strong></td><td>풀 고갈 시 정책을 설계 시점에 정해야 함: ① 실패 반환(호출자가 처리) ② 빈 슬롯 날 때까지 대기 ③ malloc으로 fallback ④ 풀 확장. 하드 RT는 보통 ① + 충분한 사전 산정</td></tr><tr><td>범용성 없음</td><td>어떤 크기가 얼마나 필요한지 <strong>미리 알아야</strong> 설계 가능 — 반대로 말하면, 그걸 아는 시스템(임베디드)에서는 단점이 아님</td></tr></tbody></table><h2 id=4-object-pool과의-구분>4. Object Pool과의 구분</h2><table><thead><tr><th></th><th>Memory Pool</th><th>Object Pool</th></tr></thead><tbody><tr><td>재사용 대상</td><td><strong>메모리</strong> (빈 슬롯)</td><td><strong>살아있는 객체</strong> (생성된 채로 보관)</td></tr><tr><td>반납 시</td><td>그냥 슬롯 반환</td><td>객체를 리셋해서 대기 목록으로</td></tr><tr><td>절약하는 것</td><td>할당 비용, 단편화</td><td>할당 비용 + <strong>생성/초기화 비용</strong> (DB 연결, 스레드, 소켓)</td></tr><tr><td>예</td><td>패킷 버퍼 풀</td><td>DB 커넥션 풀, 스레드 풀(<a class=inline-link href=/Study/linux/multi_thread/pthread_api/>pthread</a>
+워커 재사용)</td></tr></tbody></table><p>스레드 풀·커넥션 풀은 &ldquo;만들기 비싼 객체를 죽이지 않고 돌려쓰는&rdquo; object pool 패턴이고, memory pool은 그보다 아래 계층(원시 메모리)의 이야기다.</p><h2 id=5-실전-사례>5. 실전 사례</h2><ul><li><strong>RTOS</strong>: FreeRTOS의 고정 블록 힙(heap_4의 병합 힙과 별개로, 큐/태스크용 정적 할당 <code>xQueueCreateStatic</code> 등), 메시지 큐 버퍼 — 실시간성 보장의 기본기</li><li><strong>네트워크 스택</strong>: 패킷 버퍼 풀 (리눅스 커널 <code>sk_buff</code>도 slab 캐시로 관리) — 초당 수십만 번 할당/해제되는 고정 크기 객체의 전형</li><li><strong>커널 slab allocator</strong>: &ldquo;같은 크기 객체 전용 캐시"라는 점에서 메모리 풀과 같은 아이디어의 커널 버전 (<a class=inline-link href=/Study/linux/memory/memory/>Linux Memory</a>
+4장의 SLUB)</li><li><strong>게임 엔진</strong>: 프레임마다 쓰고 버리는 임시 데이터를 arena(선형) 할당자로 — 프레임 끝에 포인터 하나 리셋으로 전체 해제</li><li><strong>안전 규격 코딩</strong>(항공 DO-178C, 차량 MISRA): 런타임 동적 할당 금지 → 시작 시 풀 구성만 허용</li></ul><h2 id=6-c-표준-도구--stdpmr-c17>6. C++ 표준 도구 — std::pmr (C++17)</h2><p>직접 구현하지 않아도 표준 라이브러리에 풀/아레나 할당자가 있다. <code>std::pmr</code> 컨테이너는 <strong>할당자를 런타임에 꽂을 수 있는</strong> 버전이다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;memory_resource&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 1. 아레나(선형) — 버퍼에서 순서대로 잘라주기만 하고, 소멸 시 통째로 해제
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>char</span> buf[<span style=color:#ae81ff>64</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>1024</span>];
+</span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>pmr<span style=color:#f92672>::</span>monotonic_buffer_resource arena(buf, <span style=color:#66d9ef>sizeof</span>(buf));
+</span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>pmr<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> v(<span style=color:#f92672>&amp;</span>arena);           <span style=color:#75715e>// v의 모든 할당이 buf 안에서 해결됨
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 2. 풀 — 크기별 풀들을 자동 운용
+</span></span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>pmr<span style=color:#f92672>::</span>unsynchronized_pool_resource pool;   <span style=color:#75715e>// 단일 스레드용 (lock 없음)
+</span></span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>pmr<span style=color:#f92672>::</span>list<span style=color:#f92672>&lt;</span>Packet<span style=color:#f92672>&gt;</span> packets(<span style=color:#f92672>&amp;</span>pool);         <span style=color:#75715e>// 노드 할당이 풀에서 나옴
+</span></span></span></code></pre></div><ul><li><code>monotonic_buffer_resource</code>: 해제가 아예 없는 대신 가장 빠름 — &ldquo;한 프레임/한 요청 처리하고 통째로 버리는&rdquo; 패턴에 최적</li><li><code>(un)synchronized_pool_resource</code>: 크기별 풀 자동 관리. <code>unsynchronized</code>는 lock이 없어 빠른 대신 단일 스레드 전용</li><li><code>list</code>/<code>map</code>처럼 <strong>노드 단위 할당이 잦은 컨테이너</strong>에서 효과가 크다</li></ul><h2 id=7-요약>7. 요약</h2><ul><li>메모리 풀 = <strong>고정 크기 슬롯 + free list</strong> → 할당/해제 O(1), 결정적 시간, 외부 단편화 0</li><li>malloc의 비결정성·단편화·lock이 허용되지 않는 곳(실시간, 장기 실행 임베디드, 고빈도 할당 경로)의 표준 해법</li><li>대가는 유연성 — 크기·용량을 미리 알고 설계해야 하며, 고갈 정책도 설계의 일부</li><li>C++이면 직접 짜기 전에 <code>std::pmr</code> 먼저 검토</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,55 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/amodal_segmentation/>Amodal Segmentation</a></div><h1>2.Semantic Amodal Segmentation</h1></header><div class="doc-body post-body"><h1 id=semantic-amodal-segmentation>Semantic Amodal Segmentation</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/1509.01329>Semantic Amodal Segmentation</a>
+— Zhu et al., CVPR 2017</p><p>Yan Zhu et al., <strong>CVPR 2017</strong>. 결론부터 아주 쉽게: <strong>&ldquo;가려진 부분까지, 이번엔 진짜 사람이 손으로 직접 라벨링한 정답 데이터셋(COCOA)을 만들고, 물체 하나가 아니라 장면(scene) 전체에서 &lsquo;뭐가 뭘 가리는지&rsquo; 순서까지 정리한 논문.&rdquo;</strong> <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/>Li & Malik(2016)</a>
+이 &ldquo;인위적으로 만든 가짜 정답"으로 시작했다면, 이 논문은 &ldquo;진짜 사람이 라벨링한 정답"으로 이 분야를 한 단계 실전에 가깝게 만들었다.</p><blockquote><p>전체 계보 속 위치는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/>Amodal Segmentation 개요</a>
+참고.</p></blockquote><h2 id=1-이-논문-이전까지의-문제>1. 이 논문 이전까지의 문제</h2><p><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/>이전 논문</a>
+은 실제 amodal 정답이 없어서 &ldquo;물체를 인위적으로 가려서 정답을 만들어내는&rdquo; 우회법을 썼다. 좋은 첫걸음이었지만:</p><ul><li>사람이 직접 &ldquo;여기 가려진 부분이 원래 이런 모양이다"라고 라벨링한 <strong>진짜 정답 데이터셋이 없어서</strong>, 모델의 실력을 제대로 평가할 기준(benchmark)이 없었다</li><li>&ldquo;물체 하나의 전체 모양"만 다뤘지, 한 장면 안에 여러 물체가 서로 겹쳐 있을 때 <strong>&ldquo;어떤 물체가 앞에 있고 어떤 물체가 뒤에 가려졌는지&rdquo;</strong> 순서 관계는 다루지 않았다</li></ul><h2 id=2-이-논문의-기여--cocoa-데이터셋>2. 이 논문의 기여 — COCOA 데이터셋</h2><p><strong>COCOA(COCO Amodal)</strong> 데이터셋: COCO 이미지 5,000장에 대해 사람이 직접 다음 정보를 라벨링했다.</p><table><thead><tr><th>라벨 종류</th><th>내용</th></tr></thead><tbody><tr><td><strong>Visible mask</strong></td><td>눈에 보이는 부분 (기존 modal 라벨과 같은 개념)</td></tr><tr><td><strong>Amodal mask</strong></td><td>가려진 부분까지 포함한 물체의 전체 추정 모양 — <strong>사람이 직접 상상해서 그림</strong></td></tr><tr><td><strong>Depth ordering (깊이 순서)</strong></td><td>겹치는 두 물체 중 <strong>어느 것이 앞(occluder)이고 어느 것이 뒤(occludee)인지</strong>의 순서 관계</td></tr><tr><td>Semantic label, figure-ground edge</td><td>각 영역의 클래스, 물체 경계선 정보</td></tr></tbody></table><pre tabindex=0><code>한 장면 예시:
+
+  [자동차] 앞에    [강아지] 뒤        ← depth ordering: 자동차가 강아지를 가림
+     visible mask: 자동차 전체(안 가려짐)
+     amodal mask : 강아지 전체(뒷다리까지 사람이 상상해서 그림)</code></pre><h2 id=3-왜-scene-level이-중요한가>3. 왜 &ldquo;Scene-level"이 중요한가</h2><p><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/>이전 논문</a>
+이 &ldquo;물체 하나 대 하나의 가림"을 다뤘다면, 이 논문은 <strong>한 장면(scene) 안의 모든 물체들 사이의 관계</strong>를 통째로 다룬다.</p><ul><li>물체가 3개, 4개씩 겹쳐 있는 복잡한 현실 사진에서는 &ldquo;누가 누굴 가리는지"의 순서 자체가 중요한 정보다 (앞뒤 관계를 모르면 amodal 모양을 복원할 실마리도 없다)</li><li>이 depth ordering 개념은 이후 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/6.bcnet/>BCNet(2021)</a>
+의 &ldquo;occluder/occludee를 아예 두 레이어로 분리"하는 아이디어로 직접 이어진다</li></ul><h2 id=4-의의와-영향>4. 의의와 영향</h2><ul><li><strong>최초의 사람이 직접 라벨링한 amodal 정답 데이터셋</strong> — 이후 amodal segmentation 연구 대부분이 COCOA를 벤치마크로 사용하게 됨</li><li><a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/3.learning_to_see_the_invisible/>Follmann et al. (2019)</a>
+의 COCOA cls, 여러 후속 논문의 평가 기준이 COCOA에서 파생됨</li><li>&ldquo;문제 정의 + 평가 기준"이라는 관점에서, 이 분야가 학문적으로 자리잡는 데 가장 중요한 역할을 한 논문으로 꼽힌다</li><li>다만 5,000장이라는 규모는 실전 대규모 학습(특히 자율주행 등)에는 부족했다 — 이 문제는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/>KINS 데이터셋(Qi et al., 2019)</a>
+이 더 큰 스케일로 이어받는다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

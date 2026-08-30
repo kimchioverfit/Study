@@ -1,0 +1,54 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Basic C | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-section><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class="nav-link is-active" href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><section class=section-hero><div class=section-hero-copy><div class=eyebrow-row><a class=eyebrow-link href=/Study/>🗂 Archive</a>
+<span class=eyebrow-sep>/</span>
+<span class="eyebrow-link is-static">Basic C</span></div><h1>Basic C</h1></div><div class=section-stats><span class=stat-label>Entries</span>
+<span class=stat-value>5</span></div></section><section class=entry-grid><a class=entry-card href=/Study/basic_c/error_pointer/><h2>Error Pointer</h2><p>3종의 Error pointer 아래의 3가지 포인터 종류를 숙지해야 디버깅이 쉬워짐
+종류 정의 원인 접근 시 결과 예시 코드 Dangling Pointer
+(댕글링 포인터) 이미 해제되었거나 범위를 벗어난 메모리를 …</p></a><a class=entry-card href=/Study/basic_c/malloc/><h2>malloc</h2><p>malloc C의 동적 메모리 할당 함수. 결론부터: heap에서 크기만큼 빌리고, void*를 돌려주니 형변환해서 쓰고, 다 쓰면 반드시 free()로 직접 반납해야 하는 함수다. 반납을 잊거나, 두 번 반납하거나 …</p></a><a class=entry-card href=/Study/basic_c/noexcept/><h2>Noexcept</h2><p>noexcept 말그대로 except 를 던지지 않게 하는 것.
+어떻게 활용하지?
+-> 최적화를 노릴때 응용할 수 있다.
+예를들어, 아래와 같은 구조체가 있다고 하자.
+struct{ A(){}; A(const …</p></a><a class=entry-card href=/Study/basic_c/pointer/><h2>pointer</h2><p>Pointer란? 메모리 주소를 저장하는 변수.
+&와 *의 차이는 아래와 같다
+& (주소 연산자, address-of) 변수 앞에 붙여서, 그 변수의 메모리 주소를 구한다. (타입 뒤에 붙는 & …</p></a><a class=entry-card href=/Study/basic_c/static/><h2>Static</h2><p>Static Static은 활용 방법이 여러가지라서 하나로 단정하기는 어려우나,
+보통 Scope (함수, namespace) 안에서만 이용하게끔 제한하는 용도로 쓰임.
+그렇기 때문에, Static 과 void + …</p></a></section></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

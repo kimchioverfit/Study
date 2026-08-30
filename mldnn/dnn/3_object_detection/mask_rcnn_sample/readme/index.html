@@ -1,0 +1,77 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/3_object_detection/mask_rcnn_sample/>Mask R-CNN 실습 코드</a></div><h1>README</h1></header><div class="doc-body post-body"><h1 id=mask-r-cnn-학습-코드-구조-익히기>Mask R-CNN 학습 코드 구조 익히기</h1><p>Mask R-CNN 학습 파이프라인의 <strong>구성 요소와 순서를 학습하기 위한</strong> 샘플 코드입니다.
+성능이 아니라 &ldquo;각 단계가 왜 필요하고 무엇을 하는지"를 이해하는 데 초점을 맞췄습니다.</p><hr><h2 id=1-빠른-시작>1. 빠른 시작</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>pip install -r requirements.txt</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>python make_dummy_dataset.py --num-images <span style=color:#ae81ff>60</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>python train.py --epochs <span style=color:#ae81ff>3</span> --batch-size <span style=color:#ae81ff>2</span></span></span></code></pre></div><blockquote><p>첫 실행 시 COCO 사전학습 가중치(약 170MB)를 자동으로 내려받습니다.
+오프라인 환경이라면 <code>--no-pretrained</code> 를 붙이세요 (학습은 되지만 성능은 낮습니다).</p></blockquote><p>학습이 끝나면 <code>outputs/</code> 에 체크포인트, 학습 기록, GT/예측 시각화 이미지가 저장됩니다.</p><p>추론만 따로 해보려면:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>python predict.py --checkpoint outputs/best_model.pth --input data/images</span></span></code></pre></div><hr><h2 id=2-파일-구성-읽는-순서-추천>2. 파일 구성 (읽는 순서 추천)</h2><table><thead><tr><th>순서</th><th>파일</th><th>역할</th><th>여기서 배우는 것</th></tr></thead><tbody><tr><td>1</td><td><code>config.py</code></td><td>모든 하이퍼파라미터 집중 관리</td><td>실험 재현성, 설정 분리</td></tr><tr><td>2</td><td><code>make_dummy_dataset.py</code></td><td>합성 데이터 생성</td><td>인스턴스 마스크 형식(ID 맵)</td></tr><tr><td>3</td><td><code>dataset.py</code></td><td>파일 → <code>(image, target)</code> 변환</td><td><strong>Mask R-CNN의 target 규약</strong></td></tr><tr><td>4</td><td><code>transforms.py</code></td><td>데이터 증강</td><td>박스·마스크를 이미지와 함께 변형</td></tr><tr><td>5</td><td><code>model.py</code></td><td>모델 생성, head 교체</td><td>전이학습, 모델 구조</td></tr><tr><td>6</td><td><code>engine.py</code></td><td>학습/평가 1 epoch</td><td><strong>loss dict 반환 구조</strong>, mAP 계산</td></tr><tr><td>7</td><td><code>train.py</code></td><td>전체 조립</td><td>파이프라인 순서</td></tr><tr><td>8</td><td><code>visualize.py</code></td><td>결과 시각화</td><td>디버깅 습관</td></tr><tr><td>9</td><td><code>predict.py</code></td><td>추론 전용 경로</td><td>배포 시 필요한 최소 코드</td></tr><tr><td>—</td><td><code>utils.py</code></td><td>시드, 로깅, 체크포인트, collate_fn</td><td>보조 도구</td></tr></tbody></table><hr><h2 id=3-전체-학습-흐름>3. 전체 학습 흐름</h2><pre tabindex=0><code>설정 로드 / 시드 고정
+        ↓
+Dataset  (이미지 + 인스턴스 마스크 → boxes / labels / masks)
+        ↓
+Transforms  (이미지와 target을 함께 증강)
+        ↓
+DataLoader  (collate_fn 으로 가변 크기 샘플 묶기)
+        ↓
+Model  (ResNet50-FPN backbone + RPN + RoIAlign + Box/Mask head)
+        ↓
+반복: forward → 5개 loss 합산 → backward → optimizer.step()
+        ↓
+Validation (loss) → LR scheduler step → Checkpoint 저장
+        ↓
+최종 평가 (mAP) → 예측 결과 시각화</code></pre><hr><h2 id=4-꼭-기억할-4가지>4. 꼭 기억할 4가지</h2><h3 id=1-모델이-손실을-직접-계산한다>(1) 모델이 손실을 직접 계산한다</h3><p>torchvision detection 모델은 <strong>모드에 따라 반환값이 다릅니다.</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>model<span style=color:#f92672>.</span>train()
+</span></span><span style=display:flex><span>loss_dict <span style=color:#f92672>=</span> model(images, targets)   <span style=color:#75715e># dict of 5 losses  ← 예측이 아님!</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>model<span style=color:#f92672>.</span>eval()
+</span></span><span style=display:flex><span>outputs <span style=color:#f92672>=</span> model(images)              <span style=color:#75715e># list of predictions  ← loss가 아님!</span></span></span></code></pre></div><p><code>criterion = nn.CrossEntropyLoss()</code> 같은 코드가 없는 이유입니다.</p><h3 id=2-5개의-손실>(2) 5개의 손실</h3><table><thead><tr><th>손실</th><th>어디서</th><th>의미</th></tr></thead><tbody><tr><td><code>loss_objectness</code></td><td>RPN</td><td>후보 영역에 객체가 있는가</td></tr><tr><td><code>loss_rpn_box_reg</code></td><td>RPN</td><td>후보 박스 좌표 보정</td></tr><tr><td><code>loss_classifier</code></td><td>Box head</td><td>객체의 클래스 분류</td></tr><tr><td><code>loss_box_reg</code></td><td>Box head</td><td>최종 박스 좌표 회귀</td></tr><tr><td><code>loss_mask</code></td><td>Mask head</td><td>픽셀 단위 이진 마스크</td></tr></tbody></table><p>최종 loss는 이 다섯 개의 합입니다 (<code>engine.py</code>의 <code>sum(loss_dict.values())</code>).</p><h3 id=3-target-형식>(3) target 형식</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>target <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;boxes&#34;</span>:    FloatTensor[N, <span style=color:#ae81ff>4</span>],      <span style=color:#75715e># (x1, y1, x2, y2) 절대 픽셀 좌표</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;labels&#34;</span>:   Int64Tensor[N],         <span style=color:#75715e># 1부터 시작 (0은 배경 전용)</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;masks&#34;</span>:    UInt8Tensor[N, H, W],   <span style=color:#75715e># 객체별 이진 마스크</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;image_id&#34;</span>: Int64Tensor[<span style=color:#ae81ff>1</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;area&#34;</span>:     FloatTensor[N],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;iscrowd&#34;</span>:  Int64Tensor[N],
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><ul><li>라벨 0은 <strong>배경 전용</strong>이므로 실제 클래스는 1부터 매깁니다.</li><li>넓이가 0인 박스(<code>x2 &lt;= x1</code>)가 하나라도 있으면 학습이 NaN으로 터집니다.
+<code>dataset.py</code>에서 이를 걸러 내고 있습니다.</li></ul><h3 id=4-collate_fn이-반드시-필요하다>(4) <code>collate_fn</code>이 반드시 필요하다</h3><p>이미지 크기와 객체 수가 샘플마다 다르므로 기본 collate의 <code>torch.stack()</code>이
+실패합니다. 튜플로 그대로 묶어 넘기고, 크기 맞춤은 모델 내부
+<code>GeneralizedRCNNTransform</code>이 처리합니다.</p><hr><h2 id=5-자주-만나는-문제>5. 자주 만나는 문제</h2><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>loss가 NaN</td><td>lr이 너무 큼 / 넓이 0인 박스</td><td><code>--lr 0.001</code>, warm-up 늘리기</td></tr><tr><td>CUDA out of memory</td><td>배치가 큼 / 이미지가 큼</td><td><code>--batch-size 1</code>, <code>--amp</code></td></tr><tr><td><code>stack expects each tensor to be equal size</code></td><td><code>collate_fn</code> 미지정</td><td>DataLoader에 <code>collate_fn=collate_fn</code></td></tr><tr><td>학습은 되는데 mAP가 0</td><td>라벨을 0부터 매김</td><td>클래스 인덱스를 1부터 시작</td></tr><tr><td>Windows에서 DataLoader 멈춤</td><td><code>num_workers>0</code> + 가드 없음</td><td><code>if __name__ == "__main__":</code> 확인</td></tr></tbody></table><hr><h2 id=6-자신의-데이터로-바꾸려면>6. 자신의 데이터로 바꾸려면</h2><ol><li>데이터를 아래 구조로 준비합니다.<pre tabindex=0><code>data/
+  images/  0000.png ...
+  masks/   0000.png ...   ← 픽셀값이 인스턴스 ID (0=배경, 1,2,3...)
+  labels/  0000.txt ...   ← 인스턴스 순서대로 클래스 인덱스 (선택)</code></pre></li><li><code>config.py</code>의 <code>num_classes</code>(배경 포함)와 <code>class_names</code>를 수정합니다.</li><li>COCO JSON 형식을 쓰고 있다면 <code>dataset.py</code>의 <code>__getitem__</code>만 교체하면 됩니다.
+나머지 모듈은 그대로 재사용됩니다 — 그것이 모듈화의 목적입니다.</li></ol></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

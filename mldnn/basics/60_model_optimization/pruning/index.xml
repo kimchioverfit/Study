@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pruning on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/</link><description>Recent content in Pruning on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/0.overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/0.overview/</guid><description>&lt;h1 id="pruning"&gt;Pruning&lt;/h1&gt;
+&lt;p&gt;중요도가 낮은 파라미터를 제거하여 네트워크를 가지치기 하는 것&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;장점&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;추론 속도가 빨라진다(파라미터가 줄어드므로)&lt;/p&gt;
+&lt;p&gt;Regularization(모델 복잡도를 줄인다)이 일반화 성능을 높인다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;단점&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;정보의 손실이 생긴다&lt;/p&gt;
+&lt;p&gt;입자도(granularity, 세밀함)가 하드웨어 가속 디자인의 효율성에 영향을 미친다.&lt;/p&gt;
+&lt;p&gt;너무 sparse하게 만들어버리면 하드웨어 가속 효율이 떨어진다.&lt;/p&gt;
+&lt;p&gt;언뜻 보면 Overfitting 방지 방법인 Dropout과 유사하지만 다르다.&lt;/p&gt;
+&lt;p&gt;Pruning은 버리는 정보 재활용 X&lt;/p&gt;
+&lt;p&gt;Pruning은 한번 잘라낸 뉴런을 보관하지 않는다.&lt;/p&gt;
+&lt;p&gt;그러나 Dropout은 regularization이 목적이므로 학습 시에 뉴런들을 랜덤으로 껐다가 (보관해두고) 다시 켜는 과정을 반복한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/1.unstructured_pruning/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/1.unstructured_pruning/</guid><description>&lt;h1 id="1unstructured-pruning"&gt;1.Unstructured Pruning&lt;/h1&gt;
+&lt;p&gt;딥러닝 모델의 weight(가중치) 중&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;값이 작거나 중요도가 낮은 개별 요소&lt;/u&gt;들을 &lt;strong&gt;제거&lt;/strong&gt;하여&lt;/p&gt;
+&lt;p&gt;희소(sparse) 구조를 만드는 경량화 기법&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="모델-저장--추론"&gt;모델 저장 &amp;amp; 추론&lt;/h3&gt;
+&lt;p&gt;weight가 0인 값이 많은 sparse tensor 형태이므로, 저장 용량은 작아짐&lt;/p&gt;
+&lt;p&gt;⚠️ 하지만 PyTorch, TensorFlow 등에서는 기본적으로 sparse 연산을 최적화하지 않음&lt;/p&gt;
+&lt;p&gt;→ 추론 속도는 그대로, 모델 크기만 감소&lt;/p&gt;
+&lt;p&gt;따라서 ONNX + TensorRT, AMPERE GPU, custom inference engine 등에서 진짜 속도 향상을 체감 가능&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="sample"&gt;Sample&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; torch.nn.utils.prune &lt;span style="color:#66d9ef"&gt;as&lt;/span&gt; prune
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; torch.nn &lt;span style="color:#66d9ef"&gt;as&lt;/span&gt; nn
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 간단한 모델&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;model &lt;span style="color:#f92672"&gt;=&lt;/span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Sequential(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Linear(&lt;span style="color:#ae81ff"&gt;512&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;256&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;ReLU(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Linear(&lt;span style="color:#ae81ff"&gt;256&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 첫 번째 Linear 레이어에 대해 30% 비구조화 pruning 적용&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;prune&lt;span style="color:#f92672"&gt;.&lt;/span&gt;l1_unstructured(model[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;], name&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;weight&amp;#34;&lt;/span&gt;, amount&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0.3&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 마스크 확인 (1: 유지, 0: 제거)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;print(model[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]&lt;span style="color:#f92672"&gt;.&lt;/span&gt;weight_mask)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 영구적으로 weight만 남기고 pruning mask 제거&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;prune&lt;span style="color:#f92672"&gt;.&lt;/span&gt;remove(model[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;], &lt;span style="color:#e6db74"&gt;&amp;#39;weight&amp;#39;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/2.structured_pruning/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/pruning/2.structured_pruning/</guid><description>&lt;h1 id="2structured-pruning"&gt;2.Structured Pruning&lt;/h1&gt;
+&lt;p&gt;채널, 필터, 노드 단위로 통째로 제거하는 pruning 기법&lt;/p&gt;
+&lt;p&gt;예: Conv 레이어의 output 채널 전체 삭제, FC 레이어의 뉴런 단위 제거&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-2-비구조화와-비교"&gt;🔍 2. 비구조화와 비교&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;항목&lt;/th&gt;
+					&lt;th&gt;Unstructured&lt;/th&gt;
+					&lt;th&gt;&lt;strong&gt;Structured&lt;/strong&gt;&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;제거 단위&lt;/td&gt;
+					&lt;td&gt;개별 weight (스칼라)&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;채널, 필터, 노드&lt;/strong&gt; 등 큰 단위&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;모델 구조 변화&lt;/td&gt;
+					&lt;td&gt;없음 (희소화)&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;구조 자체가 작아짐&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;추론 속도&lt;/td&gt;
+					&lt;td&gt;느림 (별도 최적화 필요)&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;실제로 빨라짐&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;하드웨어 최적화&lt;/td&gt;
+					&lt;td&gt;어려움&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;GPU/CPU 친화적&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;구현 난이도&lt;/td&gt;
+					&lt;td&gt;쉬움&lt;/td&gt;
+					&lt;td&gt;비교적 어려움&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-3-pruning-대상"&gt;🎯 3. Pruning 대상&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;레이어&lt;/th&gt;
+					&lt;th&gt;대상&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Conv2D&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;Output 채널(channel)&lt;/strong&gt;, 커널 필터&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Linear (FC)&lt;/td&gt;
+					&lt;td&gt;노드 (행/열 단위)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;BatchNorm&lt;/td&gt;
+					&lt;td&gt;채널 단위&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Transformer&lt;/td&gt;
+					&lt;td&gt;Attention Head, FeedForward Layer 차원&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="sample"&gt;sample&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; torch
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; torch.nn.utils.prune &lt;span style="color:#66d9ef"&gt;as&lt;/span&gt; prune
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; torch.nn &lt;span style="color:#66d9ef"&gt;as&lt;/span&gt; nn
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;model &lt;span style="color:#f92672"&gt;=&lt;/span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Sequential(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Conv2d(&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;64&lt;/span&gt;, kernel_size&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, padding&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;ReLU(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Conv2d(&lt;span style="color:#ae81ff"&gt;64&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;128&lt;/span&gt;, kernel_size&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, padding&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 첫 Conv 레이어의 output 채널 중 30% 제거 (L2 norm 기준)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;prune&lt;span style="color:#f92672"&gt;.&lt;/span&gt;ln_structured(model[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;], name&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;weight&amp;#34;&lt;/span&gt;, amount&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0.3&lt;/span&gt;, n&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, dim&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 마스크 확인&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;print(model[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]&lt;span style="color:#f92672"&gt;.&lt;/span&gt;weight_mask&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# pruning 적용 후 mask 제거 → 실제 weight 저장&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;prune&lt;span style="color:#f92672"&gt;.&lt;/span&gt;remove(model[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;], &lt;span style="color:#e6db74"&gt;&amp;#34;weight&amp;#34;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item></channel></rss>

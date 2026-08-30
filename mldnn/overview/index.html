@@ -1,0 +1,82 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class="nav-link is-active" href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/>ML&amp;DNN</a></div><h1>Overview</h1></header><div class="doc-body post-body"><h1 id=computer-vision--deep-learning-study-overview>Computer Vision & Deep Learning Study Overview</h1><h2 id=1-low-level-segmentation--region-proposal>1. Low-level Segmentation / Region Proposal</h2><ul><li>Efficient Graph-Based Segmentation</li><li>Selective Search</li></ul><hr><h2 id=2-backbone-evolution>2. Backbone Evolution</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/2.alexnet/>AlexNet</a></li><li>VGG</li><li>ResNet</li><li>EfficientNet</li></ul><hr><h2 id=3-object-detection>3. Object Detection</h2><h3 id=31-classical--two-stage>3.1 Classical / Two-stage</h3><ul><li>OverFeat</li><li>R-CNN</li><li>Fast R-CNN</li><li>Faster R-CNN</li><li>FPN</li><li>Mask R-CNN</li></ul><h3 id=32-one-stage>3.2 One-stage</h3><ul><li>SSD</li><li>YOLO</li></ul><h3 id=33-improvement>3.3 Improvement</h3><ul><li>RetinaNet (Focal Loss)</li></ul><h3 id=34-anchor-free>3.4 Anchor-free</h3><ul><li>FCOS</li></ul><h3 id=35-transformer-based>3.5 Transformer-based</h3><ul><li>DETR</li></ul><hr><h2 id=4-segmentation>4. Segmentation</h2><ul><li>U-Net</li><li>DeepLab</li><li>Mask R-CNN</li></ul><hr><h2 id=5-modern-vision--foundation-models>5. Modern Vision / Foundation Models</h2><ul><li>ViT</li><li>Swin Transformer</li><li>SAM</li></ul><hr><h2 id=6-overall-flow>6. Overall Flow</h2><pre class=mermaid>flowchart TD
+    A[Low-level segmentation / region proposal] --&gt; A1[Efficient Graph-Based Segmentation]
+    A --&gt; A2[Selective Search]
+
+    A2 --&gt; B[Backbone CNN evolution]
+    B --&gt; B1[AlexNet]
+    B1 --&gt; B2[VGG]
+    B2 --&gt; B3[ResNet]
+    B3 --&gt; B4[EfficientNet]
+
+    B4 --&gt; C[Object Detection]
+
+    C --&gt; C1[&#34;OverFeat\nsliding window&#34;]
+    C --&gt; C2[R-CNN family]
+    C2 --&gt; D1[R-CNN]
+    D1 --&gt; D2[Fast R-CNN]
+    D2 --&gt; D3[Faster R-CNN]
+    D3 --&gt; D4[FPN]
+    D4 --&gt; D5[Mask R-CNN]
+
+    C --&gt; C3[One-stage detectors]
+    C3 --&gt; E1[SSD]
+    C3 --&gt; E2[YOLO]
+    C3 --&gt; E3[&#34;RetinaNet\nFocal Loss&#34;]
+
+    C --&gt; C4[Anchor-free]
+    C4 --&gt; F1[FCOS]
+
+    C --&gt; C5[Transformer detection]
+    C5 --&gt; G1[DETR]
+
+    B4 --&gt; H[Segmentation]
+    H --&gt; H1[U-Net]
+    H --&gt; H2[DeepLab]
+    H --&gt; H3[Mask R-CNN]
+
+    G1 --&gt; I[Modern Vision]
+    I --&gt; I1[ViT]
+    I1 --&gt; I2[Swin Transformer]
+    I --&gt; I3[SAM]</pre><hr><h2 id=7-recommended-study-order>7. Recommended Study Order</h2><ol><li>Efficient Graph-Based Segmentation</li><li>Selective Search</li><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/2.alexnet/>AlexNet</a></li><li>VGG</li><li>ResNet</li><li>EfficientNet</li><li>OverFeat</li><li>R-CNN</li><li>Fast R-CNN</li><li>Faster R-CNN</li><li>FPN</li><li>Mask R-CNN</li><li>SSD / YOLO</li><li>RetinaNet</li><li>FCOS</li><li>DETR</li><li>U-Net / DeepLab</li><li>ViT / Swin Transformer</li><li>SAM (optional)</li></ol><hr><h2 id=8-key-axes-to-understand>8. Key Axes to Understand</h2><ul><li>Region proposal vs sliding window</li><li>Two-stage vs One-stage detection</li><li>Anchor-based vs Anchor-free</li><li>CNN vs Transformer</li><li>Semantic vs Instance segmentation</li><li>Multi-scale feature (FPN)</li><li>Class imbalance (Focal Loss)</li></ul><hr></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

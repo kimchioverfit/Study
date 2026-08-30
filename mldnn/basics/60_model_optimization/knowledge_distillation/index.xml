@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Knowledge Distillation on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/knowledge_distillation/</link><description>Recent content in Knowledge Distillation on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/knowledge_distillation/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/knowledge_distillation/0.overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/60_model_optimization/knowledge_distillation/0.overview/</guid><description>&lt;p&gt;Knowledge Distillation(지식 증류)은 &lt;strong&gt;큰 모델(Teacher)&lt;/strong&gt; 이 가진 지식을 &lt;strong&gt;작은 모델(Student)&lt;/strong&gt; 에게 전달하여,
+작은 모델이 높은 성능을 내도록 학습시키는 모델 압축 기법. 특히 리소스가 제한된 환경(모바일, IoT, 임베디드 등)에서 자주 사용됩니다.&lt;/p&gt;
+&lt;h3 id="-핵심-개념-요약"&gt;🔍 핵심 개념 요약&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;구분&lt;/th&gt;
+					&lt;th&gt;설명&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;목적&lt;/td&gt;
+					&lt;td&gt;큰 모델의 성능을 유지하면서 작은 모델로 경량화&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;주요 구성 요소&lt;/td&gt;
+					&lt;td&gt;Teacher 모델, Student 모델, Distillation Loss&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;장점&lt;/td&gt;
+					&lt;td&gt;모델 경량화, 추론 속도 향상, 적은 연산자원 사용&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-기본-아이디어"&gt;📘 기본 아이디어&lt;/h3&gt;
+&lt;p&gt;일반적으로 딥러닝 모델은 &lt;strong&gt;ground truth (정답 레이블)&lt;/strong&gt; 에 대해 학습.&lt;/p&gt;</description></item></channel></rss>

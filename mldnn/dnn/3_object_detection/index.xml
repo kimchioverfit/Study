@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Object Detection on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/</link><description>Recent content in Object Detection on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/1.overfeat/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/1.overfeat/</guid><description>&lt;h1 id="overfeat-2013"&gt;OverFeat (2013)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1312.6229"&gt;OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks&lt;/a&gt;
+ — Sermanet et al., ICLR 2014&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Sermanet et al., 2013. Region proposal 없이 &lt;strong&gt;CNN을 이미지 전체에 sliding window처럼 돌려서, 분류(classification)·위치추정(localization)·검출(detection)을 하나의 통합 프레임워크로 동시에 수행&lt;/strong&gt;한 초기 모델. ILSVRC 2013 localization 트랙 우승작.
+시기상 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/2.r-cnn/"&gt;R-CNN&lt;/a&gt;
+보다 먼저 나왔고 접근 방식도 정반대(“이미지 전체를 훑기” vs “후보 영역만 골라내기”)다. 여기서 쓰인 &lt;strong&gt;&amp;ldquo;FC layer를 conv로 바꿔서 통째로 한 번에 처리&amp;rdquo;&lt;/strong&gt; 트릭은 이후 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/"&gt;Faster R-CNN의 RPN&lt;/a&gt;
+, SSD/YOLO 같은 One-stage detector의 뿌리와 맞닿아 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/2.r-cnn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/2.r-cnn/</guid><description>&lt;h1 id="r-cnn-2014"&gt;R-CNN (2014)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1311.2524"&gt;Rich feature hierarchies for accurate object detection and semantic segmentation&lt;/a&gt;
+ — Girshick et al., CVPR 2014&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Regions with CNN features&lt;/strong&gt; — &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/2.selective_search/"&gt;Selective Search&lt;/a&gt;
+로 뽑은 후보 영역마다 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/1.cnn/"&gt;CNN&lt;/a&gt;
+으로 특징을 추출해 객체를 탐지한 모델.
+손으로 설계한 특징(HOG 등)에 의존하던 기존 detection을 &lt;strong&gt;CNN 기반으로 전환&lt;/strong&gt;시킨 출발점으로, 이후 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/"&gt;Fast R-CNN&lt;/a&gt;
+ → &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/"&gt;Faster R-CNN&lt;/a&gt;
+ → &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+으로 이어지는 R-CNN 계열의 시작이다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="-1-핵심-아이디어"&gt;🔷 1. 핵심 아이디어&lt;/h2&gt;
+&lt;p align="center"&gt;
+ &lt;img src="https://kimchioverfit.github.io/Study/imgs/rcnn_pipeline.png" alt="R-CNN pipeline" width="700"/&gt;
+&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/2.selective_search/"&gt;Selective Search&lt;/a&gt;
+로 객체가 있을 법한 &lt;strong&gt;region proposal 약 2000개&lt;/strong&gt;를 생성.&lt;/li&gt;
+&lt;li&gt;각 proposal을 고정 크기로 &lt;strong&gt;warping&lt;/strong&gt;한 뒤 CNN(당시 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/2.alexnet/"&gt;AlexNet&lt;/a&gt;
+)에 넣어 &lt;strong&gt;feature 추출&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;클래스별 &lt;strong&gt;SVM&lt;/strong&gt;으로 분류하고, &lt;strong&gt;Bounding Box Regression&lt;/strong&gt;으로 박스 위치를 보정.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NMS&lt;/strong&gt;로 겹치는 박스를 제거해 최종 detection 완성.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class="mermaid"&gt;flowchart LR
+ IN[&amp;#34;입력 이미지&amp;#34;] --&amp;gt; SS[&amp;#34;Selective Search&amp;lt;br/&amp;gt;~2000 proposals&amp;#34;]
+ SS --&amp;gt; W[&amp;#34;Warp&amp;lt;br/&amp;gt;227×227로 리사이즈&amp;#34;]
+ W --&amp;gt; CNN[&amp;#34;CNN (AlexNet)&amp;lt;br/&amp;gt;proposal마다 forward&amp;#34;]
+ CNN --&amp;gt; F[&amp;#34;4096-d feature vector&amp;#34;]
+ F --&amp;gt; SVM[&amp;#34;클래스별 SVM&amp;lt;br/&amp;gt;분류&amp;#34;]
+ F --&amp;gt; REG[&amp;#34;Bbox Regression&amp;lt;br/&amp;gt;위치 보정&amp;#34;]
+ SVM --&amp;gt; NMS[&amp;#34;NMS&amp;lt;br/&amp;gt;중복 박스 제거&amp;#34;]
+ REG --&amp;gt; NMS
+ NMS --&amp;gt; OUT[&amp;#34;최종 박스 + 클래스&amp;#34;]&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;이름 그대로 &lt;strong&gt;Region proposal + CNN&lt;/strong&gt;의 조합이 핵심이다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/</guid><description>&lt;h1 id="fast-r-cnn"&gt;Fast R-CNN&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1504.08083"&gt;Fast R-CNN&lt;/a&gt;
+ — Ross Girshick, ICCV 2015&lt;/p&gt;
+&lt;p&gt;Fast R-CNN에 대해 학습하기 전에, R-CNN에서 사용된 Region Proposal 의 기본인
+`Selective Search&amp;rsquo; 에 해대 알아보자.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/2.r-cnn/"&gt;R-CNN&lt;/a&gt;
+&lt;/p&gt;
+&lt;h3 id="어떻게-r-cnn보다-빨라진걸까"&gt;어떻게 R-CNN보다 빨라진걸까?&lt;/h3&gt;
+&lt;p&gt;R-CNN은 Proposal 각각에 대해 CNN을 돌리는 형태이므로, 느릴 수 밖에 없음.&lt;/p&gt;
+&lt;p&gt;여기서 ROI Pooling 을 통해서, Proposal 생성이후 CNN을 여러번 돌리지 않고도 고정 크기 Feature를 얻을 수 있게 하는 것이 핵심 기술
+즉, Proposal 이후 단계 최적화&lt;/p&gt;
+&lt;p&gt;1장의 이미지를 입력받아서, ROI pooling 하고, 고정된 크기의 feature vector를 fully connected layer에 전달한다. 또한, multi-task loss를 이용해서 모델을 개별적으로 학습시키지 않고, 한 번에 학습시킨다. -&amp;gt; Training &amp;amp; Detection time 감소&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/</guid><description>&lt;h1 id="faster-r-cnn-2015"&gt;Faster R-CNN (2015)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1506.01497"&gt;Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks&lt;/a&gt;
+ — Ren et al., NeurIPS 2015&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Region Proposal Network(RPN)&lt;/strong&gt; 도입으로 region proposal 생성까지 신경망 안에 통합한 모델. Selective Search라는 &lt;strong&gt;외부의, CPU 기반, 학습되지 않는 느린 알고리즘&lt;/strong&gt;을 제거하고, 이미 계산된 conv feature map을 재사용해 proposal을 만든다 — 그 결과 파이프라인 전체가 GPU 위에서 end-to-end로 돌아가는, 처음으로 실시간에 가까운 detector가 됐다.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/"&gt;Fast R-CNN&lt;/a&gt;
+까지 이어진 R-CNN 계열의 마지막 개선 단계이며, 여기서 도입된 RPN + Anchor 개념은 이후 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+에도 그대로 이어진다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/</guid><description>&lt;h1 id="mask-r-cnn"&gt;Mask R-CNN&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1703.06870"&gt;Mask R-CNN&lt;/a&gt;
+ — He et al., ICCV 2017&lt;/p&gt;
+&lt;p&gt;내가 자주 사용하는 Mask R-CNN에 대한 정리&lt;/p&gt;
+&lt;p&gt;우선, Mask R-CNN 의 기본 구조에 대해 알아보자.&lt;/p&gt;
+&lt;p&gt;기본적으로 3개의 모델(또는 5개라고 보기도)이 합쳐진 구성이다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Feature extractor&lt;/li&gt;
+&lt;li&gt;RPN (Region Proposal Network)&lt;/li&gt;
+&lt;li&gt;ROI Heads (Box classification, Box Regression, Mask head)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;ROI Align (연산 모듈)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이렇게 구성되어 있고, 핵심 기술은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/"&gt;Faster R-CNN&lt;/a&gt;
+ 과 유사하다.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Idioms on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_c++/idioms/</link><description>Recent content in Idioms on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_c++/idioms/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/idioms/emplace_vs_push_back/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/idioms/emplace_vs_push_back/</guid><description>&lt;h1 id="emplace_back-vs-push_back"&gt;emplace_back vs push_back&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;vector&lt;/code&gt;에 원소를 추가하는 두 함수의 차이. 결론부터: &lt;strong&gt;push_back은 &amp;ldquo;완성된 객체를 받아서&amp;rdquo; 넣고, emplace_back은 &amp;ldquo;생성자 인자를 받아서&amp;rdquo; 컨테이너 내부 메모리에 직접 생성한다.&lt;/strong&gt; 차이가 나는 상황은 생각보다 좁고, emplace에만 있는 함정도 있다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;전제 개념: 복사/이동 생성자와 그 자동 생성 규칙은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_c&amp;#43;&amp;#43;/idioms/rule_of_five_zero/"&gt;Rule of Three/Five/Zero&lt;/a&gt;
+ 참고.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-동작-차이"&gt;1. 동작 차이&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Item&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Item(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; id, std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;string name); &lt;span style="color:#75715e"&gt;// 생성자
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;Item&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; v;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;v.push_back(Item(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// ① 임시 Item 생성 → ② vector 내부로 이동(또는 복사) → ③ 임시 소멸
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;v.emplace_back(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 인자를 그대로 전달받아 vector 내부 메모리에서 곧바로 생성 (1회)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;push_back(const T&amp;amp;)&lt;/code&gt; / &lt;code&gt;push_back(T&amp;amp;&amp;amp;)&lt;/code&gt; — &lt;strong&gt;T 자체&lt;/strong&gt;만 받는다. 호출부에서 이미 T가 만들어져 있어야 함&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;emplace_back(Args&amp;amp;&amp;amp;... args)&lt;/code&gt; — &lt;strong&gt;아무 인자나&lt;/strong&gt; 받아서 (perfect forwarding) 내부에서 &lt;code&gt;T(args...)&lt;/code&gt;를 호출&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;즉 emplace_back은 &amp;ldquo;임시 객체 생성 + 이동 + 소멸&amp;rdquo; 한 사이클을 절약할 수 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/idioms/rule_of_five_zero/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/idioms/rule_of_five_zero/</guid><description>&lt;h1 id="rule-of-three--five--zero"&gt;Rule of Three / Five / Zero&lt;/h1&gt;
+&lt;p&gt;클래스가 자원(메모리, fd, 핸들)을 소유할 때 특수 멤버 함수를 어떻게 다뤄야 하는지에 대한 C++의 설계 규칙. 결론부터: &lt;strong&gt;기본은 Rule of Zero, 자원을 직접 만지는 소수의 래퍼 클래스만 Rule of Five.&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;전제 개념 — RAII (Resource Acquisition Is Initialization)&lt;/strong&gt;
+자원(메모리, 파일, lock, 소켓)의 수명을 &lt;strong&gt;객체의 수명에 묶는&lt;/strong&gt; C++의 핵심 관용구. &lt;strong&gt;생성자에서 자원을 획득하고, 소멸자에서 해제한다.&lt;/strong&gt; 스코프를 벗어나는 순간 — 정상 리턴이든, early return이든, 예외가 던져졌든 &lt;strong&gt;어떤 경로로든 소멸자는 반드시 호출&lt;/strong&gt;되므로, 해제를 잊는 것 자체가 불가능해진다 (C의 &lt;code&gt;goto cleanup&lt;/code&gt; 패턴을 언어 차원에서 자동화한 것).
+&lt;code&gt;std::string&lt;/code&gt;, &lt;code&gt;vector&lt;/code&gt;, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_c&amp;#43;&amp;#43;/memory/smart_pointer/"&gt;&lt;code&gt;unique_ptr&lt;/code&gt;/&lt;code&gt;shared_ptr&lt;/code&gt;&lt;/a&gt;
+, &lt;code&gt;lock_guard&lt;/code&gt;, &lt;code&gt;fstream&lt;/code&gt;이 전부 RAII 타입이다. 이 문서의 규칙들은 결국 RAII의 실천법이다 — &lt;strong&gt;Rule of Five = RAII 클래스를 직접 올바르게 만드는 법, Rule of Zero = 이미 만들어진 RAII 타입에게 맡기는 법.&lt;/strong&gt;&lt;/p&gt;</description></item></channel></rss>

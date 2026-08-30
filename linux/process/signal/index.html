@@ -1,0 +1,83 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/linux/process/>Process</a></div><h1>Signal</h1></header><div class="doc-body post-body"><h1 id=linux-signal>Linux Signal</h1><p>시그널은 커널 또는 다른 프로세스가 특정 프로세스에게 보내는 <strong>비동기 알림</strong>이다. 프로세스 제어(<code>wait</code>와 <code>SIGCHLD</code>), 종료 처리, 데몬의 설정 리로드 등 프로세스 관리와 밀접하게 얽혀 있다.</p><h2 id=1-대표-시그널>1. 대표 시그널</h2><table><thead><tr><th>시그널</th><th>번호</th><th>기본 동작</th><th>발생 상황</th></tr></thead><tbody><tr><td><code>SIGHUP</code></td><td>1</td><td>종료</td><td>터미널 연결 끊김. 데몬에서는 관례적으로 &ldquo;설정 리로드&rdquo; 용도로 재활용</td></tr><tr><td><code>SIGINT</code></td><td>2</td><td>종료</td><td><code>Ctrl+C</code></td></tr><tr><td><code>SIGQUIT</code></td><td>3</td><td>종료+코어덤프</td><td><code>Ctrl+\</code></td></tr><tr><td><code>SIGKILL</code></td><td>9</td><td>종료</td><td><strong>핸들링/무시/블록 불가.</strong> 커널이 즉시 죽임</td></tr><tr><td><code>SIGSEGV</code></td><td>11</td><td>종료+코어덤프</td><td>잘못된 메모리 접근</td></tr><tr><td><code>SIGTERM</code></td><td>15</td><td>종료</td><td><code>kill</code> 기본값. &ldquo;정리하고 종료해라"는 정중한 요청</td></tr><tr><td><code>SIGCHLD</code></td><td>17</td><td><strong>무시</strong></td><td>자식이 종료/정지됨</td></tr><tr><td><code>SIGSTOP</code> / <code>SIGCONT</code></td><td>19/18</td><td>정지/재개</td><td>SIGSTOP도 핸들링/무시 불가</td></tr><tr><td><code>SIGUSR1</code> / <code>SIGUSR2</code></td><td>10/12</td><td>종료</td><td>사용자 정의 용도</td></tr></tbody></table><ul><li>프로세스를 죽일 때의 매너: <strong><code>SIGTERM</code>을 먼저</strong> 보내 정리 기회를 주고, 안 죽을 때만 <code>SIGKILL</code></li><li><code>SIGKILL</code>/<code>SIGSTOP</code>을 못 막게 한 이유: 어떤 프로세스든 관리자가 반드시 제어할 수 있어야 하므로</li></ul><h2 id=2-시그널-보내기--kill-raise>2. 시그널 보내기 — kill(), raise()</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;signal.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>kill</span>(pid, SIGTERM);      <span style=color:#75715e>// 특정 프로세스에게
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>kill</span>(<span style=color:#f92672>-</span>pgid, SIGTERM);    <span style=color:#75715e>// 음수: 프로세스 그룹 전체에게
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>kill</span>(pid, <span style=color:#ae81ff>0</span>);            <span style=color:#75715e>// 시그널 0: 실제로 안 보내고 &#34;프로세스 생존 확인&#34;용
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>raise</span>(SIGABRT);          <span style=color:#75715e>// 자기 자신에게 (= kill(getpid(), sig))
+</span></span></span></code></pre></div><ul><li>이름과 달리 <code>kill()</code>은 &ldquo;죽이는 함수"가 아니라 &ldquo;시그널 전달 함수"다</li><li><code>kill(pid, 0)</code>은 프로세스 존재 확인의 관용 표현 — 성공하면 살아있고, <code>errno == ESRCH</code>면 없는 것</li></ul><h2 id=3-signal-vs-sigaction>3. signal() vs sigaction()</h2><h3 id=3-1-signal--간단하지만-쓰지-말-것>3-1. signal() — 간단하지만 쓰지 말 것</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#a6e22e>signal</span>(SIGINT, handler);   <span style=color:#75715e>// 간단하지만 동작이 구현마다 다름
+</span></span></span></code></pre></div><p>역사적으로 System V 계열에서는 핸들러가 한 번 실행되면 <code>SIG_DFL</code>로 리셋되는 등(one-shot), <strong>플랫폼마다 의미가 달랐다.</strong> 이식성 있는 코드에서는 <code>SIG_IGN</code>/<code>SIG_DFL</code> 설정 정도에만 쓰고, 핸들러 등록은 <code>sigaction()</code>을 쓰는 것이 원칙이다.</p><h3 id=3-2-sigaction--표준>3-2. sigaction() — 표준</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>struct</span> sigaction sa <span style=color:#f92672>=</span> {<span style=color:#ae81ff>0</span>};
+</span></span><span style=display:flex><span>sa.sa_handler <span style=color:#f92672>=</span> handler;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sigemptyset</span>(<span style=color:#f92672>&amp;</span>sa.sa_mask);        <span style=color:#75715e>// 핸들러 실행 중 추가로 블록할 시그널 집합
+</span></span></span><span style=display:flex><span>sa.sa_flags <span style=color:#f92672>=</span> SA_RESTART;        <span style=color:#75715e>// 시그널로 끊긴 시스템 콜을 자동 재시작
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>sigaction</span>(SIGINT, <span style=color:#f92672>&amp;</span>sa, NULL);</span></span></code></pre></div><table><thead><tr><th>주요 플래그</th><th>의미</th></tr></thead><tbody><tr><td><code>SA_RESTART</code></td><td>시그널로 중단된 <code>read()</code> 등 느린 시스템 콜을 <code>EINTR</code> 대신 자동 재시작</td></tr><tr><td><code>SA_NOCLDWAIT</code></td><td><code>SIGCHLD</code>에 설정 시 자식이 좀비가 되지 않음 (wait 불필요)</td></tr><tr><td><code>SA_SIGINFO</code></td><td>핸들러가 <code>siginfo_t</code>로 발신자 PID 등 상세 정보를 받음</td></tr></tbody></table><h2 id=4-sigchld와-좀비-회수-패턴>4. SIGCHLD와 좀비 회수 패턴</h2><p>자식 프로세스가 종료되면 부모는 <code>SIGCHLD</code>를 받는다. 이를 이용하면 부모가 블록되지 않고 <strong>비동기로 자식을 회수</strong>할 수 있다 (<a class=inline-link href=/Study/linux/process/process_api/>Process API</a>
+3장의 좀비 문제 해결).</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>reap_children</span>(<span style=color:#66d9ef>int</span> sig) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> saved <span style=color:#f92672>=</span> errno;                       <span style=color:#75715e>// errno 보존 (핸들러 규칙)
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> (<span style=color:#a6e22e>waitpid</span>(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, NULL, WNOHANG) <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>)
+</span></span><span style=display:flex><span>        ;
+</span></span><span style=display:flex><span>    errno <span style=color:#f92672>=</span> saved;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> sigaction sa <span style=color:#f92672>=</span> {<span style=color:#ae81ff>0</span>};
+</span></span><span style=display:flex><span>sa.sa_handler <span style=color:#f92672>=</span> reap_children;
+</span></span><span style=display:flex><span>sa.sa_flags <span style=color:#f92672>=</span> SA_RESTART <span style=color:#f92672>|</span> SA_NOCLDSTOP;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sigaction</span>(SIGCHLD, <span style=color:#f92672>&amp;</span>sa, NULL);</span></span></code></pre></div><p><strong>루프를 도는 이유</strong>: 시그널은 큐잉되지 않는다(standard signal 기준). 자식 3개가 거의 동시에 죽어도 <code>SIGCHLD</code>는 1번만 전달될 수 있으므로, 핸들러에서 <code>WNOHANG</code> 루프로 그 시점의 종료 자식을 전부 회수해야 한다.</p><h2 id=5-시그널-핸들러-안에서의-제약--async-signal-safe>5. 시그널 핸들러 안에서의 제약 — async-signal-safe</h2><p>시그널 핸들러는 프로그램의 <strong>아무 지점에서나 끼어들어 실행</strong>된다. 예를 들어 <code>malloc()</code> 실행 도중(내부 lock 보유 상태)에 핸들러가 끼어들어 다시 <code>malloc()</code>을 부르면 데드락이다 — <a class=inline-link href=/Study/linux/process/fork/>fork의 lock 문제</a>
+와 정확히 같은 구조다.</p><p>따라서 핸들러 안에서는 <strong>async-signal-safe 함수만</strong> 호출해야 한다.</p><table><thead><tr><th>안전 (허용)</th><th>위험 (금지)</th></tr></thead><tbody><tr><td><code>write()</code>, <code>_exit()</code>, <code>kill()</code>, <code>waitpid()</code>, <code>sigaction()</code></td><td><code>printf()</code>, <code>malloc()</code>/<code>free()</code>, <code>exit()</code>, 뮤텍스 계열, C++ new/delete</td></tr></tbody></table><p><strong>실무 패턴 — 핸들러에서는 플래그만 세운다:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>volatile</span> <span style=color:#66d9ef>sig_atomic_t</span> got_signal <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>handler</span>(<span style=color:#66d9ef>int</span> sig) { got_signal <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; }   <span style=color:#75715e>// 이것만 하고 즉시 리턴
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>void</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>/* sigaction 등록 후 */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> (running) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (got_signal) { got_signal <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>do_real_work</span>(); }
+</span></span><span style=display:flex><span>        <span style=color:#75715e>/* ... 메인 루프 ... */</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><ul><li><code>volatile sig_atomic_t</code>: 비동기 수정에 대해 읽기/쓰기가 원자적임이 보장되는 유일한 표준 타입</li><li>더 나아가면 self-pipe trick이나 리눅스 고유의 <code>signalfd()</code>로 시그널을 이벤트 루프(poll/epoll)에 통합하는 방법도 있다</li></ul><h2 id=6-시그널-블록--sigprocmask>6. 시그널 블록 — sigprocmask()</h2><p>크리티컬 섹션 동안 시그널 전달을 잠시 미룰 수 있다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>sigset_t</span> set, old;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sigemptyset</span>(<span style=color:#f92672>&amp;</span>set);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sigaddset</span>(<span style=color:#f92672>&amp;</span>set, SIGCHLD);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sigprocmask</span>(SIG_BLOCK, <span style=color:#f92672>&amp;</span>set, <span style=color:#f92672>&amp;</span>old);    <span style=color:#75715e>// SIGCHLD 잠시 보류
+</span></span></span><span style=display:flex><span><span style=color:#75715e>/* ... fork 하고 자식 PID를 자료구조에 등록하는 크리티컬 섹션 ... */</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sigprocmask</span>(SIG_SETMASK, <span style=color:#f92672>&amp;</span>old, NULL);  <span style=color:#75715e>// 원복 — 보류된 시그널이 이때 전달됨
+</span></span></span></code></pre></div><ul><li>블록은 &ldquo;버리는 것"이 아니라 &ldquo;보류(pending)&ldquo;다 — 해제하면 전달된다</li><li>멀티스레드에서는 <code>sigprocmask</code> 대신 <code>pthread_sigmask()</code>를 쓴다 (시그널 마스크는 스레드별 속성)</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

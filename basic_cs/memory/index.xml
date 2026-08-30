@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Memory on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_cs/memory/</link><description>Recent content in Memory on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_cs/memory/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_cs/memory/fragmentation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_cs/memory/fragmentation/</guid><description>&lt;h1 id="memory-fragmentation-메모리-단편화"&gt;Memory Fragmentation (메모리 단편화)&lt;/h1&gt;
+&lt;p&gt;할당과 해제를 반복하다 보면 메모리가 조각나서, &lt;strong&gt;총 여유 공간은 충분한데 정작 원하는 할당은 실패&lt;/strong&gt;하는 상태가 된다. &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_cs/memory/memory_layout/"&gt;Memory_Layout&lt;/a&gt;
+의 heap 대가 중 하나이며, 장기 실행하는 임베디드/서버 시스템에서 특히 치명적이다.&lt;/p&gt;
+&lt;h2 id="1-외부-단편화-external-fragmentation"&gt;1. 외부 단편화 (External Fragmentation)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;할당된 블록들 &amp;ldquo;사이&amp;quot;에 생기는 자잘한 구멍&lt;/strong&gt; 때문에, 여유 총량은 충분해도 연속된 큰 블록이 없는 상태.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;초기: [________________ 여유 100KB ________________]
+
+할당: [ A 20K ][ B 20K ][ C 20K ][ D 20K ][ 여유 20K ]
+
+B, D 해제: [ A 20K ][빈 20K ][ C 20K ][빈 20K ][ 여유 20K ]
+
+malloc(50K) → 실패! (여유 총합 60KB지만 연속 공간은 최대 20KB)&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;원인: 해제 순서가 할당 순서와 다르기 때문. 수명이 제각각인 블록들이 섞이면 필연적으로 발생한다&lt;/li&gt;
+&lt;li&gt;오래 돌수록 악화된다 — &amp;ldquo;일주일 돌리면 malloc이 실패하기 시작하는 장비&amp;quot;의 전형적 원인&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-내부-단편화-internal-fragmentation"&gt;2. 내부 단편화 (Internal Fragmentation)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;할당된 블록 &amp;ldquo;안&amp;quot;에서&lt;/strong&gt; 실제 쓰는 크기보다 크게 받아서 낭비되는 부분.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_cs/memory/memory_layout/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_cs/memory/memory_layout/</guid><description>&lt;h1 id="프로세스-메모리-구조--code--data--heap--stack"&gt;프로세스 메모리 구조 — Code / Data / Heap / Stack&lt;/h1&gt;
+&lt;p&gt;프로그램이 실행되면 OS는 프로세스에게 가상 주소 공간을 주고, 그 안을 용도별 영역으로 나눈다. 이 구조는 OS 무관 개념이다 — 리눅스 ELF든 Windows PE든 같은 구도로 나뉜다. (리눅스 관점의 확인 도구는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/memory/memory/"&gt;Linux Memory&lt;/a&gt;
+ 참고)&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;높은 주소 
+┌──────────────────┐
+│ 커널 공간 │ 유저 코드 접근 불가
+├──────────────────┤
+│ Stack ↓ │ 아래로 자람 (함수 호출마다)
+│ ─ ─ ─ ─ ─ ─ ─ │
+│ (빈 공간) │ ← 둘이 마주보며 자라는 이유:
+│ ─ ─ ─ ─ ─ ─ ─ │ 같은 빈 공간을 양쪽에서 나눠 쓰기 위해
+│ Heap ↑ │ 위로 자람 (malloc/new 마다)
+├──────────────────┤
+│ .bss │ 초기화 안 된 전역/정적 변수
+│ .data │ 초기화된 전역/정적 변수
+│ .rodata │ 상수 (문자열 리터럴 등)
+│ .text (Code) │ 실행 코드
+└──────────────────┘
+낮은 주소 &lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;영역&lt;/th&gt;
+					&lt;th&gt;담는 것&lt;/th&gt;
+					&lt;th&gt;크기 결정 시점&lt;/th&gt;
+					&lt;th&gt;수명&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Code (&lt;code&gt;.text&lt;/code&gt;)&lt;/td&gt;
+					&lt;td&gt;기계어 코드&lt;/td&gt;
+					&lt;td&gt;컴파일 타임&lt;/td&gt;
+					&lt;td&gt;프로세스 전체&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Data (&lt;code&gt;.data&lt;/code&gt;/&lt;code&gt;.bss&lt;/code&gt;)&lt;/td&gt;
+					&lt;td&gt;전역/정적 변수&lt;/td&gt;
+					&lt;td&gt;컴파일 타임&lt;/td&gt;
+					&lt;td&gt;프로세스 전체&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heap&lt;/td&gt;
+					&lt;td&gt;동적 할당 (&lt;code&gt;malloc&lt;/code&gt;/&lt;code&gt;new&lt;/code&gt;)&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;런타임&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;free&lt;/code&gt;/&lt;code&gt;delete&lt;/code&gt; 할 때까지&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Stack&lt;/td&gt;
+					&lt;td&gt;지역 변수, 함수 호출 프레임&lt;/td&gt;
+					&lt;td&gt;런타임 (자동)&lt;/td&gt;
+					&lt;td&gt;함수 리턴까지&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="1-code-영역-text"&gt;1. Code 영역 (.text)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;컴파일된 &lt;strong&gt;기계어 명령&lt;/strong&gt;이 놓이는 곳. CPU가 여기서 명령을 읽어 실행한다&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;읽기 전용 + 실행 가능&lt;/strong&gt;으로 매핑된다 — 코드를 덮어쓰는 공격/버그를 막기 위해 쓰기가 금지되고, 반대로 데이터 영역은 실행이 금지된다 (NX bit, W^X 원칙)&lt;/li&gt;
+&lt;li&gt;읽기 전용이므로 같은 프로그램을 여러 개 띄우면 &lt;strong&gt;물리 메모리에서 한 부를 공유&lt;/strong&gt;한다 — 공유 라이브러리(.so/.dll)가 메모리를 절약하는 원리이기도 하다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-data-영역-data--bss--rodata"&gt;2. Data 영역 (.data / .bss / .rodata)&lt;/h2&gt;
+&lt;p&gt;전역 변수와 &lt;code&gt;static&lt;/code&gt; 변수가 놓이는 곳. 프로그램 시작 전에 준비되고 종료까지 산다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_cs/memory/memory_pool/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_cs/memory/memory_pool/</guid><description>&lt;h1 id="memory-pool-메모리-풀"&gt;Memory Pool (메모리 풀)&lt;/h1&gt;
+&lt;p&gt;큰 메모리 블록을 &lt;strong&gt;미리 확보해두고, 고정 크기 슬롯으로 잘라서 빌려주고 돌려받는&lt;/strong&gt; 커스텀 할당자. &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_cs/memory/fragmentation/"&gt;단편화&lt;/a&gt;
+의 실전 해법이자, 실시간/임베디드 시스템에서 malloc을 대체하는 정석 패턴이다.&lt;/p&gt;
+&lt;h2 id="1-왜-필요한가--malloc의-3가지-약점"&gt;1. 왜 필요한가 — malloc의 3가지 약점&lt;/h2&gt;
+&lt;p&gt;일반 할당자(&lt;code&gt;malloc&lt;/code&gt;/&lt;code&gt;new&lt;/code&gt;)는 범용이라는 대가로 다음을 포기한다 (&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_cs/memory/memory_layout/"&gt;Memory_Layout&lt;/a&gt;
+ 3-2 참고):&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;malloc의 약점&lt;/th&gt;
+					&lt;th&gt;결과&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;free list &lt;strong&gt;탐색&lt;/strong&gt; — 실행 시간이 그때그때 다름&lt;/td&gt;
+					&lt;td&gt;실시간 시스템에서 &lt;strong&gt;WCET(최악 실행 시간) 보장 불가&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;할당/해제 반복 시 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_cs/memory/fragmentation/"&gt;외부 단편화&lt;/a&gt;
+ 누적&lt;/td&gt;
+					&lt;td&gt;장기 실행 기기에서 어느 날 갑자기 할당 실패&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;내부 lock — 멀티스레드 경합&lt;/td&gt;
+					&lt;td&gt;우선순위 역전, 지연 스파이크 (&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/process/fork/"&gt;fork/lock 문제&lt;/a&gt;
+의 그 lock)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;메모리 풀은 이 셋을 전부 뒤집는다: &lt;strong&gt;O(1) 결정적 할당, 단편화 0, (스레드별 풀이면) lock 0.&lt;/strong&gt;&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Region Proposal on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/</link><description>Recent content in Region Proposal on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/1.efficient_graph_based_segmentation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/1.efficient_graph_based_segmentation/</guid><description>&lt;h1 id="efficient-graph-based-segmentation"&gt;Efficient Graph Based Segmentation&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://cs.brown.edu/people/pfelzens/papers/seg-ijcv.pdf"&gt;Efficient Graph-Based Image Segmentation&lt;/a&gt;
+ — Felzenszwalb &amp;amp; Huttenlocher, IJCV 2004&lt;/p&gt;
+&lt;p&gt;Felzenszwalb &amp;amp; Huttenlocher Segmentation 라고도 불림&lt;/p&gt;
+&lt;p&gt;이미지를 그래프(픽셀/슈퍼픽셀을 노드, 유사도를 엣지)로 보고,&lt;/p&gt;
+&lt;p&gt;지역적 기준(local criterion)에 따라 영역(region)을 합치면서 세그멘테이션을 수행&lt;/p&gt;
+&lt;p&gt;픽셀 단위 그래프 분할 → 여러 개의 후보 영역(region proposals)을 얻는 기본 방식.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="example"&gt;Example&lt;/h3&gt;
+&lt;div class="math-block"&gt;\[A = 
+\begin{bmatrix}
+1 &amp; 2 &amp; 3 &amp; 4 &amp; 5\\
+6 &amp; 7 &amp; 8 &amp; 9 &amp; 10\\
+11 &amp; 12 &amp; \cdots &amp; \cdots &amp; \cdots \\
+\cdots &amp; \cdots &amp; \cdots &amp; \cdots &amp; 25\\ 
+\end{bmatrix}\]&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;우선 인접 행렬을 획득하도록 하자.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/2.selective_search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/2.selective_search/</guid><description>&lt;h1 id="selective-search"&gt;Selective search&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://doi.org/10.1007/s11263-013-0620-5"&gt;Selective Search for Object Recognition&lt;/a&gt;
+ — Uijlings et al., IJCV 2013&lt;/p&gt;
+&lt;h3 id="main-idea"&gt;Main idea&lt;/h3&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/1_region_proposal/1.efficient_graph_based_segmentation/"&gt;Felzenszwalb &amp;amp; Huttenlocher segmentation&lt;/a&gt;
+ 같은 저수준 분할을 여러 스케일에서 수행.&lt;/p&gt;
+&lt;p&gt;이후 색상, 질감, 크기, 공간적 인접성 등을 기준으로 영역(region)들을 계층적(hierarchical)으로 병합.&lt;/p&gt;
+&lt;p&gt;결과적으로 수천 개의 **object-like 후보 영역(region proposals)**을 생성.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Selective search 이전에는 물체가 있을만한 영역을 모두 조사해보는 Exhaustive search 방법이 있었다.&lt;/p&gt;
+&lt;p&gt;쉽게 말해서, Sliding window + multi-scale search 방식이고, 가능한 모든 위치와 크기의 사각형 윈도우를 만들어서 일일히 분류기 (SVM, CNN 등)에 넣는 방식이다.&lt;/p&gt;</description></item></channel></rss>

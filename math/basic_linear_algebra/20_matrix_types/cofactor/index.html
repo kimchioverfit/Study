@@ -1,0 +1,75 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/math/basic_linear_algebra/20_matrix_types/>20 matrix types</a></div><h1>Cofactor</h1></header><div class="doc-body post-body"><h1 id=-여인수cofactor와-행렬식-계산>📌 여인수(Cofactor)와 행렬식 계산</h1><h2 id=-1-소행렬-minor>✅ 1. 소행렬 (Minor)</h2><p>행렬 $ A $에서 $ i $행 $ j $열 원소 $ a_{ij} $의 <strong>소행렬(minor)</strong> $ M_{ij} $은<br>해당 행과 열을 제거하여 얻은 부분 행렬의 행렬식을 말한다.</p><hr><h2 id=-2-여인수-cofactor>✅ 2. 여인수 (Cofactor)</h2><p>여인수 $ C_{ij} $는 소행렬 $ M_{ij} $에 부호를 곱한 값:</p>$$
+C_{ij} = (-1)^{i+j} \cdot \det(M_{ij})
+$$<ul><li>부호는 체스판처럼 번갈아가며 $ +, - $ 반복</li><li>예: 3×3 행렬의 부호 행렬</li></ul><p>$$
+\begin{bmatrix}</p><ul><li>& - & + \</li></ul><ul><li>& + & - \</li></ul><ul><li>& - & +
+\end{bmatrix}
+$$</li></ul><hr><h2 id=-3-여인수-전개-cofactor-expansion>✅ 3. 여인수 전개 (Cofactor Expansion)</h2><p>정방행렬 $ A $의 행렬식은 임의의 한 <strong>행 또는 열을 기준</strong>으로 여인수를 이용해 계산할 수 있다.</p><ul><li>$ i $번째 <strong>행</strong>을 기준으로:</li></ul>$$
+\det(A) = \sum_{j=1}^{n} a_{ij} \cdot C_{ij}
+$$<ul><li>$ j $번째 <strong>열</strong>을 기준으로:</li></ul>$$
+\det(A) = \sum_{i=1}^{n} a_{ij} \cdot C_{ij}
+$$<hr><h2 id=-33-행렬-예시>🧮 3×3 행렬 예시</h2><p>행렬 $ A $:</p><pre tabindex=0><code>A = | 1  2  3 |
+    | 0  4  5 |
+    | 1  0  6 |
+
+det(A)
+= 1 × det | 4  5 |
+               | 0  6 |
+ - 2 × det | 0  5 |
+                | 1  6 |
+ + 3 × det | 0  4 |
+                | 1  0 |
+
+= 1 × (4×6 - 0×5)
+ - 2 × (0×6 - 1×5)
+ + 3 × (0×0 - 1×4)
+
+= 1 × 24
+ + 2 × 5
+ - 3 × 4
+
+= 24 + 10 - 12
+= 22
+
+det(A) = 22</code></pre><h2 id=-요약>📌 요약</h2><table><thead><tr><th>개념</th><th>설명</th></tr></thead><tbody><tr><td>소행렬 $ M_{ij} $</td><td>$ a_{ij} $를 제외한 나머지 행렬의 행렬식</td></tr><tr><td>여인수 $ C_{ij} $</td><td>$ (-1)^{i+j} \cdot \det(M_{ij}) $</td></tr><tr><td>여인수 전개</td><td>특정 행/열 기준으로 행렬식 계산 가능</td></tr></tbody></table><hr><h2 id=-응용>🧠 응용</h2><ul><li>역행렬 계산 (여인수 행렬 + 전치 / 수반행렬)</li><li>고차 행렬의 행렬식 재귀적 계산</li><li>행렬식이 0인지 판별 → 가역성 여부 판단</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

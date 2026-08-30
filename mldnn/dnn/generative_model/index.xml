@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Generative Model on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/generative_model/</link><description>Recent content in Generative Model on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/generative_model/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/generative_model/auto-encoding_variational_bayes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/generative_model/auto-encoding_variational_bayes/</guid><description>&lt;h1 id="auto-encoding-variational-bayes-vae"&gt;Auto-Encoding Variational Bayes (VAE)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1312.6114"&gt;Auto-Encoding Variational Bayes&lt;/a&gt;
+ — Kingma &amp;amp; Welling, ICLR 2014&lt;/p&gt;
+&lt;p&gt;Kingma &amp;amp; Welling, 2013. &lt;strong&gt;VAE(Variational Autoencoder)&lt;/strong&gt; 를 처음 제안한 논문. 결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;압축했다가 복원하는 오토인코더인데, 압축한 결과를 딱 하나의 점이 아니라 &amp;lsquo;이 근처 어딘가&amp;rsquo;라는 확률 구름으로 만들어서 — 그 구름에서 아무 데나 찍어도 그럴듯한 새 데이터를 만들 수 있게 한 모델&amp;rdquo;&lt;/strong&gt; 이다.&lt;/p&gt;
+&lt;h2 id="1-먼저-오토인코더autoencoder부터"&gt;1. 먼저, 오토인코더(Autoencoder)부터&lt;/h2&gt;
+&lt;p&gt;오토인코더는 두 부분으로 이루어진다.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;입력(예: 고양이 사진) → [Encoder] → 압축된 벡터(z) → [Decoder] → 복원된 사진&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Encoder&lt;/strong&gt;: 큰 이미지를 작은 벡터 &lt;code&gt;z&lt;/code&gt;로 압축 (예: 784차원 이미지 → 20차원 벡터)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Decoder&lt;/strong&gt;: 그 작은 벡터를 다시 원래 이미지로 복원&lt;/li&gt;
+&lt;li&gt;학습 목표는 단순하다: &lt;strong&gt;&amp;ldquo;입력과 복원 결과가 최대한 똑같게&amp;rdquo;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이 작은 벡터 &lt;code&gt;z&lt;/code&gt;가 사는 공간을 &lt;strong&gt;잠재 공간(latent space)&lt;/strong&gt; 이라 부른다. 잘 학습되면 이 공간엔 &amp;ldquo;고양이다움&amp;rdquo;, &amp;ldquo;표정&amp;rdquo;, &amp;ldquo;각도&amp;rdquo; 같은 의미가 압축되어 있다고 기대한다.&lt;/p&gt;</description></item></channel></rss>

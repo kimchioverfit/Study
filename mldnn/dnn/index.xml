@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DNN on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/</link><description>Recent content in DNN on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vision_overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vision_overview/</guid><description>&lt;h1 id="vision-역사-한눈에-보기-computer-vision-overview"&gt;Vision 역사 한눈에 보기 (Computer Vision Overview)&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Region Proposal(저수준 분할) → Backbone(특징 추출) → Object Detection/Segmentation → Transformer 기반 최신 Vision 모델로 이어지는 &lt;strong&gt;컴퓨터 비전 발전사&lt;/strong&gt;를 한눈에 정리한 문서.
+각 항목은 실제 정리 문서로 연결되며, 아직 문서가 없는 항목은 링크 없이 이름만 표기했다. (전체 작성 현황은 &lt;strong&gt;§7&lt;/strong&gt; 참고)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="-1-전체-흐름-한눈에-보기"&gt;🔷 1. 전체 흐름 한눈에 보기&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;flowchart TD
+ A[Low-level segmentation / region proposal] --&amp;gt; A1[Efficient Graph-Based Segmentation]
+ A --&amp;gt; A2[Selective Search]
+
+ A2 --&amp;gt; Z[CNN 기본 개념]
+ Z --&amp;gt; B[Backbone CNN evolution]
+ B --&amp;gt; B1[AlexNet]
+ B1 --&amp;gt; B2[VGG]
+ B2 --&amp;gt; B2b[&amp;#34;GoogLeNet / Inception&amp;#34;]
+ B2b --&amp;gt; B3[ResNet]
+ B3 --&amp;gt; B4[EfficientNet]
+
+ B4 --&amp;gt; C[Object Detection]
+
+ C --&amp;gt; C1[&amp;#34;OverFeat\nsliding window&amp;#34;]
+ C --&amp;gt; C2[R-CNN family]
+ C2 --&amp;gt; D1[R-CNN]
+ D1 --&amp;gt; D2[Fast R-CNN]
+ D2 --&amp;gt; D3[Faster R-CNN]
+ D3 --&amp;gt; D4[FPN]
+ D4 --&amp;gt; D5[Mask R-CNN]
+
+ C --&amp;gt; C3[One-stage detectors]
+ C3 --&amp;gt; E1[SSD]
+ C3 --&amp;gt; E2[YOLO]
+ C3 --&amp;gt; E3[&amp;#34;RetinaNet\nFocal Loss&amp;#34;]
+
+ C --&amp;gt; C4[Anchor-free]
+ C4 --&amp;gt; F1[FCOS]
+
+ C --&amp;gt; C5[Transformer detection]
+ C5 --&amp;gt; G1[DETR]
+
+ B4 --&amp;gt; H[Segmentation]
+ H --&amp;gt; H1[U-Net]
+ H --&amp;gt; H2[DeepLab]
+ H --&amp;gt; H3[Mask R-CNN]
+
+ G1 --&amp;gt; I[Modern Vision]
+ I --&amp;gt; I1[ViT]
+ I1 --&amp;gt; I2[Swin Transformer]
+ I1 --&amp;gt; I4[&amp;#34;EfficientFormer\nmobile latency&amp;#34;]
+ I --&amp;gt; I3[SAM]&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;화살표는 &lt;strong&gt;개념적 발전 순서&lt;/strong&gt;(A가 B의 문제의식/기반이 됨)이지, 실제 논문 인용 관계와 완전히 같지는 않다.&lt;/p&gt;</description></item></channel></rss>

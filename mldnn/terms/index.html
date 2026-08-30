@@ -1,0 +1,48 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class="nav-link is-active" href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/>ML&amp;DNN</a></div><h1>Terms</h1></header><div class="doc-body post-body"><h1 id=terms>Terms</h1><h3 id=flatten>Flatten</h3><p>Projection 과 완전히 다른 개념이니 혼동 주의</p><p>다차원 벡터를 1D array 형태로 바꾸는거임.</p><p>Fully connected layer에 넣기 위해서 1D로 바꾸는건데,</p><p>이후 사용하기 위해서는 정보가 추가로 필요함 (예를들어, 2D image를 1D array로 바꾸게되면 가로세로 정보없으면 알 수 없으니)</p><p>Flatten을 주로 하는 이유는, 예전 ML 에서 연산이 무거운 경우 cache localty 때문에 flatten 이용해서 연산을 빠르게 했었다.</p><p>요새는 GPU 가 2D Conv layer 같은걸로 처리해버리기 때문에, FC layer를 넣을때를 제외하고는 안쓰인다.</p><p>(물론 CNN 마지막 단계에서 요약된 feature map을 펼쳐서 Classification head 같은거에 넣는건 다른 얘기.)</p><hr><p>Gradient Descent (경사하강법) -> loss function의 최소값을 찾기위함. 평균제곱오차 (MSE)를 주로 사용. Local minimum에 빠질 가능성이 있음</p><p>종류</p><ol><li>Batch GD : weight에 대한 편미분. 전체 데이터에 대한 업데이트 한번에. -> optimal 수렴이 안정적, 계산량이 적음. 병렬처리에 유리</li><li>Stochastic GD : 데이터 하나에 대한 error gradient. Local optimal에 빠질일이 적음. step에 걸리는 속도가 짧아 수렴속도 빠름. Global optimal을 못찾을 수도 있음. 랜덤인스턴스를 매번 설정</li><li>mini batch : 위의 두개 혼합</li></ol><p>Logistic Regression -> 이진분류. Sigmoid function이용.</p><p>Overfitting -> 학습을 과하게 시켜 테스트케이스에만 오차가 적은경우. 마진이 넓음.
+해결법 : 사용 feature수를 줄이기, 정규화</p><p>Underfitting -> 모델의 표현 부족으로 트레이닝 데이터조차 예측못함.
+해결법 : 사용 feature증가, 정규화</p><p>MLP(Multi Layer Perceptron)
+입력-은닉-출력층
+은닉층을 통해 좌표평면을 왜곡하는 효과가 있음.</p><p>Back-Propagation 오류역전파 -> 예측값과 출력값을 비교하고, 오차를 통해 W를 수정. Layer별 노드 기여도에 대한 W를 알 수 있음. 하지만 step function은 미분이 어려워 sigmoid 이용.</p><p>ReLU -> 0전까지는 의미가 없다가, 0보다 큰 경우의 기울기는 일정한 형태. 미분하기가좋음</p><p>Ensemble 집단지성 -> 여러 predictor에 적용, 결과를 voting함.</p><p>SVM (Support Vector Machine) -> 분류를 위한 기준선 정의모델</p><p>커널트릭 -> 차원변환을 통한 분류 (저차원->고차원) 데이터 튜플을 고차원으로 보낸뒤 벡터의 내적을 계산한것과 내적 후에 고차원으로 보내는 것이 같은 값임을 이용함.</p><p>Clustering
+종류</p><ol><li>Gausian Mixture : 가우시안을 합쳐버림. 베이시안 기법을 이용해서 각각의 확률응용. Anomaly dection에 활용됨.</li><li>K-means : 각 군에 Centroid를 잡고, 인스턴스에 레이블 후에 centroid 업데이트. 그 다음 centroid이동 후 반복</li></ol><p>PCA(Principal Component Analysis) -> 고차원을 선형연관성 없는 저차원으로 바꾸는것. 선형결합을 통해 새로운 변수창출</p><p>마지막으로 하고싶은 말 : 제가 가진 역량을 바탕으로 AI기획직군에 참여하여, IOT기술을 바탕으로빠르게 급성장하는 중국 시장의 MS 확대를 이뤄내고싶습니다.</p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

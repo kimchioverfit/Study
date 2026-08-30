@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CUDA on Study Notes</title><link>https://kimchioverfit.github.io/Study/cuda/</link><description>Recent content in CUDA on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/cuda/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/cuda/cuda_python_sample/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/cuda/cuda_python_sample/</guid><description>&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; numpy &lt;span style="color:#66d9ef"&gt;as&lt;/span&gt; np
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; numba &lt;span style="color:#f92672"&gt;import&lt;/span&gt; cuda, float32
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 2D Convolution CUDA 커널&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;@cuda.jit&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;conv2d_kernel&lt;/span&gt;(img, kernel, output):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; i, j &lt;span style="color:#f92672"&gt;=&lt;/span&gt; cuda&lt;span style="color:#f92672"&gt;.&lt;/span&gt;grid(&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; kH, kW &lt;span style="color:#f92672"&gt;=&lt;/span&gt; kernel&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; H, W &lt;span style="color:#f92672"&gt;=&lt;/span&gt; img&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 유효한 범위 내에서만 계산 (valid padding)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; H &lt;span style="color:#f92672"&gt;-&lt;/span&gt; kH &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;and&lt;/span&gt; j &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; W &lt;span style="color:#f92672"&gt;-&lt;/span&gt; kW &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; val &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; ki &lt;span style="color:#f92672"&gt;in&lt;/span&gt; range(kH):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kj &lt;span style="color:#f92672"&gt;in&lt;/span&gt; range(kW):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; val &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; img[i &lt;span style="color:#f92672"&gt;+&lt;/span&gt; ki, j &lt;span style="color:#f92672"&gt;+&lt;/span&gt; kj] &lt;span style="color:#f92672"&gt;*&lt;/span&gt; kernel[ki, kj]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; output[i, j] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; val
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 입력 이미지와 필터&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;image &lt;span style="color:#f92672"&gt;=&lt;/span&gt; np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;random&lt;span style="color:#f92672"&gt;.&lt;/span&gt;rand(&lt;span style="color:#ae81ff"&gt;64&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;64&lt;/span&gt;)&lt;span style="color:#f92672"&gt;.&lt;/span&gt;astype(np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;float32)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kernel &lt;span style="color:#f92672"&gt;=&lt;/span&gt; np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;array([[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; [&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; [&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]], dtype&lt;span style="color:#f92672"&gt;=&lt;/span&gt;np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;float32) &lt;span style="color:#75715e"&gt;# Sobel-like 필터&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 출력 배열 (valid padding)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;out_shape &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (image&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;-&lt;/span&gt; kernel&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; image&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;-&lt;/span&gt; kernel&lt;span style="color:#f92672"&gt;.&lt;/span&gt;shape[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;output &lt;span style="color:#f92672"&gt;=&lt;/span&gt; np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;zeros(out_shape, dtype&lt;span style="color:#f92672"&gt;=&lt;/span&gt;np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;float32)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# GPU 메모리로 복사&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;d_img &lt;span style="color:#f92672"&gt;=&lt;/span&gt; cuda&lt;span style="color:#f92672"&gt;.&lt;/span&gt;to_device(image)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;d_kernel &lt;span style="color:#f92672"&gt;=&lt;/span&gt; cuda&lt;span style="color:#f92672"&gt;.&lt;/span&gt;to_device(kernel)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;d_output &lt;span style="color:#f92672"&gt;=&lt;/span&gt; cuda&lt;span style="color:#f92672"&gt;.&lt;/span&gt;device_array(out_shape, dtype&lt;span style="color:#f92672"&gt;=&lt;/span&gt;np&lt;span style="color:#f92672"&gt;.&lt;/span&gt;float32)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 커널 실행 구성&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;threadsperblock &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;16&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;16&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;blockspergrid_x &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (out_shape[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; threadsperblock[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;) &lt;span style="color:#f92672"&gt;//&lt;/span&gt; threadsperblock[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;blockspergrid_y &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (out_shape[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; threadsperblock[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;) &lt;span style="color:#f92672"&gt;//&lt;/span&gt; threadsperblock[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;blockspergrid &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (blockspergrid_x, blockspergrid_y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# CUDA 커널 실행&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;conv2d_kernel[blockspergrid, threadsperblock](d_img, d_kernel, d_output)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 결과 복사&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;result &lt;span style="color:#f92672"&gt;=&lt;/span&gt; d_output&lt;span style="color:#f92672"&gt;.&lt;/span&gt;copy_to_host()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 결과 확인&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;print(&lt;span style="color:#e6db74"&gt;&amp;#34;Convolution 결과 (일부):&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;print(result[:&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;, :&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;])&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;@cuda.jit은 이 함수가 CUDA 커널임을 알려준다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/cuda/cuda_study_order/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/cuda/cuda_study_order/</guid><description>&lt;h1 id="cuda-study-order"&gt;CUDA Study Order&lt;/h1&gt;
+&lt;p&gt;CUDA를 공부할 때는 문법부터 외우기보다, CPU와 GPU가 일을 나누는 방식부터 잡는 것이 좋다.
+아래 순서는 CUDA C/C++ 기준으로 핵심 개념을 먼저 익히고, 이후 Python CUDA(Numba, CuPy, PyTorch extension 등)로 확장하는 흐름이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="0-선수-지식"&gt;0. 선수 지식&lt;/h2&gt;
+&lt;p&gt;CUDA는 병렬 프로그래밍, 메모리 계층, C/C++ 포인터 개념이 같이 쓰인다.&lt;/p&gt;
+&lt;p&gt;먼저 확인할 것:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C/C++ 기본 문법&lt;/li&gt;
+&lt;li&gt;포인터와 배열&lt;/li&gt;
+&lt;li&gt;stack / heap 메모리&lt;/li&gt;
+&lt;li&gt;CPU cache 개념&lt;/li&gt;
+&lt;li&gt;thread, process 차이&lt;/li&gt;
+&lt;li&gt;행렬 연산 기초&lt;/li&gt;
+&lt;li&gt;Python + NumPy 배열 연산&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;실습:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/cuda/kernel/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/cuda/kernel/</guid><description>&lt;h1 id="kernel"&gt;Kernel&lt;/h1&gt;
+&lt;p&gt;커널이라고 해서 헷갈릴 수 있는데,&lt;/p&gt;
+&lt;p&gt;사실 커널이라는건 OS의 커널 뿐 아니라, GPU 의 병렬 실행 단위를 kernel이라고도 한다.&lt;/p&gt;</description></item></channel></rss>

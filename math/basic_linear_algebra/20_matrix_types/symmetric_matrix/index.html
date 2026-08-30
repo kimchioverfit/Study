@@ -1,0 +1,54 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/math/basic_linear_algebra/20_matrix_types/>20 matrix types</a></div><h1>Symmetric matrix</h1></header><div class="doc-body post-body"><h1 id=-대칭-행렬-symmetric-matrix>🔁 대칭 행렬 (Symmetric Matrix)</h1><h2 id=-정의>✅ 정의</h2><p>대칭 행렬(Symmetric Matrix)은 **전치행렬(transpose)**과 자기 자신이 같은 <strong>정방행렬</strong>.</p><p>즉, 행렬 $ A $가 다음을 만족하면:</p>$$
+A^T = A
+$$<p>→ $ A $는 <strong>대칭 행렬</strong>.</p><hr><h2 id=-예시>🧮 예시</h2><p>다음은 대칭 행렬의 예:</p>$$
+A =
+\begin{bmatrix}
+2 & 3 & 4 \\
+3 & 5 & 6 \\
+4 & 6 & 7
+\end{bmatrix}
+$$<ul><li>$ A_{ij} = A_{ji} $ → 모든 원소가 대각선 기준으로 대칭</li></ul><hr><h2 id=-전치행렬과-비교>🔄 전치행렬과 비교</h2><p>전치행렬이란 행과 열을 뒤바꾸는 연산:</p>$$
+A^T_{ij} = A_{ji}
+$$<p>대칭 행렬은 전치해도 변하지 않음:<br>$ A = A^T $</p><hr><h2 id=-성질>📌 성질</h2><ol><li><strong>실수 대칭 행렬</strong>은 항상 **실수 고유값(real eigenvalues)**을 갖는다.</li><li><strong>직교대각화(orthogonal diagonalization)</strong> 가능 → $ A = Q \Lambda Q^T $</li><li><strong>대칭 행렬의 행렬식</strong>은 일반 행렬과 동일한 방식으로 계산</li><li>$ A + A^T $는 항상 대칭 행렬이다.</li><li>$ A \cdot A^T $도 항상 대칭 행렬이다.</li></ol><hr><h2 id=-활용-분야>🧠 활용 분야</h2><ul><li><strong>공분산 행렬(Covariance Matrix)</strong> → 항상 대칭</li><li><strong>물리 시뮬레이션</strong>의 강성 행렬(Stiffness Matrix)</li><li><strong>고유값 분해(Eigendecomposition)</strong> → 주성분 분석(PCA), 스펙트럼 분해 등</li><li><strong>최적화 문제</strong>에서 헤세 행렬(Hessian)은 대칭행렬</li></ul><hr><h2 id=-요약>✳️ 요약</h2><table><thead><tr><th>특성</th><th>설명</th></tr></thead><tbody><tr><td>정의</td><td>$ A^T = A $</td></tr><tr><td>구조</td><td>대각선 기준으로 대칭</td></tr><tr><td>고유값</td><td>항상 실수</td></tr><tr><td>대각화</td><td>직교 행렬 $ Q $로 가능</td></tr><tr><td>예시</td><td>공분산 행렬, 그래프의 라플라시안 행렬 등</td></tr></tbody></table></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

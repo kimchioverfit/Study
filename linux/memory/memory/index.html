@@ -1,0 +1,49 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/linux/memory/>Memory</a></div><h1>Memory</h1></header><div class="doc-body post-body"><h1 id=linux-memory>Linux Memory</h1><h2 id=-임베디드-리눅스-메모리-모델-핵심-요약>✅ 임베디드 리눅스 메모리 모델 핵심 요약</h2><h3 id=1-리눅스-메모리의-큰-구성>1. 리눅스 메모리의 큰 구성</h3><p>User space (사용자 공간)
+유저 애플리케이션이 실행되는 공간. 일반적으로 0x00000000 ~ 0xBFFFFFFF (32bit 기준).</p><p>Kernel space (커널 공간)
+커널이 사용하는 공간. 메모리 보호를 위해 user space와 분리되어 있음. (ex: 0xC0000000 ~ 0xFFFFFFFF)</p><h3 id=2-임베디드-시스템에서의-주요-메모리-구역>2. 임베디드 시스템에서의 주요 메모리 구역</h3><table><thead><tr><th>메모리 영역</th><th>설명</th></tr></thead><tbody><tr><td><code>.text</code></td><td>실행 코드</td></tr><tr><td><code>.data</code></td><td>초기화된 전역/정적 변수</td></tr><tr><td><code>.bss</code></td><td>초기화되지 않은 전역/정적 변수</td></tr><tr><td><code>heap</code></td><td>동적 메모리 (malloc 등)</td></tr><tr><td><code>stack</code></td><td>함수 호출, 지역 변수</td></tr><tr><td><code>mmap 영역</code></td><td>공유 라이브러리, 파일 매핑 등</td></tr></tbody></table><p>→ top, free, /proc/[pid]/maps, /proc/meminfo로 확인 가능</p><h3 id=3-임베디드에서-자주-보는-메모리-상태-지표>3. 임베디드에서 자주 보는 메모리 상태 지표</h3><table><thead><tr><th>항목</th><th>의미</th></tr></thead><tbody><tr><td><code>RSS (Resident Set Size)</code></td><td>실제 메모리에 올라간 크기</td></tr><tr><td><code>VSZ (Virtual Size)</code></td><td>전체 가상 메모리 사용량</td></tr><tr><td><code>shared</code>, <code>heap</code>, <code>stack</code></td><td>각각 공유 메모리, 동적 할당, 호출 스택 크기</td></tr></tbody></table><p>→ ps, pmap, smem, cat /proc/[pid]/status 등으로 분석</p><h3 id=4-커널-메모리-관련-요소>4. 커널 메모리 관련 요소</h3><p>Slab Allocator (SLUB, SLOB)
+커널 내부의 효율적인 메모리 할당기
+→ /proc/slabinfo, slabtop 으로 확인</p><p>Page Frame / Buddy System
+리눅스는 4KB 단위의 페이지로 메모리 관리
+Buddy System으로 page frame을 병합/분할</p><p>kmalloc, vmalloc 차이</p><p>kmalloc: 연속된 물리 메모리 (빠름)</p><p>vmalloc: 연속된 가상 메모리 (큰 메모리 할당 시 사용)</p><h3 id=5-메모리-압축-및-스와핑>5. 메모리 압축 및 스와핑</h3><p>zram: 임베디드에서 압축된 swap 공간을 램에 마련</p><p>swap: 플래시 기반 스왑은 수명 문제로 일반적으로 비활성화</p><h3 id=6-메모리-관련-디버깅-도구>6. 메모리 관련 디버깅 도구</h3><table><thead><tr><th>도구</th><th>기능</th></tr></thead><tbody><tr><td><code>free</code> / <code>top</code></td><td>전체 시스템 메모리 확인</td></tr><tr><td><code>pmap</code>, <code>smem</code></td><td>프로세스별 상세 메모리 정보</td></tr><tr><td><code>valgrind</code></td><td>메모리 누수, 접근 오류 검사</td></tr><tr><td><code>massif</code></td><td>힙 메모리 프로파일링</td></tr><tr><td><code>perf</code>, <code>ftrace</code></td><td>커널 메모리 관련 성능 분석</td></tr></tbody></table></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

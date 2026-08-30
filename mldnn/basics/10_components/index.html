@@ -1,0 +1,59 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>10 components | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-section><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><section class=section-hero><div class=section-hero-copy><div class=eyebrow-row><a class=eyebrow-link href=/Study/>🗂 Archive</a>
+<span class=eyebrow-sep>/</span>
+<span class="eyebrow-link is-static">10 components</span></div><h1>10 components</h1></div><div class=section-stats><span class=stat-label>Entries</span>
+<span class=stat-value>10</span></div></section><section class=entry-grid><a class=entry-card href=/Study/mldnn/basics/10_components/backbone/><h2>Backbone</h2><p>Backbone 주된 feature extractor
+일반적으로 CNN, Transformer 기반임.
+학습이 잘 된 사전 학습 가중치를 이용하기도 한다.
+예를 들어, resnet50_fpn 모델을 로드했다고 가정하 …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/decoder/><h2>Decoder</h2><p>s
+🧠 딥러닝에서 디코더(Decoder)란? 디코더는 딥러닝 모델에서 **잠재 벡터(latent vector)**를 받아서, 이를 기반으로 원하는 출력 형태로 복원 또는 변환하는 부분.
+인코더가 입력을 요약하는 역할 …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/encoder/><h2>Encoder</h2><p>🧠 딥러닝에서 인코더(Encoder)란? 인코더는 딥러닝 모델에서 입력 데이터를 의미 있는 잠재 표현(latent representation)으로 압축하는 부분을 말한다.
+보통 여러 개의 **히든 레이어(hidden …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/head/><h2>Head</h2><p>Head 최종 Task를 수행하는 모듈
+Classfication Regression Segmentation 보통 여러개의 FC layer 또는 Conv layer로 구성.</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/hidden_layer/><h2>Hidden layer</h2><p>✅ Hidden layer 🔷 1. 히든 레이어란? 딥러닝의 가장 핵심적인 부분 입력층(Input Layer) 과 출력층(Output Layer) 사이
+모델의 학습 가능한 파라미터가 대부분 존재하는 곳
+세부적으로 모 …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/hidden_layer_sample/><h2>Hidden layer sample</h2><p>Hidden layer sample 1채널짜리 바이너리 이미지의 수학적 표현 📌 수학적 표현 1. 행렬 형태 이미지가 $ H \times W $ 크기일 때:
+\[X \in \{0, 1\}^{H \times W}\]예 …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/neck/><h2>Neck</h2><p>Neck 선택적 사항
+멀티 스케일 feature를 결합하여 더 정교한 표현을 생성
+Object detection, Segmentation 에 주로 사용된다.</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/neural_network_example/><h2>Neural Network example</h2><p>Nueral Network example 뉴럴 네트워크의 기본 학습을 위한 샘플 공부
+시작하기에 앞서, 기본적인 전제는 아래와 같다.
+Input : Scalar x Hidden layer : Neural 1 개(w, …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/nnfunction/><h2>nnFunction</h2><p>nn Function 항목 nn.Linear nn.Conv2d 입력 형태 1D 벡터 (예: [batch, features]) 4D 텐서 (예: [batch, channels, height, width]) 연산 방식 …</p></a><a class=entry-card href=/Study/mldnn/basics/10_components/vectorization_flattening/><h2>Vectorization Flattening</h2><p>벡터화 (Flattening)란? 벡터화란 **2차원 또는 다차원 배열(이미지 등)**을 1차원 벡터 형태로 변환하는 작업.
+딥러닝 모델, 특히 **완전연결층(Dense Layer)**에 입력으로 넣기 위해 필요한 …</p></a></section></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

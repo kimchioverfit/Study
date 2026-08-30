@@ -1,0 +1,49 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/basics/50_methods/>50 methods</a></div><h1>0.Deep learning methods</h1></header><div class="doc-body post-body"><h1 id=deep-learning-method>Deep learning method</h1><h3 id=-1-학습-목적에-따른-분석>🔹 1. 학습 목적에 따른 분석</h3><ol><li><p>지도학습 (Supervised Learning)</p><ul><li>라벨이 있는 데이터를 사용하여 학습
+예: 이미지 분류, 회귀, 음성 인식 등</li></ul></li><li><p>비지도학습 (Unsupervised Learning)</p><ul><li>라벨 없이 데이터 구조 파악
+예: 클러스터링, 차원 축소, 이상 탐지 등</li></ul></li><li><p>강화학습 (Reinforcement Learning)</p><ul><li>보상을 최대화하는 정책을 학습
+예: 게임 에이전트, 로봇 제어 등</li></ul></li></ol><h3 id=-2-문제-유형에-따른-분석>🔹 2. 문제 유형에 따른 분석</h3><ol><li><p><a class=inline-link href=/Study/mldnn/basics/50_methods/classification/>분류 (Classification)</a></p></li><li><p><a class=inline-link href=/Study/mldnn/basics/50_methods/regression/>회귀 (Regression)</a></p></li><li><p><a class=inline-link href>클러스터링 (Clustering)</a></p></li><li><p><a class=inline-link href>차원 축소 (Dimensionality Reduction)</a></p></li><li><p><a class=inline-link href>이상 탐지 (Anomaly Detection)</a></p></li></ol><h3 id=-3-데이터-종류에-따른-분석>🔹 3. 데이터 종류에 따른 분석</h3><ol><li><p>이미지 분석 (Image Analysis)</p><ul><li>CNN, Vision Transformer 등 활용
+예: 객체 탐지, 세분화</li></ul></li><li><p>시계열 분석 (Time Series Analysis)</p><ul><li>RNN, LSTM, Transformer 등 활
+예: 주가 예측, 센서 데이터 분석</li></ul></li><li><p>자연어 처리 (NLP)</p><ul><li>단어/문장 분석
+예: 번역, 감성 분석, 요약</li></ul></li><li><p>음성 분석</p><ul><li>음성 인식, 화자 분리 등</li></ul></li></ol><h3 id=-4-모델-내부-분석-해석-가능한-ai-xai>🔹 4. 모델 내부 분석 (해석 가능한 AI, XAI)</h3><ol><li><p>특성 중요도 분석 (Feature Importance)</p><ul><li>예: SHAP, LIME</li></ul></li><li><p>시각화 (Visualization)</p><ul><li>중간층 시각화, Grad-CAM 등</li></ul></li><li><p>오류 분석</p><ul><li>잘못 분류된 샘플 분석, confusion matrix</li></ul></li></ol><h3 id=-5-성능-분석>🔹 5. 성능 분석</h3><ol><li><p>정확도/정밀도/재현율/F1-score</p></li><li><p>ROC-AUC, PR-AUC</p></li><li><p>Loss 곡선 시각화</p></li><li><p>Overfitting 여부 분석 (Training vs Validation Curve)</p></li></ol><hr></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

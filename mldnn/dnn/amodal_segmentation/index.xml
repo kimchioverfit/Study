@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Amodal Segmentation on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/</link><description>Recent content in Amodal Segmentation on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/</guid><description>&lt;h1 id="amodal-segmentation-핵심-논문-계보"&gt;Amodal Segmentation 핵심 논문 계보&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Amodal(아모달) segmentation이란?&lt;/strong&gt; 일반적인 segmentation(&amp;ldquo;modal segmentation&amp;rdquo;)은 &lt;strong&gt;눈에 보이는 부분만&lt;/strong&gt; 마스크로 표시한다. Amodal segmentation은 여기서 한 발 더 나가서, &lt;strong&gt;다른 물체에 가려져 안 보이는 부분까지 포함한 &amp;ldquo;물체의 원래 전체 모양&amp;rdquo;&lt;/strong&gt; 을 예측하는 문제다. 사람은 자동차 뒤에 반쯤 가려진 강아지를 봐도 &amp;ldquo;강아지는 원래 이런 통짜 모양이겠구나&amp;quot;를 직관적으로 안다 — 이 능력을 모델에 가르치려는 것.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;[일반 segmentation] [Amodal segmentation]
+
+ ┌────┐ ┌────┐
+ │ 차량 │████가림████ │ 차량 │
+ └────┘ ▓▓강아지▓▓ └────┘ ╲
+ (보이는 부분만 마스크) ╲ 강아지 (가려진 부분까지 통짜로 복원)
+ ╲&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이 문서는 이 분야의 흐름을 만든 7개 핵심 논문을 시간 순으로 정리한다. 각 논문의 상세 설명은 개별 문서로 분리되어 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/</guid><description>&lt;h1 id="amodal-instance-segmentation"&gt;Amodal Instance Segmentation&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1604.08202"&gt;Amodal Instance Segmentation&lt;/a&gt;
+ — Ke Li &amp;amp; Jitendra Malik, ECCV 2016&lt;/p&gt;
+&lt;p&gt;Ke Li &amp;amp; Jitendra Malik, &lt;strong&gt;ECCV 2016&lt;/strong&gt;. 결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;가려진 부분까지 포함해서 물체의 전체 모양을 예측하자&amp;quot;는 문제(amodal instance segmentation) 자체를 처음으로 명확히 정의하고, 정답 라벨이 없는 상황에서도 학습시킬 수 있는 기발한 훈련법을 제시한 논문.&lt;/strong&gt; Amodal segmentation 분야의 사실상 출발점이다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;전체 계보 속 위치는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/"&gt;Amodal Segmentation 개요&lt;/a&gt;
+ 참고.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-먼저--amodal이-뭔가"&gt;1. 먼저 — &amp;ldquo;Amodal&amp;quot;이 뭔가&lt;/h2&gt;
+&lt;p&gt;일반적인 instance segmentation(예: &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+)은 이미지에서 &lt;strong&gt;눈에 보이는 픽셀만&lt;/strong&gt; 마스크로 표시한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/</guid><description>&lt;h1 id="semantic-amodal-segmentation"&gt;Semantic Amodal Segmentation&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1509.01329"&gt;Semantic Amodal Segmentation&lt;/a&gt;
+ — Zhu et al., CVPR 2017&lt;/p&gt;
+&lt;p&gt;Yan Zhu et al., &lt;strong&gt;CVPR 2017&lt;/strong&gt;. 결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;가려진 부분까지, 이번엔 진짜 사람이 손으로 직접 라벨링한 정답 데이터셋(COCOA)을 만들고, 물체 하나가 아니라 장면(scene) 전체에서 &amp;lsquo;뭐가 뭘 가리는지&amp;rsquo; 순서까지 정리한 논문.&amp;rdquo;&lt;/strong&gt; &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/1.amodal_instance_segmentation/"&gt;Li &amp;amp; Malik(2016)&lt;/a&gt;
+이 &amp;ldquo;인위적으로 만든 가짜 정답&amp;quot;으로 시작했다면, 이 논문은 &amp;ldquo;진짜 사람이 라벨링한 정답&amp;quot;으로 이 분야를 한 단계 실전에 가깝게 만들었다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;전체 계보 속 위치는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/"&gt;Amodal Segmentation 개요&lt;/a&gt;
+ 참고.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/3.learning_to_see_the_invisible/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/3.learning_to_see_the_invisible/</guid><description>&lt;h1 id="learning-to-see-the-invisible-orcnn"&gt;Learning to See the Invisible (ORCNN)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1804.08864"&gt;Learning to See the Invisible: End-to-End Trainable Amodal Instance Segmentation&lt;/a&gt;
+ — Follmann et al., WACV 2019&lt;/p&gt;
+&lt;p&gt;Patrick Follmann et al., &lt;strong&gt;WACV 2019&lt;/strong&gt;. 결론부터 아주 쉽게: &lt;strong&gt;&amp;quot;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+에 예측 브랜치 몇 개만 더 붙여서, 사진 한 장 넣으면 한 번에 &amp;lsquo;보이는 부분&amp;rsquo;, &amp;lsquo;가려진 부분&amp;rsquo;, &amp;lsquo;전체 모양&amp;rsquo; 세 가지 마스크를 동시에 뱉어내는 구조를 만든 논문.&lt;/strong&gt; 앞선 두 논문이 &amp;ldquo;문제 정의&amp;quot;와 &amp;ldquo;데이터셋&amp;quot;에 집중했다면, 이 논문은 &lt;strong&gt;처음으로 실용적으로 갖다 쓸 수 있는 end-to-end 모델&lt;/strong&gt;을 내놓았다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/</guid><description>&lt;h1 id="amodal-instance-segmentation-with-kins-dataset"&gt;Amodal Instance Segmentation With KINS Dataset&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://openaccess.thecvf.com/content_CVPR_2019/html/Qi_Amodal_Instance_Segmentation_With_KINS_Dataset_CVPR_2019_paper.html"&gt;Amodal Instance Segmentation With KINS Dataset&lt;/a&gt;
+ — Qi et al., CVPR 2019 · &lt;a class="inline-link" href="https://github.com/qqlu/Amodal-Instance-Segmentation-through-KINS-Dataset"&gt;데이터셋/코드&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;Lu Qi et al., &lt;strong&gt;CVPR 2019&lt;/strong&gt;. 결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;자율주행 사진(KITTI)에 가려진 부분까지 라벨링한 대규모 데이터셋 KINS를 만들고, 여러 단계의 특징(feature)을 한꺼번에 활용해서 가려진 부분을 더 잘 맞추는 MVC 구조를 제안한 논문.&amp;rdquo;&lt;/strong&gt; 앞선 COCOA(5,000장, 일반 사진)보다 훨씬 크고, 실전 위험이 직결되는 &lt;strong&gt;자율주행 도메인&lt;/strong&gt;에 amodal segmentation을 처음 본격적으로 적용했다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;전체 계보 속 위치는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/"&gt;Amodal Segmentation 개요&lt;/a&gt;
+ 참고.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/5.self-supervised_scene_de-occlusion/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/5.self-supervised_scene_de-occlusion/</guid><description>&lt;h1 id="self-supervised-scene-de-occlusion"&gt;Self-Supervised Scene De-Occlusion&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2004.02788"&gt;Self-Supervised Scene De-occlusion&lt;/a&gt;
+ — Zhan et al., CVPR 2020&lt;/p&gt;
+&lt;p&gt;Xiaohang Zhan et al., &lt;strong&gt;CVPR 2020&lt;/strong&gt;. 결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;사람이 라벨링한 amodal 정답이 하나도 없어도, 물체를 스스로 인위적으로 가렸다가 복원하는 연습을 반복시켜서 &amp;lsquo;가려진 부분을 상상하는 능력&amp;rsquo;을 학습시킨 논문.&amp;rdquo;&lt;/strong&gt; &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/2.semantic_amodal_segmentation/"&gt;COCOA&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/4.amodal_instance_segmentation_with_kins_dataset/"&gt;KINS&lt;/a&gt;
+처럼 사람이 일일이 라벨링하는 비용 문제를 근본적으로 우회한, 이 계보에서 &lt;strong&gt;&amp;ldquo;라벨링 없는 학습(self-supervised)&amp;rdquo;&lt;/strong&gt; 방향의 대표작이다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;전체 계보 속 위치는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/"&gt;Amodal Segmentation 개요&lt;/a&gt;
+ 참고.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-이-논문이-풀려는-문제--라벨링-비용"&gt;1. 이 논문이 풀려는 문제 — 라벨링 비용&lt;/h2&gt;
+&lt;p&gt;지금까지의 흐름을 되짚어보면:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/6.bcnet/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/6.bcnet/</guid><description>&lt;h1 id="bcnet--deep-occlusion-aware-instance-segmentation-with-overlapping-bilayers"&gt;BCNet — Deep Occlusion-Aware Instance Segmentation with Overlapping BiLayers&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2103.12340"&gt;Deep Occlusion-Aware Instance Segmentation with Overlapping BiLayers (BCNet)&lt;/a&gt;
+ — Ke, Tai &amp;amp; Tang, CVPR 2021&lt;/p&gt;
+&lt;p&gt;Lei Ke, Yu-Wing Tai, Chi-Keung Tang, &lt;strong&gt;CVPR 2021&lt;/strong&gt;. 결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;가려진 물체의 마스크를 그냥 예측하는 대신, &amp;lsquo;가리고 있는 물체&amp;rsquo;와 &amp;lsquo;가려지고 있는 물체&amp;rsquo;를 아예 두 개의 레이어로 명시적으로 분리해서 각각 따로 계산하자는 논문.&amp;rdquo;&lt;/strong&gt; 지금까지의 방법들이 &amp;ldquo;가려진 부분까지 포함한 마스크 하나&amp;quot;를 뭉뚱그려 예측했다면, BCNet은 &lt;strong&gt;&amp;ldquo;누가 가리고 누가 가려지는지&amp;quot;의 구조 자체&lt;/strong&gt;를 모델 안에 박아 넣었다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/7.amodal_sam/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/amodal_segmentation/7.amodal_sam/</guid><description>&lt;h1 id="amodal-sam"&gt;Amodal SAM&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2604.20748"&gt;Amodal SAM: A Unified Amodal Segmentation Framework with Generalization&lt;/a&gt;
+ — Zhang et al., 2026&lt;/p&gt;
+&lt;p&gt;Bo Zhang et al. (Harbin Institute of Technology, Kuaishou Technology), &lt;strong&gt;2026&lt;/strong&gt; (arXiv 2604.20748). 결론부터 아주 쉽게: &lt;strong&gt;&amp;quot;&lt;a class="inline-link" href="https://arxiv.org/abs/2304.02643"&gt;SAM(Segment Anything Model)&lt;/a&gt;
+의 &amp;lsquo;뭐든 프롬프트 하나로 분할해내는&amp;rsquo; 능력을, 가려진 부분까지 예측하는 amodal segmentation에도 그대로 이식한 논문.&amp;quot;&lt;/strong&gt; 지금까지의 6개 논문은 전부 &lt;strong&gt;정해진 카테고리(자동차, 사람 등)로 학습된 모델&lt;/strong&gt;이었다. Amodal SAM은 &lt;strong&gt;학습 때 한 번도 보지 못한 물체 종류(unseen category)와 낯선 배경(unseen context)&lt;/strong&gt; 에서도 동작하는 것을 목표로 한, 이 계보의 가장 최근 결과물이다.&lt;/p&gt;</description></item></channel></rss>

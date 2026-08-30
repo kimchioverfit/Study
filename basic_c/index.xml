@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Basic C on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_c/</link><description>Recent content in Basic C on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_c/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_c/error_pointer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c/error_pointer/</guid><description>&lt;h1 id="3종의-error-pointer"&gt;3종의 Error pointer&lt;/h1&gt;
+&lt;p&gt;아래의 3가지 포인터 종류를 숙지해야 디버깅이 쉬워짐&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;종류&lt;/th&gt;
+					&lt;th&gt;정의&lt;/th&gt;
+					&lt;th&gt;원인&lt;/th&gt;
+					&lt;th&gt;접근 시 결과&lt;/th&gt;
+					&lt;th&gt;예시 코드&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Dangling Pointer&lt;/strong&gt;&lt;br&gt;(댕글링 포인터)&lt;/td&gt;
+					&lt;td&gt;이미 &lt;strong&gt;해제되었거나 범위를 벗어난 메모리&lt;/strong&gt;를 가리키는 포인터&lt;/td&gt;
+					&lt;td&gt;- &lt;code&gt;free()&lt;/code&gt; 후 포인터 그대로 둠&lt;br&gt;- 함수 종료 후 지역 변수 주소 사용&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;Undefined Behavior&lt;/strong&gt; (쓰레기 값, crash, 보안 취약점)&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;c&amp;lt;br&amp;gt;int *p = malloc(sizeof(int));&amp;lt;br&amp;gt;free(p);&amp;lt;br&amp;gt;*p = 10; // ❌&amp;lt;br&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;NULL Pointer&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;어떤 것도 가리키지 않는 포인터 (주소가 &lt;code&gt;0&lt;/code&gt;)&lt;/td&gt;
+					&lt;td&gt;- &lt;code&gt;int *p = NULL;&lt;/code&gt;&lt;br&gt;- &lt;code&gt;free()&lt;/code&gt; 후 &lt;code&gt;p=NULL;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;접근 시 무조건 crash (segfault) → &lt;strong&gt;오류 조기 발견 가능&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;c&amp;lt;br&amp;gt;int *p = NULL;&amp;lt;br&amp;gt;*p = 10; // ❌ 즉시 crash&amp;lt;br&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Wild Pointer&lt;/strong&gt;&lt;br&gt;(야생 포인터)&lt;/td&gt;
+					&lt;td&gt;초기화되지 않아 &lt;strong&gt;쓰레기 주소&lt;/strong&gt;를 가진 포인터&lt;/td&gt;
+					&lt;td&gt;- 포인터 선언 후 초기화 안 함&lt;/td&gt;
+					&lt;td&gt;접근 시 Undefined Behavior (댕글링보다 더 위험)&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;c&amp;lt;br&amp;gt;int *p; // 초기화 X&amp;lt;br&amp;gt;*p = 10; // ❌&amp;lt;br&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h1 id="dangling-pointer--segmentation-fault--보안-취약점"&gt;dangling pointer → segmentation fault → 보안 취약점&lt;/h1&gt;
+&lt;h3 id="1-댕글링-포인터에서-시작"&gt;1. 댕글링 포인터에서 시작&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;42&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;free&lt;/span&gt;(p); &lt;span style="color:#75715e"&gt;// 메모리 해제
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;%d&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p); &lt;span style="color:#75715e"&gt;// ❌ 댕글링 포인터 접근
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;free(p)로 OS에 메모리를 반환했지만,&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c/malloc/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c/malloc/</guid><description>&lt;h1 id="malloc"&gt;malloc&lt;/h1&gt;
+&lt;p&gt;C의 동적 메모리 할당 함수. 결론부터: &lt;strong&gt;heap에서 크기만큼 빌리고, &lt;code&gt;void*&lt;/code&gt;를 돌려주니 형변환해서 쓰고, 다 쓰면 반드시 &lt;code&gt;free()&lt;/code&gt;로 직접 반납&lt;/strong&gt;해야 하는 함수다. 반납을 잊거나, 두 번 반납하거나, 반납 후에도 계속 쓰면 이 문서 3장의 버그들이 그대로 터진다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;heap 영역 자체의 특성(스택과의 속도/크기 차이, 단편화)은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_cs/memory/memory_layout/"&gt;Memory_Layout&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_cs/memory/fragmentation/"&gt;Fragmentation&lt;/a&gt;
+ 참고. C++의 &lt;code&gt;new&lt;/code&gt;와의 비교는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_c&amp;#43;&amp;#43;/memory/new_malloc/"&gt;New_malloc&lt;/a&gt;
+ 참고.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-기본-사용"&gt;1. 기본 사용&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;malloc(size)&lt;/code&gt;은 &lt;strong&gt;heap 영역에서 &lt;code&gt;size&lt;/code&gt; 바이트만큼 메모리를 할당&lt;/strong&gt;하고, 그 블록의 &lt;strong&gt;첫 번째 바이트 주소&lt;/strong&gt;를 반환한다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)&lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// int 1개 크기만큼 heap에서 할당
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;42&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;free&lt;/span&gt;(p);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;반환 타입은 &lt;code&gt;void*&lt;/code&gt;&lt;/strong&gt; — 아무 타입도 아닌 포인터이므로 원하는 타입으로 형변환해서 받는다
+&lt;ul&gt;
+&lt;li&gt;C는 &lt;code&gt;void*&lt;/code&gt; → 다른 포인터로의 암시적 변환을 허용해서 캐스팅 없이도 대입 가능(&lt;code&gt;int *p = malloc(...)&lt;/code&gt;), 하지만 &lt;strong&gt;C++에서는 금지&lt;/strong&gt;되어 있어 명시적 캐스팅이 필수다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;실패 시 &lt;code&gt;NULL&lt;/code&gt;을 반환&lt;/strong&gt;한다 (예외를 던지지 않음). 실전 코드는 반드시 체크한다:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)&lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt; n);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (p &lt;span style="color:#f92672"&gt;==&lt;/span&gt; NULL) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 할당 실패 처리 — 메모리 부족 등
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;배열 할당은 &lt;code&gt;sizeof(T) * count&lt;/code&gt;로 크기를 직접 계산해서 넘긴다:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;arr &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)&lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; arr[i] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; i &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// arr[i] == *(arr + i)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;free&lt;/span&gt;(arr);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="1-1-int-a---vs-int-a----를-빠뜨리는-실수"&gt;1-1. &lt;code&gt;int a = ...&lt;/code&gt; vs &lt;code&gt;int *a = ...&lt;/code&gt; — &lt;code&gt;*&lt;/code&gt;를 빠뜨리는 실수&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)&lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// ❌ 타입 불일치
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)&lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// ✅ 올바른 선언
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;malloc&lt;/code&gt;은 항상 &lt;strong&gt;주소값&lt;/strong&gt;(포인터)을 반환한다. 그 주소를 담을 변수는 반드시 &lt;strong&gt;포인터 타입&lt;/strong&gt;(&lt;code&gt;int *&lt;/code&gt;)이어야 한다&lt;/li&gt;
+&lt;li&gt;첫 번째 줄은 &lt;code&gt;a&lt;/code&gt;를 &lt;strong&gt;포인터가 아닌 평범한 &lt;code&gt;int&lt;/code&gt;&lt;/strong&gt; 로 선언해놓고 주소값을 대입하는 코드다. 결과는 &lt;strong&gt;아키텍처의 데이터 모델에 따라 다르다&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;64bit(LP64/LLP64)&lt;/strong&gt;: 포인터는 8바이트, &lt;code&gt;int&lt;/code&gt;는 4바이트 → 대입 시 &lt;strong&gt;상위 32비트가 잘려나가 원래 주소와 다른 값&lt;/strong&gt;이 된다. 이후 그 값을 다시 포인터로 캐스팅해서 역참조하면 엉뚱한 주소를 건드려 크래시하거나 데이터를 오염시킨다&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;32bit(ILP32)&lt;/strong&gt;: 포인터도 &lt;code&gt;int&lt;/code&gt;도 둘 다 4바이트라 &lt;strong&gt;숫자값 자체는 잘리지 않고 보존&lt;/strong&gt;된다. &lt;code&gt;(int *)(long)a&lt;/code&gt;처럼 다시 포인터로 되돌리면 원래 주소와 같은 값이 나온다는 뜻 — 그래서 32bit 환경에서 짠 이런 코드가 &amp;ldquo;우연히 동작&amp;quot;하는 것처럼 보인다&lt;/li&gt;
+&lt;li&gt;하지만 32bit이라 값이 안 잘린다는 사실이 이 코드를 안전하게 만들어주진 않는다: 여전히 &lt;strong&gt;타입이 틀렸다는 사실 자체가 버그&lt;/strong&gt;이고(컴파일러 경고, 정적 분석 실패, 코드 리뷰에서 지적됨), 무엇보다 &lt;strong&gt;64bit로 옮기는 순간 조용히 깨지는 이식성 문제&lt;/strong&gt;로 남는다&lt;/li&gt;
+&lt;li&gt;C에서는 이 대입에 대해 컴파일러가 &lt;code&gt;assignment makes integer from pointer without a cast&lt;/code&gt; 경고를 낸다 (32bit/64bit 무관하게 — 타입 불일치 자체를 지적하는 것이지 크기가 맞고 안 맞고의 문제가 아니다)&lt;/li&gt;
+&lt;li&gt;C++에서는 애초에 포인터 → &lt;code&gt;int&lt;/code&gt; 암시적 변환이 없어 &lt;strong&gt;컴파일 에러&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;포인터를 정수로 정말 담아야 하는 상황(포인터 산술, 디버그 출력 등)이라면 크기가 항상 딱 맞는 &lt;code&gt;intptr_t&lt;/code&gt;/&lt;code&gt;uintptr_t&lt;/code&gt;(&lt;code&gt;&amp;lt;stdint.h&amp;gt;&lt;/code&gt;)를 쓰는 것이 아키텍처 독립적인 정석이다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;두 번째 줄에서 &lt;code&gt;int *a&lt;/code&gt;의 &lt;code&gt;*&lt;/code&gt;는 &amp;ldquo;a는 int를 가리키는 포인터&amp;quot;라는 뜻이다. &lt;code&gt;int a&lt;/code&gt;와 &lt;code&gt;int *a&lt;/code&gt;는 &lt;strong&gt;완전히 다른 타입&lt;/strong&gt;(값 vs 주소)이므로, malloc의 반환값을 받는 변수는 항상 &lt;code&gt;*&lt;/code&gt;가 붙어야 한다는 점을 기계적으로 기억해두는 게 안전하다&lt;/li&gt;
+&lt;li&gt;만약 &lt;code&gt;a&lt;/code&gt;가 진짜 &lt;code&gt;int&lt;/code&gt;여야 했다면(가리키는 값을 바로 쓰고 싶었다면) &lt;code&gt;int a = *(int *)malloc(sizeof(int));&lt;/code&gt;처럼 &lt;strong&gt;역참조까지 해야&lt;/strong&gt; 값이 나온다 — 다만 이 경우 할당받은 주소를 어디에도 저장하지 않으므로 &lt;code&gt;free()&lt;/code&gt; 할 방법이 사라져 &lt;strong&gt;즉시 메모리 누수&lt;/strong&gt;가 된다 (3-1장 참고)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="1-2-malloc-반환값-캐스팅--c의-암묵적-변환-허용-vs-c의-금지"&gt;1-2. malloc 반환값 캐스팅 — C의 암묵적 변환 허용 vs C++의 금지&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;q &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// C: 캐스팅 없이 OK — C 관용 스타일에서는 이쪽을 권장
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;r &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)&lt;span style="color:#a6e22e"&gt;malloc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// C에서도 문법적으로는 되지만, 캐스팅이 불필요
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;q &lt;span style="color:#f92672"&gt;=&lt;/span&gt; malloc(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// ❌ C++: 컴파일 에러
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;r &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;)malloc(&lt;span style="color:#66d9ef"&gt;sizeof&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// ✅ C++: 캐스팅 필수
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;C — &lt;code&gt;void*&lt;/code&gt;는 어떤 객체 포인터 타입으로도 암묵적 변환된다.&lt;/strong&gt;&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c/noexcept/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c/noexcept/</guid><description>&lt;h1 id="noexcept"&gt;noexcept&lt;/h1&gt;
+&lt;p&gt;말그대로 except 를 던지지 않게 하는 것.&lt;/p&gt;
+&lt;p&gt;어떻게 활용하지?&lt;/p&gt;
+&lt;p&gt;-&amp;gt; 최적화를 노릴때 응용할 수 있다.&lt;/p&gt;
+&lt;p&gt;예를들어, 아래와 같은 구조체가 있다고 하자.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; A(){};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; A(&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; A&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;){};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; A(A&lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;noexcept&lt;/span&gt;{};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;A&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; v;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; v.push_back(A{});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드를 실행하면,&lt;/p&gt;
+&lt;p&gt;우선 vector는 내부적으로 move가 가능한지 체크한다. (noexcept가 있는지 확인함)&lt;/p&gt;
+&lt;p&gt;noexcept가 있다면 move를 수행하고, 없으면 copy를 수행하는데, 이는 성능에 영향을 미칠 수 있다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c/pointer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c/pointer/</guid><description>&lt;h1 id="pointer란"&gt;Pointer란?&lt;/h1&gt;
+&lt;p&gt;메모리 주소를 저장하는 변수.&lt;/p&gt;
+&lt;p&gt;&amp;amp;와 *의 차이는 아래와 같다&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;amp; (주소 연산자, address-of)
+변수 앞에 붙여서, 그 변수의 메모리 주소를 구한다.
+(타입 뒤에 붙는 &amp;amp; 는 참조자 (reference) 선언)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;(간접 참조 연산자, dereference)
+포인터 변수 앞에 붙여서, 그 포인터가 가리키는 주소의 값을 가져옵니다.
+즉, 주소를 “열어서 안에 있는 값”을 꺼내는 것.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;a; &lt;span style="color:#75715e"&gt;// p에 a의 주소 저장
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;printf(&lt;span style="color:#e6db74"&gt;&amp;#34;%d&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, &lt;span style="color:#f92672"&gt;*&lt;/span&gt;p); &lt;span style="color:#75715e"&gt;// p가 가리키는 곳(a)의 값(10) 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;*&lt;/span&gt;p &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;20&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// p가 가리키는 곳(a)의 값을 20으로 변경
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id="초기화-해주지-않은-포인터의-예"&gt;초기화 해주지 않은 포인터의 예&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;*&lt;/span&gt; p; &lt;span style="color:#75715e"&gt;// 초기화 안됨
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; p &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// p에 들어있는 임의의 메모리 주소 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;여러 번 실행해보면 쓰레기 값이 계속해서 바뀌면서 출력이됨.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c/static/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c/static/</guid><description>&lt;h1 id="static"&gt;Static&lt;/h1&gt;
+&lt;p&gt;Static은 활용 방법이 여러가지라서 하나로 단정하기는 어려우나,&lt;/p&gt;
+&lt;p&gt;보통 Scope (함수, namespace) 안에서만 이용하게끔 제한하는 용도로 쓰임.&lt;/p&gt;
+&lt;p&gt;그렇기 때문에, Static 과 void + override 를 통한 Runtime 다형성 형성이 불가능함.
+(애초에 void + override 는 vtable이용하는데, static 키워드를 이용하면 compile time에 정해지기 때문) -&amp;gt; inline 가능성 높음
+(compile time 에 정해진다는 것은, 동시에 this를 쓰는 것도 불가능하다는 얘기임 (instance))&lt;/p&gt;
+&lt;p&gt;대신, 정적인 다형성인 overloading은 가능하다.&lt;/p&gt;
+&lt;p&gt;참고로, compile time에 주소를 바로 박는다.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Retrospective on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/retrospective/</link><description>Recent content in Retrospective on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/retrospective/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/retrospective/1.mask_r-cnn_misuse_20260803/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/retrospective/1.mask_r-cnn_misuse_20260803/</guid><description>&lt;h1 id="회고--단일-물체-segmentation에-mask-r-cnn을-계속-쓴-건"&gt;회고 — 단일 물체 segmentation에 Mask R-CNN을 계속 쓴 건&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;2026-08-03 / 결론: Semantic segmentation으로 교체해서 해결됨.
+관련 정리: &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="1-무슨-일이-있었나"&gt;1. 무슨 일이 있었나&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;처음엔 화면에 여러 물체가 있었고, 인스턴스를 분리해야 했다. → &lt;strong&gt;Mask R-CNN 선택. 이 판단 자체는 옳았다.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;이후 모델을 분리하면서 이 모델이 맡는 태스크가 &lt;strong&gt;&amp;ldquo;중앙의 큰 물체 1개를 segmentation&amp;rdquo;&lt;/strong&gt; 으로 바뀌었다.&lt;/li&gt;
+&lt;li&gt;그런데 모델은 그대로 뒀다. 이유는 하나였다 — &lt;em&gt;&amp;ldquo;성능이 나름 괜찮아서&amp;rdquo;&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;운영 중에 object box가 &lt;strong&gt;왼쪽으로 shift되는 케이스&lt;/strong&gt;가 나왔다. 매번은 아니고 &lt;strong&gt;간헐적&lt;/strong&gt;, 대신 &lt;strong&gt;방향은 항상 왼쪽&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;1차 조치로 &lt;strong&gt;backbone을 ResNet → ConvNeXt로 교체&lt;/strong&gt;했다. → 안 잡혔다.&lt;/li&gt;
+&lt;li&gt;그 다음 RPN을 의심했다. → &lt;strong&gt;격리 실험은 하지 않았다.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;최종적으로는 원인을 특정해서 고친 게 아니라, &lt;strong&gt;Semantic segmentation 모델로 갈아타서 문제가 사라졌다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;여기서 짚어둘 것 — &lt;strong&gt;근본 원인은 지금도 확정되지 않았다.&lt;/strong&gt;
+semantic segmentation으로 바꾼 건 RPN을 고친 게 아니라 &lt;strong&gt;박스 단계 전체를 삭제한 것&lt;/strong&gt;이라,
+범인이 RPN이었는지 그 뒤(RoIAlign / FPN level assignment / box decode)였는지는 구분되지 않은 채 덮였다.
+컴포넌트를 세 번 갈아치웠고(backbone → RPN 의심 → 모델 전체), 그중 어느 것도 &amp;ldquo;이게 원인이다&amp;quot;를 증명한 적이 없다.&lt;/p&gt;</description></item></channel></rss>

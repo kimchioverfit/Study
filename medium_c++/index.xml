@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Medium C++ on Study Notes</title><link>https://kimchioverfit.github.io/Study/medium_c++/</link><description>Recent content in Medium C++ on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/medium_c++/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/medium_c++/_stprintf_s/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/medium_c++/_stprintf_s/</guid><description>&lt;h1 id="_stprintf_s"&gt;_stprintf_s&lt;/h1&gt;
+&lt;p&gt;문자열을 포맷팅하여 버퍼에 안전하게 출력하는 함수&lt;/p&gt;
+&lt;p&gt;Windows 환경에서 사용하는 Secure CRT(보안 C 런타임) 함수 중 하나&lt;/p&gt;
+&lt;p&gt;기본적인 목적은 sprintf나 _stprintf처럼 문자열을 버퍼에 출력하되,&lt;/p&gt;
+&lt;p&gt;버퍼 오버플로우를 방지하기 위한 보안 기능이 추가된 버전&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;_stprintf_s&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TCHAR &lt;span style="color:#f92672"&gt;*&lt;/span&gt;buffer, &lt;span style="color:#75715e"&gt;// 출력 버퍼
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; size_t sizeOfBuffer, &lt;span style="color:#f92672"&gt;//&lt;/span&gt; &lt;span style="color:#960050;background-color:#1e0010"&gt;버퍼&lt;/span&gt; &lt;span style="color:#960050;background-color:#1e0010"&gt;크기&lt;/span&gt; (&lt;span style="color:#960050;background-color:#1e0010"&gt;문자&lt;/span&gt; &lt;span style="color:#960050;background-color:#1e0010"&gt;단위&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; TCHAR &lt;span style="color:#f92672"&gt;*&lt;/span&gt;format, &lt;span style="color:#75715e"&gt;// 포맷 문자열
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ... &lt;span style="color:#75715e"&gt;// 가변 인자
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Parameter&lt;/th&gt;
+					&lt;th&gt;Description&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;buffer&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;출력 결과를 저장할 버퍼&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;sizeOfBuffer&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;버퍼의 크기 (&lt;code&gt;TCHAR&lt;/code&gt; 기준 크기)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;format&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;출력할 형식을 지정하는 문자열 (&lt;code&gt;%d&lt;/code&gt;, &lt;code&gt;%s&lt;/code&gt;, 등 사용 가능)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;...&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;포맷에 따라 들어가는 값들&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="-특징"&gt;✅ 특징&lt;/h3&gt;
+&lt;p&gt;TCHAR 기반으로 작성되어 있어, 유니코드 설정 여부에 따라 char 또는 wchar_t 버전으로 동작.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/medium_c++/cpp_initializer_order/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/medium_c++/cpp_initializer_order/</guid><description>&lt;h1 id="c-멤버-초기화-순서와-이니셜라이저-리스트"&gt;C++ 멤버 초기화 순서와 이니셜라이저 리스트&lt;/h1&gt;
+&lt;h2 id="문제-개요"&gt;문제 개요&lt;/h2&gt;
+&lt;p&gt;다음과 같이 이니셜라이저 리스트에서 멤버 &lt;code&gt;diameter_range&lt;/code&gt;를 먼저 초기화하고,
+그 뒤에 &lt;code&gt;filterPointsByDiameter&lt;/code&gt; 함수에서 사용했는데도 &lt;code&gt;diameter_range&lt;/code&gt; 값이 빈 상태로 전달되는 문제가 발생했다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PartitionedPointSample&lt;span style="color:#f92672"&gt;::&lt;/span&gt;PartitionedPointSample(std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;tuple&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;Centers, ROI&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; inferenceResults)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;:&lt;/span&gt; diameter_range{&lt;span style="color:#ae81ff"&gt;28&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;},
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; filtered_points(filterPointsByDiameter(inferenceResults, diameter_range)),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; regions_matrix(defineRegions()) {}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="핵심-원인-"&gt;핵심 원인 🔥&lt;/h2&gt;
+&lt;p&gt;C++에서는 생성자 이니셜라이저 리스트에서의 순서와 무관하게, &lt;strong&gt;멤버 초기화 순서는 클래스에 선언된 순서대로&lt;/strong&gt; 진행된다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;PartitionedPointSample&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;private&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;tuple&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;Centers, ROI&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; filtered_points; &lt;span style="color:#75715e"&gt;// 먼저 초기화됨
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;cv&lt;span style="color:#f92672"&gt;::&lt;/span&gt;Rect&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; regions_matrix;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;tuple&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;cv&lt;span style="color:#f92672"&gt;::&lt;/span&gt;Point2f, &lt;span style="color:#66d9ef"&gt;float&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;char&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; final_points;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;unsigned&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; diameter_range; &lt;span style="color:#75715e"&gt;// 나중에 초기화됨
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 경우, &lt;code&gt;diameter_range&lt;/code&gt;는 &lt;code&gt;filtered_points&lt;/code&gt;보다 &lt;strong&gt;나중에 초기화되기 때문에&lt;/strong&gt;,&lt;br&gt;
+&lt;code&gt;filtered_points&lt;/code&gt; 초기화 시점에서 &lt;code&gt;diameter_range&lt;/code&gt;는 비어 있는 상태이다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/medium_c++/lpctstr/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/medium_c++/lpctstr/</guid><description>&lt;h1 id="lpctstr"&gt;LPCTSTR&lt;/h1&gt;
+&lt;p&gt;LPCTSTR는 Windows API에서 사용되는 데이터 타입&lt;/p&gt;
+&lt;h3 id="-lpctstr의-의미"&gt;🔹 LPCTSTR의 의미&lt;/h3&gt;
+&lt;p&gt;LPCTSTR = Long Pointer to a Constant &lt;code&gt;TCHAR&lt;/code&gt; String&lt;/p&gt;
+&lt;p&gt;쉽게 말해: 변경 불가능한 문자열(읽기 전용 문자열)을 가리키는 포인터&lt;/p&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/medium_c&amp;#43;&amp;#43;/tchar/"&gt;&lt;code&gt;TCHAR&lt;/code&gt;란? &lt;/a&gt;
+&lt;/p&gt;
+&lt;h3 id="-구성-요소"&gt;🔹 구성 요소&lt;/h3&gt;
+&lt;p&gt;LP = Long Pointer (Windows에서 32비트/64비트 주소 공간을 지칭)&lt;/p&gt;
+&lt;p&gt;C = Constant (읽기 전용)&lt;/p&gt;
+&lt;p&gt;TCHAR = 문자 타입 (유니코드/멀티바이트 대응)&lt;/p&gt;
+&lt;p&gt;STR = 문자열&lt;/p&gt;
+&lt;h3 id="-유니코드-vs-ansi"&gt;🔹 유니코드 vs ANSI&lt;/h3&gt;
+&lt;p&gt;TCHAR는 컴파일 설정에 따라 다음 중 하나로 결정됩니다:&lt;/p&gt;
+&lt;p&gt;유니코드 설정이면: TCHAR → wchar_t, LPCTSTR → const wchar_t*&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/medium_c++/std_ranges_join_with/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/medium_c++/std_ranges_join_with/</guid><description>&lt;h1 id="stdrangesjoin_with"&gt;std::ranges::join_with&lt;/h1&gt;
+&lt;p&gt;C++ 23 에서 추가된거&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Flatten&lt;/code&gt; 을 수행하는 std::ranges::join 의 업그레이드 버젼인데,&lt;/p&gt;
+&lt;p&gt;(Flateen 이란, 예를들어 vector에 1,2,3 이 들어있으면 한줄로 123 만드는거)&lt;/p&gt;
+&lt;p&gt;join 과 다르게, std::ranges::join_with(&amp;quot;,&amp;quot;)해주면 &amp;ldquo;,&amp;ldquo;를 구분자로 넣어줌.&lt;/p&gt;
+&lt;p&gt;그러면 1,2,3 이런식으로 됨.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/medium_c++/tchar/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/medium_c++/tchar/</guid><description>&lt;h1 id="tchar"&gt;TCHAR&lt;/h1&gt;
+&lt;p&gt;TCHAR는 Windows 프로그래밍에서 사용하는 문자형 자료형(type) 중 하나&lt;/p&gt;
+&lt;p&gt;유니코드와 ANSI 문자셋을 모두 지원하기 위해 만들어짐&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#ifdef UNICODE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;typedef&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;wchar_t&lt;/span&gt; TCHAR; &lt;span style="color:#75715e"&gt;// 유니코드일 경우
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#else
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;typedef&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;char&lt;/span&gt; TCHAR; &lt;span style="color:#75715e"&gt;// ANSI일 경우
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#endif&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/medium_c&amp;#43;&amp;#43;/wchar_t/"&gt;&lt;code&gt;wchar_t&lt;/code&gt;란?&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;즉,&lt;/p&gt;
+&lt;p&gt;UNICODE 매크로가 정의되어 있으면 → TCHAR는 wchar_t (2바이트 문자형, 유니코드)&lt;/p&gt;
+&lt;p&gt;그렇지 않으면 → TCHAR는 char (1바이트 문자형, ANSI)&lt;/p&gt;
+&lt;h3 id="요약"&gt;요약&lt;/h3&gt;
+&lt;p&gt;TCHAR는 Windows에서 유니코드와 ANSI 호환을 위해 사용되는 문자 자료형&lt;/p&gt;
+&lt;p&gt;유니코드 설정 시 wchar_t, 아니면 char&lt;/p&gt;
+&lt;p&gt;문자열 함수도 _tcslen, _tcscpy 같은 접두사가 붙은 버전을 사용&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/medium_c++/wchar_t/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/medium_c++/wchar_t/</guid><description>&lt;h1 id="wchar_t"&gt;wchar_t&lt;/h1&gt;
+&lt;p&gt;C/C++에서 유니코드(Unicode) 문자를 표현하기 위한 데이터 타입&lt;/p&gt;
+&lt;p&gt;기본 char가 보통 1바이트(8비트)로 ASCII 문자 하나를 표현하는 데 비해,&lt;/p&gt;
+&lt;p&gt;wchar_t는 플랫폼에 따라 2바이트 또는 4바이트를 사용하여 더 많은 문자&lt;/p&gt;
+&lt;p&gt;(예: 한글, 한자, 이모지 등)를 표현할 수 있음&lt;/p&gt;
+&lt;h3 id="요약"&gt;요약&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;타입&lt;/th&gt;
+					&lt;th&gt;바이트 수&lt;/th&gt;
+					&lt;th&gt;설명&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;char&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;1바이트 (8비트)&lt;/td&gt;
+					&lt;td&gt;ASCII 문자 (영문 등)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;wchar_t&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;2바이트(Windows)&lt;br&gt;4바이트(Linux 등)&lt;/td&gt;
+					&lt;td&gt;유니코드 문자&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;wchar_t&lt;/span&gt; wc &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;L&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;한&amp;#39;&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// L 접두사로 wchar_t 리터럴 표현
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;wcout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;L&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;문자: &amp;#34;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; wc &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;endl;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="참고"&gt;참고&lt;/h3&gt;
+&lt;p&gt;Windows에서는 wchar_t가 UTF-16 기반 (2바이트)&lt;/p&gt;</description></item></channel></rss>

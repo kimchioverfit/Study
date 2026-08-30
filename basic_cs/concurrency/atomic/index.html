@@ -1,0 +1,85 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_cs/concurrency/>Concurrency</a></div><h1>Atomic</h1></header><div class="doc-body post-body"><h1 id=stdatomic과-메모리-모델>std::atomic과 메모리 모델</h1><p>C++ 표준(C++11~)과 CPU 하드웨어 레벨의 이야기로, OS와 무관하게 적용된다. C에도 동일한 개념의 <code>&lt;stdatomic.h></code>(<code>_Atomic</code>, <code>atomic_int</code>)가 있다.</p><h2 id=1-왜-필요한가--int는-원자적이지-않다>1. 왜 필요한가 — &ldquo;int는 원자적이지 않다&rdquo;</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>int</span> counter <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;              <span style=color:#75715e>// ❌ 두 스레드가 counter++ 하면
+</span></span></span><span style=display:flex><span>                              <span style=color:#75715e>//    load → add → store 3단계가 인터리빙되어 값 유실
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>atomic<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> counter{<span style=color:#ae81ff>0</span>};  <span style=color:#75715e>// ✅ counter++가 단일 원자 연산 (LOCK XADD 등)
+</span></span></span><span style=display:flex><span>counter.fetch_add(<span style=color:#ae81ff>1</span>);</span></span></code></pre></div><ul><li><code>counter++</code> 같은 read-modify-write는 CPU 입장에서 여러 단계라서, 뮤텍스나 atomic 없이는 <strong>데이터 레이스(미정의 동작)</strong></li><li><code>volatile</code>은 <strong>원자성과 무관</strong>하다 — 컴파일러 최적화 억제일 뿐, 동기화 도구가 아님 (시그널 핸들러의 <code>sig_atomic_t</code>(<a class=inline-link href=/Study/linux/process/signal/>Signal</a>
+5장)와 스레드 동기화를 혼동하지 말 것)</li></ul><h2 id=2-주요-연산>2. 주요 연산</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>std<span style=color:#f92672>::</span>atomic<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> a{<span style=color:#ae81ff>0</span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>a.store(<span style=color:#ae81ff>1</span>);                   <span style=color:#75715e>// 쓰기
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> v <span style=color:#f92672>=</span> a.load();             <span style=color:#75715e>// 읽기
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> old <span style=color:#f92672>=</span> a.exchange(<span style=color:#ae81ff>5</span>);      <span style=color:#75715e>// 새 값 쓰고 이전 값 반환
+</span></span></span><span style=display:flex><span>a.fetch_add(<span style=color:#ae81ff>1</span>);  a.fetch_sub(<span style=color:#ae81ff>1</span>);  a.fetch_or(<span style=color:#ae81ff>0x4</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// CAS (Compare-And-Swap) — lock-free 자료구조의 핵심 연산
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> expected <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>bool</span> ok <span style=color:#f92672>=</span> a.compare_exchange_strong(expected, <span style=color:#ae81ff>10</span>);
+</span></span><span style=display:flex><span><span style=color:#75715e>// a == expected면: a = 10, true 반환
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// 다르면:          expected에 현재 값이 담기고 false 반환
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 전형적 CAS 루프 (lock-free 갱신)
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> cur <span style=color:#f92672>=</span> a.load();
+</span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> (<span style=color:#f92672>!</span>a.compare_exchange_weak(cur, cur <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span>))
+</span></span><span style=display:flex><span>    ;   <span style=color:#75715e>// 실패 시 cur에 최신 값이 들어오므로 그걸로 재시도
+</span></span></span></code></pre></div><ul><li><code>weak</code>은 이유 없이 실패(spurious failure)할 수 있는 대신 일부 아키텍처(ARM의 LL/SC)에서 더 싸다 — <strong>루프 안에서는 weak</strong>, 단발 호출은 strong</li><li><code>a.is_lock_free()</code> — 해당 타입이 진짜 하드웨어 원자 명령으로 처리되는지 확인. 크기가 크면 내부적으로 lock을 쓸 수도 있다 (<code>std::atomic&lt;BigStruct></code>)</li></ul><h2 id=3-메모리-순서-memory_order>3. 메모리 순서 (memory_order)</h2><p>atomic의 진짜 어려운 부분. CPU와 컴파일러는 성능을 위해 <strong>메모리 접근을 재배치</strong>하는데, atomic 연산에 순서 제약을 지정할 수 있다.</p><table><thead><tr><th>순서</th><th>의미</th><th>비용</th></tr></thead><tbody><tr><td><code>seq_cst</code> (기본값)</td><td>전역 단일 순서 보장. 가장 직관적</td><td>가장 비쌈 (특히 ARM)</td></tr><tr><td><code>acquire</code> (load 측)</td><td>이 load <strong>이후</strong>의 접근들이 앞으로 재배치되지 않음</td><td>중간</td></tr><tr><td><code>release</code> (store 측)</td><td>이 store <strong>이전</strong>의 접근들이 뒤로 재배치되지 않음</td><td>중간</td></tr><tr><td><code>relaxed</code></td><td>원자성만 보장, 순서 보장 없음</td><td>가장 쌈</td></tr></tbody></table><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// 생산자-소비자 핸드셰이크: release/acquire 짝
+</span></span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>atomic<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>bool</span><span style=color:#f92672>&gt;</span> ready{false};
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> payload;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// [생산자]
+</span></span></span><span style=display:flex><span>payload <span style=color:#f92672>=</span> <span style=color:#ae81ff>42</span>;                                  <span style=color:#75715e>// ①
+</span></span></span><span style=display:flex><span>ready.store(true, std<span style=color:#f92672>::</span>memory_order_release);  <span style=color:#75715e>// ② ①이 ②보다 먼저임을 보장
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// [소비자]
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> (<span style=color:#f92672>!</span>ready.load(std<span style=color:#f92672>::</span>memory_order_acquire)) <span style=color:#75715e>// ③
+</span></span></span><span style=display:flex><span>    ;
+</span></span><span style=display:flex><span>use(payload);                                  <span style=color:#75715e>// ④ ③이 참이면 ①의 결과가 보임
+</span></span></span></code></pre></div><ul><li>release store를 acquire load가 관측하면, store <strong>이전에 쓴 모든 데이터</strong>(payload)가 load 쪽에 보이는 것이 보장된다 — 이것이 뮤텍스 unlock/lock이 내부적으로 하는 일이기도 하다</li><li><code>relaxed</code>는 순서가 필요 없는 순수 카운터(통계 집계 등)에만</li><li>확신이 없으면 <strong>기본값(seq_cst)</strong> 을 쓰는 것이 정답이다. 순서 완화는 프로파일링으로 병목이 확인된 뒤의 최적화</li></ul><h2 id=4-atomic-vs-mutex-선택-기준>4. atomic vs mutex 선택 기준</h2><table><thead><tr><th>상황</th><th>선택</th></tr></thead><tbody><tr><td>변수 하나의 카운터/플래그</td><td><code>std::atomic</code></td></tr><tr><td>여러 변수를 <strong>한 덩어리로</strong> 일관되게 갱신</td><td>mutex (atomic 여러 개로는 원자성이 안 묶임)</td></tr><tr><td>크리티컬 섹션에서 I/O, 긴 연산</td><td>mutex (잠들 수 있음)</td></tr><tr><td>lock-free 큐/스택 구현</td><td>atomic CAS — 단, ABA 문제 등 난도가 매우 높아 검증된 라이브러리 사용 권장</td></tr></tbody></table><p>mutex 자체의 상세(타입, 우선순위 상속 등)는 <a class=inline-link href=/Study/linux/multi_thread/pthread_api/>Pthread API</a>
+2장, spinlock과의 비교는 <a class=inline-link href=/Study/basic_cs/concurrency/sync_advanced/>동기화 심화</a>
+참고.</p><h2 id=5-false-sharing--atomic을-써도-느려지는-함정>5. false sharing — atomic을 써도 느려지는 함정</h2><p>서로 다른 atomic 변수라도 <strong>같은 캐시라인(64B)에 붙어 있으면</strong>, 코어들이 그 라인의 소유권을 서로 뺏고 빼앗기며(cache line ping-pong) 성능이 급락한다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// ❌ 두 카운터가 같은 캐시라인에 인접 — 스레드 2개가 각자 자기 것만 증가시켜도 느림
+</span></span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>atomic<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>long</span><span style=color:#f92672>&gt;</span> c0, c1;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ✅ 캐시라인 단위로 분리
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>alignas</span>(<span style=color:#ae81ff>64</span>) PaddedCounter { std<span style=color:#f92672>::</span>atomic<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>long</span><span style=color:#f92672>&gt;</span> v; };
+</span></span><span style=display:flex><span>PaddedCounter c[<span style=color:#ae81ff>2</span>];   <span style=color:#75715e>// 스레드별로 c[t].v 사용, 마지막에 합산
+</span></span></span></code></pre></div><ul><li>C++17의 <code>std::hardware_destructive_interference_size</code>가 이 정렬 크기의 표준 표현</li><li>&ldquo;스레드별 로컬 누적 → 마지막에 합산&rdquo; 패턴이 공유 atomic 카운터보다 거의 항상 빠르다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

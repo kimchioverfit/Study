@@ -1,0 +1,94 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/3_object_detection/>Object Detection</a></div><h1>4.Faster R CNN</h1></header><div class="doc-body post-body"><h1 id=faster-r-cnn-2015>Faster R-CNN (2015)</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/1506.01497>Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks</a>
+— Ren et al., NeurIPS 2015</p><blockquote><p><strong>Region Proposal Network(RPN)</strong> 도입으로 region proposal 생성까지 신경망 안에 통합한 모델. Selective Search라는 <strong>외부의, CPU 기반, 학습되지 않는 느린 알고리즘</strong>을 제거하고, 이미 계산된 conv feature map을 재사용해 proposal을 만든다 — 그 결과 파이프라인 전체가 GPU 위에서 end-to-end로 돌아가는, 처음으로 실시간에 가까운 detector가 됐다.
+<a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a>
+까지 이어진 R-CNN 계열의 마지막 개선 단계이며, 여기서 도입된 RPN + Anchor 개념은 이후 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a>
+에도 그대로 이어진다.</p></blockquote><h2 id=-1-이-논문-이전까지-남아있던-문제>🔷 1. 이 논문 이전까지 남아있던 문제</h2><p><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+→ <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a>
+을 거치며 &ldquo;detection 자체"는 크게 빨라졌지만, 파이프라인에는 병목이 하나 남아 있었다.</p><pre tabindex=0><code>[Fast R-CNN 파이프라인]
+
+  원본 이미지
+     │
+     ├──────────────► Selective Search (CPU, 이미지당 ~2초)  ← 병목! 학습 안 되는 고정 알고리즘
+     │                       │
+     ▼                       ▼
+   CNN (GPU, 빠름)      Region Proposals (~2000개)
+     │                       │
+     └───────► ROI Pooling ◄─┘
+                  │
+                  ▼
+        Classification + BBox Regression</code></pre><ul><li>Selective Search는 <strong>학습되지 않는 고정된 규칙 기반 알고리즘</strong>이라, CNN 부분이 아무리 GPU에서 빨라져도 이 부분만은 여전히 CPU에서 이미지당 약 2초씩 걸린다</li><li>결과적으로 detection 파이프라인 전체 속도가 <strong>&ldquo;가장 느린 부품"인 Selective Search에 발목 잡힌다</strong> — Fast R-CNN이 아무리 개선돼도 이 병목 자체는 그대로 남아 있었다</li></ul><h2 id=-2-핵심-아이디어--rpn으로-selective-search를-대체>🔷 2. 핵심 아이디어 — RPN으로 Selective Search를 대체</h2><p>Faster R-CNN의 발상은 단순하지만 강력하다.</p><blockquote><p>&ldquo;이미 CNN이 detection을 위해 feature map을 계산해뒀는데, 그 feature map을 그냥 재활용해서 proposal도 뽑으면 안 되나?&rdquo;</p></blockquote><pre tabindex=0><code>[Faster R-CNN 파이프라인]
+
+  원본 이미지
+     │
+     ▼
+   CNN (한 번만 통과, GPU)
+     │
+     ├──────► RPN (같은 feature map 재사용, GPU) ──► Region Proposals
+     │                                                    │
+     └───────────────► ROI Pooling ◄─────────────────────┘
+                  │
+                  ▼
+        Classification + BBox Regression</code></pre><ul><li><strong>RPN(Region Proposal Network)</strong>: proposal 생성을 별도의 외부 CPU 알고리즘이 아니라, <strong>detection용으로 이미 계산된 conv feature map 위에서 작은 신경망으로 수행</strong>한다</li><li>Selective Search와 CNN을 나란히(따로) 돌리던 구조에서, <strong>feature map 하나를 detection과 proposal 생성이 공유</strong>하는 구조로 바뀐 것 — 논문 표현으로는 &ldquo;region proposal이 거의 공짜(nearly cost-free)가 됐다&rdquo;</li><li>전체가 GPU 위에서 end-to-end로 돌아가면서, Fast R-CNN 대비 훨씬 빨라진다 (§7 참고)</li></ul><h2 id=-3-anchor-box--후보-박스-모양을-미리-준비해두는-방법>🔷 3. Anchor Box — &ldquo;후보 박스 모양"을 미리 준비해두는 방법</h2><p>RPN이 &ldquo;여기에 물체가 있을 것 같다"를 예측하려면, 먼저 <strong>어떤 모양의 박스들을 후보로 놓고 볼지</strong> 기준이 필요하다. 이 기준 박스가 <strong>Anchor(앵커) box</strong>다.</p><pre tabindex=0><code>feature map의 각 위치(sliding window 중심)마다:
+
+        ┌───────┐
+        │ ┌───┐ │     3가지 스케일(작음/중간/큼)
+        │ │┌─┐│ │   ×  3가지 가로세로비(1:1, 1:2, 2:1)
+        │ │└─┘│ │   =  9개의 Anchor를 동시에 배치
+        └───────┘</code></pre><ul><li>feature map의 <strong>모든 위치</strong>마다 미리 정해둔 여러 크기·비율의 anchor를 촘촘히 깔아둔다 (보통 3 scale × 3 ratio = <strong>9개</strong>)</li><li>예: 800×600 이미지라면 feature map 위 각 위치마다 9개씩, 총 약 <strong>20,000개</strong>의 anchor가 생긴다</li><li>RPN이 실제로 학습하는 것은 &ldquo;이 anchor를 그대로 써라"가 아니라, <strong>&ldquo;이 anchor를 기준으로 물체가 있는지 없는지&rdquo; + &ldquo;정확한 박스가 되려면 이 anchor를 얼마나 옮기고 늘려야 하는지&rdquo;</strong> 두 가지다 — 즉 anchor는 정답이 아니라 결과물을 만들어내기 위한 <strong>기준점(reference)</strong> 역할을 한다</li></ul><h2 id=-4-rpn의-구조--작은-cnn-하나가-두-가지를-동시에-예측>🔷 4. RPN의 구조 — 작은 CNN 하나가 두 가지를 동시에 예측</h2><p>RPN 자체는 거창한 별도 네트워크가 아니라, feature map 위에서 <strong>3×3 conv 하나 + 1×1 conv 두 갈래</strong>로 구성된 아주 작은 신경망이다.</p><pre tabindex=0><code>              conv feature map
+                    │
+              3×3 conv (sliding window)
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+  1×1 conv (cls)           1×1 conv (reg)
+  → 2k개 출력               → 4k개 출력
+  (objectness: 물체 있음/없음)  (anchor 대비 박스 보정값 dx,dy,dw,dh)</code></pre><table><thead><tr><th>출력</th><th>의미</th><th>개수(anchor 9개 기준)</th></tr></thead><tbody><tr><td><strong>cls (classification)</strong></td><td>이 anchor에 <strong>물체가 있는지 없는지</strong>(objectness) — 클래스가 무엇인지는 아직 모름</td><td>anchor당 2개 → 9×2=18</td></tr><tr><td><strong>reg (regression)</strong></td><td>anchor를 실제 물체 박스에 맞게 옮기고 늘리는 보정값 $(dx, dy, dw, dh)$</td><td>anchor당 4개 → 9×4=36</td></tr></tbody></table><ul><li><strong>RPN은 &ldquo;이게 사람이다/자동차다&rdquo; 같은 클래스 분류는 하지 않는다.</strong> 오직 &ldquo;물체 O/X"만 판단하며, 실제 클래스 분류는 뒤쪽 Fast R-CNN detection head가 담당한다</li><li>이 두 브랜치가 <strong>같은 conv feature map을 공유</strong>하기 때문에, Selective Search처럼 이미지를 별도로 다시 처리할 필요 없이 detection과 proposal이 동시에 계산된다</li></ul><h2 id=-5-학습--anchor에-정답을-어떻게-매기나>🔷 5. 학습 — Anchor에 정답을 어떻게 매기나</h2><p>RPN을 학습시키려면 각 anchor가 &ldquo;정답(물체 있음)&ldquo;인지 &ldquo;오답(배경)&ldquo;인지 라벨을 매겨야 한다. 기준은 <strong>IoU(Intersection over Union)</strong>.</p><table><thead><tr><th>Anchor 분류</th><th>조건</th></tr></thead><tbody><tr><td><strong>Positive (물체 있음)</strong></td><td>실제 물체 박스와 IoU > 0.7, 또는 그 물체와 IoU가 가장 높은 anchor</td></tr><tr><td><strong>Negative (배경)</strong></td><td>모든 실제 물체 박스와 IoU &lt; 0.3</td></tr><tr><td><strong>무시</strong></td><td>애매한 중간 지대(0.3~0.7) — 학습에서 제외</td></tr></tbody></table><ul><li><strong>Multi-task loss</strong>: <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a>
+과 같은 철학으로, <strong>분류 loss(물체 O/X) + 회귀 loss(박스 보정)</strong> 를 한 번에 학습시킨다. 회귀 loss는 positive anchor에서만 계산한다 (배경은 애초에 맞출 박스가 없으므로)</li><li><strong>학습 방식</strong>: RPN과 detection head가 conv layer(backbone)를 공유해야 하는데, 이 둘을 동시에 학습시키면 서로의 gradient가 얽혀 불안정해질 수 있다. 그래서 원 논문은 <strong>4단계 번갈아 학습(alternating training)</strong> 을 사용했다 (RPN 학습 → 그 proposal로 detector 학습 → detector의 conv로 RPN 재학습 → detector 미세조정). 이후 구현들에서는 <strong>근사 joint training</strong>(두 loss를 한 번에 역전파, 일부 gradient는 근사 처리)으로 단순화되어 지금은 이쪽이 표준이다</li><li>RPN과 detector가 공유하는 conv layer(=<strong>backbone</strong>)는 처음부터 학습시키지 않고, <strong>ImageNet으로 미리 학습된 모델(VGG, ResNet 등)로 초기화한 뒤 fine-tuning만 한다</strong> — backbone을 처음부터 학습하면 시간도 오래 걸리고 데이터도 훨씬 많이 필요하기 때문 (일반적인 전이학습(transfer learning) 관행)</li></ul><h2 id=-6-anchor-20000개--실제로-쓰는-건-수백-개-nms>🔷 6. Anchor 20,000개 → 실제로 쓰는 건 수백 개 (NMS)</h2><p>Anchor를 다 쓰면 이미지 하나에 2만 개나 되므로, 이걸 그대로 detection head에 넘기면 오히려 비효율적이다. 그래서:</p><ol><li>RPN이 예측한 objectness 점수로 anchor들을 <strong>정렬</strong>한다</li><li>상위 N개만 남기고, <strong>NMS(Non-Maximum Suppression)</strong> 로 서로 많이 겹치는 박스를 제거한다</li><li>학습 시엔 top ~2000개, 테스트(추론) 시엔 top ~300개 정도만 실제 <strong>region proposal</strong>로 골라 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a>
+의 ROI Pooling 단계로 전달한다</li></ol><h2 id=-7-결과--selective-search-제거의-실질적-효과>🔷 7. 결과 — Selective Search 제거의 실질적 효과</h2><table><thead><tr><th>모델</th><th>Region Proposal 방식</th><th>속도(대략)</th></tr></thead><tbody><tr><td>R-CNN</td><td>Selective Search (CPU)</td><td>~47초/이미지</td></tr><tr><td>Fast R-CNN</td><td>Selective Search (CPU)</td><td>~2초/이미지 (대부분이 Selective Search 시간)</td></tr><tr><td><strong>Faster R-CNN</strong></td><td><strong>RPN (GPU, feature 공유)</strong></td><td><strong>~0.2초/이미지 (5fps 이상)</strong></td></tr></tbody></table><ul><li>Selective Search를 RPN으로 바꾼 것만으로 detection 파이프라인이 <strong>처음으로 거의 실시간(near real-time)에 도달</strong>했다</li><li>정확도(mAP)도 Selective Search 대비 근소하게 향상됐다 — RPN은 <strong>학습 가능한</strong> proposal 생성기라서, 고정된 규칙(Selective Search)보다 데이터에 맞는 더 나은 proposal을 만들어내기 때문</li></ul><h2 id=-8-정리--한-문장씩>🔷 8. 정리 — 한 문장씩</h2><table><thead><tr><th>질문</th><th>답</th></tr></thead><tbody><tr><td>뭘 없앴나</td><td>Selective Search (CPU, 학습 안 됨, 느림)</td></tr><tr><td>뭘로 대체했나</td><td>RPN (GPU, 학습됨, feature map 공유)</td></tr><tr><td>RPN이 예측하는 것</td><td>anchor별 &ldquo;물체 O/X&rdquo; + &ldquo;박스 보정값&rdquo; — 클래스는 예측하지 않음</td></tr><tr><td>Anchor란</td><td>feature map 위 각 위치마다 미리 깔아둔 여러 크기/비율의 기준 박스 (보통 9개)</td></tr><tr><td>왜 빨라졌나</td><td>detection과 proposal 생성이 <strong>같은 conv 연산 결과를 재사용</strong>하기 때문</td></tr><tr><td>어떻게 학습하나</td><td>IoU 기준으로 anchor에 정답 라벨을 매기고, multi-task loss(분류+회귀)로 학습</td></tr></tbody></table><h2 id=참고>참고</h2><ul><li>Anchor의 scale/ratio 하이퍼파라미터는 데이터셋의 물체 크기 분포에 따라 성능에 큰 영향을 준다 — 실전에서 튜닝이 필요한 대표적인 지점</li><li>이후 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a>
+은 이 RPN + Anchor 구조를 그대로 가져오고, ROI Pooling을 ROI Align으로 바꿔 마스크 예측까지 확장한다</li><li>관련 문서: <a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/2.selective_search/>Selective Search</a>
+· <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/vision_overview/>Vision Overview</a></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

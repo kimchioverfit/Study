@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>00 foundations on Study Notes</title><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/</link><description>Recent content in 00 foundations on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/0.basic_terms/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/0.basic_terms/</guid><description>&lt;h1 id="basic-terms"&gt;Basic Terms&lt;/h1&gt;
+&lt;h3 id="identity-matrix-항등-행렬"&gt;Identity Matrix (항등 행렬)&lt;/h3&gt;
+$$
+I_n =
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; 0 &amp; \cdots &amp; 1
+\end{bmatrix}
+$$&lt;p&gt;위와 같이 n x n 정사각행렬이면서, 대각 원소들이 1인 행렬을 항등 행렬이라고 한다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/1.determinant/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/1.determinant/</guid><description>&lt;h1 id="-행렬식-determinant"&gt;📐 행렬식 (Determinant)&lt;/h1&gt;
+&lt;h2 id="-정의"&gt;✅ 정의&lt;/h2&gt;
+&lt;p&gt;행렬식(Determinant)은 정방행렬(square matrix)에 대응되는 &lt;strong&gt;실수값&lt;/strong&gt;으로, 행렬이 어떤 성질을 가지는지 나타내는 중요한 지표.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;보통 $ \det(A) $ 또는 $ |A| $로 표기한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-22-행렬의-행렬식"&gt;🧮 2×2 행렬의 행렬식&lt;/h2&gt;
+&lt;p&gt;행렬 $ A = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix} $의 행렬식은 다음과 같이 계산한다:&lt;/p&gt;
+$$
+\det(A) = ad - bc
+$$&lt;hr&gt;
+&lt;h2 id="-33-행렬의-행렬식"&gt;🧮 3×3 행렬의 행렬식&lt;/h2&gt;
+$$
+A =
+\begin{bmatrix}
+a &amp; b &amp; c \\
+d &amp; e &amp; f \\
+g &amp; h &amp; i
+\end{bmatrix}
+$$&lt;p&gt;행렬식은 다음과 같이 계산됩니다:&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/3.linear_equation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/math/basic_linear_algebra/00_foundations/3.linear_equation/</guid><description>&lt;h1 id="linear-equation"&gt;Linear equation&lt;/h1&gt;
+&lt;p&gt;선형 방정식&lt;/p&gt;
+&lt;p&gt;아주 기본인데 오랜만에 봐서 다 까먹어서 복습함&lt;/p&gt;
+&lt;h1 id="-선형-방정식의-예시-linear-equation-example"&gt;📘 선형 방정식의 예시 (Linear Equation Example)&lt;/h1&gt;
+&lt;h2 id="-일반-형태"&gt;✅ 일반 형태&lt;/h2&gt;
+&lt;p&gt;선형 방정식은 다음과 같은 형태를 갖습니다:&lt;/p&gt;
+$$
+a_1 x_1 + a_2 x_2 + \cdots + a_n x_n = b
+$$&lt;ul&gt;
+&lt;li&gt;$ x_1, x_2, \dots, x_n $: 미지수 (unknowns)&lt;/li&gt;
+&lt;li&gt;$ a_1, a_2, \dots, a_n $: 계수 (coefficients)&lt;/li&gt;
+&lt;li&gt;$ b $: 상수항 (constant term)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="-행렬-형태로-표현"&gt;🧮 행렬 형태로 표현&lt;/h2&gt;
+$$
+\begin{aligned}
+2x + 3y &amp;= 8 \\
+4x - y &amp;= 2
+\end{aligned}
+$$&lt;p&gt;을 행렬 곱셈 형태로 다음과 같이 표현할 수 있다:&lt;/p&gt;</description></item></channel></rss>

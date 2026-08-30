@@ -1,0 +1,67 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_c++/language_core/>language core</a></div><h1>Inline</h1></header><div class="doc-body post-body"><h1 id=inline>Inline</h1><p><code>inline</code>은 이름 때문에 가장 오해가 많은 키워드다. 결론부터: <strong>현대 C++에서 inline의 실제 의미는 &ldquo;인라인 확장 힌트"가 아니라 &ldquo;여러 번역 단위에 같은 정의가 있어도 하나로 취급하라&rdquo;(ODR 완화)다.</strong> 최적화는 컴파일러가 inline 키워드와 무관하게 알아서 한다.</p><h2 id=1-전제--odr-one-definition-rule>1. 전제 — ODR (One Definition Rule)</h2><p>프로그램 전체에서 하나의 함수/변수는 <strong>정의가 정확히 한 번</strong>이어야 한다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// util.h
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>int</span> a, <span style=color:#66d9ef>int</span> b) { <span style=color:#66d9ef>return</span> a <span style=color:#f92672>+</span> b; }   <span style=color:#75715e>// 정의를 헤더에 둠
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// a.cpp, b.cpp 둘 다 util.h를 include
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// → add의 정의가 두 번역 단위에 존재
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// → 링크 에러: multiple definition of `add(int, int)`
+</span></span></span></code></pre></div><ul><li>헤더는 여러 .cpp에 include되므로, <strong>헤더에 (비-inline) 정의를 쓰면 링크가 깨진다</strong></li><li>그래서 전통적으로 헤더에는 선언만, 정의는 .cpp에 두는 것이 규칙이었다</li></ul><h2 id=2-inline의-진짜-의미--odr-완화>2. inline의 진짜 의미 — ODR 완화</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// util.h
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>inline</span> <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>int</span> a, <span style=color:#66d9ef>int</span> b) { <span style=color:#66d9ef>return</span> a <span style=color:#f92672>+</span> b; }   <span style=color:#75715e>// ✅ 어느 .cpp에 몇 번 include돼도 OK
+</span></span></span></code></pre></div><p><code>inline</code>이 붙으면: <strong>&ldquo;이 정의는 여러 번역 단위에 나타나도 된다. 모두 동일하며, 링커야, 하나만 골라 써라.&rdquo;</strong></p><ul><li>링커가 중복 정의를 에러로 삼는 대신 하나로 접는다(fold)</li><li>헤더 온리 라이브러리가 가능한 이유가 바로 이것</li><li>클래스 정의 <strong>안에</strong> 몸체를 쓴 멤버 함수는 자동으로 inline — 헤더의 클래스 몸체 안 함수가 링크 에러를 안 내는 이유</li></ul><p><strong>&ldquo;인라인 확장 힌트"로서의 inline은 사실상 죽은 의미다:</strong></p><ul><li>현대 컴파일러는 inline 키워드 유무와 무관하게 비용/이득을 계산해 스스로 인라인 확장을 결정한다 (키워드가 없어도 하고, 있어도 무시한다)</li><li>확장을 정말 강제하고 싶을 때 쓰는 것은 컴파일러 확장인 <code>__attribute__((always_inline))</code> (GCC/Clang), <code>__forceinline</code> (MSVC) — 표준 inline이 아니다</li><li><a class=inline-link href=/Study/basic_c++/language_core/static/>static</a>
+함수와의 차이: static은 번역 단위마다 <strong>별개의 사본</strong>(internal linkage)을 만들고, inline은 <strong>하나로 합쳐질 동일 정의</strong>(external linkage 유지)다. 함수 주소를 비교하면 static은 .cpp마다 다르고 inline은 같다</li></ul><h2 id=3-inline-변수-c17>3. inline 변수 (C++17)</h2><p>C++17부터 변수에도 inline을 붙일 수 있다. <strong>헤더에 전역 변수/상수를 정의하는 문제의 최종 해법.</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// config.h — C++17 이전의 고민
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#66d9ef>int</span> max_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>;          <span style=color:#75715e>// internal linkage — .cpp마다 사본 (상수라 대개 무해하지만 주소가 다름)
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>extern</span> <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>int</span> timeout;          <span style=color:#75715e>// 선언만 하고 정의는 .cpp에 — 두 파일 관리
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// C++17 — 한 줄로 끝
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>inline</span> <span style=color:#66d9ef>constexpr</span> <span style=color:#66d9ef>int</span> max_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>;   <span style=color:#75715e>// 프로그램 전체에서 단 하나의 개체
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>inline</span> <span style=color:#66d9ef>int</span> global_counter <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;         <span style=color:#75715e>// 가변 전역도 헤더에 정의 가능 (하나로 접힘)
+</span></span></span></code></pre></div><ul><li><code>inline constexpr</code> — 요즘 라이브러리 헤더에서 흔히 보는 관용구. 컴파일 타임 상수(<a class=inline-link href=/Study/basic_c++/language_core/constexpr/>Constexpr</a>
+)이면서 프로그램 전체에 하나만 존재</li><li>모든 번역 단위에서 <strong>주소가 같다</strong>는 것이 핵심 (사본 방식은 주소 비교, ODR-use 시 문제가 될 수 있음)</li></ul><h2 id=4-constexpr과의-관계>4. constexpr과의 관계</h2><table><thead><tr><th>규칙</th><th>의미</th></tr></thead><tbody><tr><td><code>constexpr</code> <strong>함수</strong>는 암시적으로 inline</td><td>헤더에 정의해도 ODR 위반 없음 — constexpr 함수를 헤더에 두는 이유. 컴파일 타임 평가를 하려면 각 번역 단위가 함수의 <strong>몸체</strong>를 볼 수 있어야 하므로 설계상 필연</td></tr><tr><td><code>constexpr</code> <strong>static 멤버 변수</strong>는 C++17부터 암시적 inline</td><td>클래스 밖 별도 정의(<code>const int C::N;</code>)가 필요 없어졌다</td></tr><tr><td><code>constexpr</code> <strong>일반 변수</strong>는 inline이 아님</td><td>헤더의 <code>constexpr int x = 1;</code>은 번역 단위마다 사본 → 하나로 만들려면 명시적으로 <code>inline constexpr</code></td></tr></tbody></table><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Config</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>constexpr</span> <span style=color:#66d9ef>int</span> N <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span>;    <span style=color:#75715e>// C++17부터 이 한 줄로 정의까지 완료 (암시적 inline)
+</span></span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// C++14 이전엔 ODR-use 시 .cpp에 추가로 필요했다:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// constexpr int Config::N;
+</span></span></span></code></pre></div><h2 id=5-정리>5. 정리</h2><table><thead><tr><th>상황</th><th>선택</th></tr></thead><tbody><tr><td>헤더에 함수 정의를 두고 싶다</td><td><code>inline</code> (또는 <code>constexpr</code>이면 자동)</td></tr><tr><td>헤더에 컴파일 타임 상수를 두고 싶다</td><td><code>inline constexpr</code> 변수</td></tr><tr><td>헤더에 가변 전역 변수를 두고 싶다</td><td><code>inline</code> 변수 (C++17) — 정말 전역이 필요한지는 별개 문제</td></tr><tr><td>.cpp 내부 전용 헬퍼</td><td><a class=inline-link href=/Study/basic_c++/language_core/static/>static</a>
+또는 익명 namespace — inline과 목적이 다름</td></tr><tr><td>인라인 확장을 강제하고 싶다</td><td>표준 방법 없음 — <code>always_inline</code>/<code>__forceinline</code> (컴파일러 확장), 그 전에 컴파일러를 믿을 것</td></tr></tbody></table><ul><li><strong>inline = &ldquo;하나로 접어라&rdquo;(링크 의미론), 인라인 확장 = 컴파일러의 최적화 결정.</strong> 이 둘을 분리해서 기억하면 혼란이 없다</li><li>클래스 몸체 안 멤버 함수, constexpr 함수, 템플릿은 모두 사실상 inline 취급 — &ldquo;헤더에 정의가 살아도 되는 것들"의 목록이다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

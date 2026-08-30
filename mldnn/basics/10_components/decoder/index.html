@@ -1,0 +1,60 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/basics/10_components/>10 components</a></div><h1>Decoder</h1></header><div class="doc-body post-body"><p>s</p><h1 id=-딥러닝에서-디코더decoder란>🧠 딥러닝에서 디코더(Decoder)란?</h1><p>디코더는 딥러닝 모델에서 **잠재 벡터(latent vector)**를 받아서, 이를 기반으로 <strong>원하는 출력 형태로 복원 또는 변환</strong>하는 부분.<br>인코더가 입력을 요약하는 역할이라면, 디코더는 <strong>그 요약된 정보를 풀어내는 역할</strong>을 한다.</p><hr><h2 id=-디코더의-위치-및-역할>✅ 디코더의 위치 및 역할</h2><pre class=mermaid>flowchart LR
+    I[&#34;Input&#34;] --&gt; E[&#34;Encoder&#34;] --&gt; Z[&#34;Latent vector z&#34;] --&gt; D[&#34;Decoder&#34;] --&gt; O[&#34;Output&#34;]</pre><ul><li><strong>입력(Input)</strong>: 원시 데이터 (이미지, 텍스트 등)</li><li><strong>인코더(Encoder)</strong>: 입력을 잠재 벡터 z로 변환</li><li><strong>디코더(Decoder)</strong>: z로부터 출력 생성</li><li><strong>출력(Output)</strong>: 예측된 결과 (복원 이미지, 번역된 문장 등)</li></ul><hr><h2 id=-예시-autoencoder>📦 예시: Autoencoder</h2><pre class=mermaid>flowchart TD
+    A[&#34;Latent vector z&#34;] --&gt; B[&#34;Linear → ReLU&lt;br/&gt;디코더 hidden layer&#34;] --&gt; C[&#34;Linear → Sigmoid&lt;br/&gt;디코더 출력&#34;] --&gt; D[&#34;784차원 복원된 이미지 벡터&#34;]</pre><p>수학적으로:</p>\[
+\hat{x} = f_{\text{dec}}(z) = \sigma(W_d z + b_d)
+\]<hr><h2 id=-디코더-내부-구성-요소>🧱 디코더 내부 구성 요소</h2><table><thead><tr><th>구성 요소</th><th>설명</th></tr></thead><tbody><tr><td>Linear Layer</td><td>z를 출력 공간으로 맵핑</td></tr><tr><td>Activation</td><td>출력 형태에 맞는 활성화 함수 사용</td></tr><tr><td>Upsampling</td><td>이미지 복원 시, 해상도 확장에 사용</td></tr><tr><td>ConvTranspose</td><td>이미지 업샘플링에 사용되는 역컨볼루션</td></tr><tr><td>Attention (NLP)</td><td>문맥을 반영하며 출력 생성 (Transformer 디코더)</td></tr></tbody></table><hr><h2 id=-디코더-vs-일반-히든-레이어>🧠 디코더 vs 일반 히든 레이어</h2><ul><li>디코더는 <strong>히든 레이어 집합이지만 &ldquo;출력 생성을 위한 역할"에 집중된 블록</strong></li><li>인코더의 반대 방향 흐름을 가짐</li></ul><hr><h2 id=-pytorch-예시-코드>🧠 PyTorch 예시 코드</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn <span style=color:#66d9ef>as</span> nn
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Decoder</span>(nn<span style=color:#f92672>.</span>Module):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>layers <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Sequential(
+</span></span><span style=display:flex><span>            nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>256</span>),
+</span></span><span style=display:flex><span>            nn<span style=color:#f92672>.</span>ReLU(),
+</span></span><span style=display:flex><span>            nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>784</span>),
+</span></span><span style=display:flex><span>            nn<span style=color:#f92672>.</span>Sigmoid()
+</span></span><span style=display:flex><span>        )
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, z):
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>layers(z)  <span style=color:#75715e># output reconstruction</span></span></span></code></pre></div><hr><h2 id=-요약>🔚 요약</h2><table><thead><tr><th>항목</th><th>설명</th></tr></thead><tbody><tr><td>목적</td><td>잠재 벡터로부터 출력 생성</td></tr><tr><td>내부 구성</td><td>여러 히든 레이어로 구성된 출력 생성용 블록</td></tr><tr><td>사용 위치</td><td>인코더 다음, 출력 직전</td></tr><tr><td>활용 분야</td><td>Autoencoder, 번역기(Seq2Seq), U-Net, GPT 등</td></tr></tbody></table></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

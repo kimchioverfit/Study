@@ -1,0 +1,97 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/2_backbone/>Backbone</a></div><h1>2.AlexNet</h1></header><div class="doc-body post-body"><h1 id=alexnet-2012>AlexNet (2012)</h1><p>📄 논문: <a class=inline-link href=https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html>ImageNet Classification with Deep Convolutional Neural Networks</a>
+— Krizhevsky, Sutskever & Hinton, NeurIPS 2012</p><blockquote><p><strong>Krizhevsky, Sutskever, Hinton</strong>이 발표한 CNN. <strong>ILSVRC 2012</strong>(ImageNet 대회)에서 top-5 에러율 **15.3%**로 2위(26.2%)를 압도적으로 이기며 우승했다.
+&ldquo;딥러닝이 실제로 통한다"는 것을 대규모 실전 데이터로 증명한 첫 사례로, 이후 <a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+·GoogLeNet·<a class=inline-link href=/Study/mldnn/dnn/2_backbone/4.resnet/>ResNet</a>
+등으로 이어지는 <strong>딥러닝 붐의 시발점</strong>이 된 모델이다.</p></blockquote><p><a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>CNN</a>
+의 기본 개념(합성곱, 풀링, Flatten+FC)을 먼저 이해하고 오면 이 문서를 읽기 수월하다.</p><hr><h2 id=-1-등장-배경--왜-alexnet이-중요한가>🔷 1. 등장 배경 — 왜 AlexNet이 중요한가</h2><p>2012년 이전까지 이미지 인식은 <strong>SIFT, HOG 같은 사람이 직접 설계한 특징(hand-crafted feature)</strong> + SVM 조합이 주류였고, ILSVRC 최고 성적도 top-5 에러 <strong>26%대</strong>에 머물러 있었다.</p><p>CNN 자체는 1998년 LeNet-5부터 존재했지만 대중화되지 못했는데, 이유는 크게 두 가지였다.</p><table><thead><tr><th>걸림돌</th><th>내용</th></tr></thead><tbody><tr><td><strong>연산량 부족</strong></td><td>대규모 CNN을 학습시킬 만한 컴퓨팅 파워가 없었음</td></tr><tr><td><strong>데이터 부족 → 과적합</strong></td><td>큰 모델을 학습시킬 만큼 크고 다양한 라벨 데이터셋이 없었음</td></tr></tbody></table><p>AlexNet은 이 두 문제를 다음으로 정면 돌파했다.</p><ul><li><strong>데이터</strong>: ImageNet(1000개 클래스, 약 120만 장의 학습 이미지) 사용</li><li><strong>연산</strong>: GPU(NVIDIA GTX 580, 3GB 메모리 2장) 병렬 학습 도입</li><li><strong>과적합 방지</strong>: Dropout, 데이터 증강(Data Augmentation) 등 정규화 기법 적극 도입</li></ul><p>즉 AlexNet의 성공은 &ldquo;새로운 이론"이 아니라, <strong>깊은 CNN + 대용량 데이터 + GPU 학습 + 정규화 기법</strong>을 실전 스케일로 처음 결합해낸 <strong>엔지니어링의 승리</strong>에 가깝다.</p><hr><h2 id=-2-전체-구조-개요>🔷 2. 전체 구조 개요</h2><p><strong>5개의 Convolution Layer + 3개의 FC Layer</strong>, 총 8개의 학습 가능한 층으로 구성된다. (Pooling·정규화 층은 파라미터가 없어 층수에서 제외)</p><ul><li>입력: $224\times224\times3$ (RGB) — 단, 실제 출력 크기 계산이 맞으려면 $227\times227\times3$ 이어야 함 (논문 원문의 잘 알려진 오탈자. 아래 §3에서 $227$ 기준으로 계산)</li><li>파라미터: 약 <strong>6,200만 개</strong></li><li>뉴런 수: 약 65만 개</li></ul><pre class=mermaid>flowchart LR
+    IN[&#34;입력&lt;br/&gt;227×227×3&#34;] --&gt; C1[&#34;Conv1&lt;br/&gt;11×11, 96, s4&#34;] --&gt; R1[&#34;ReLU+LRN&#34;] --&gt; P1[&#34;MaxPool&lt;br/&gt;3×3, s2&#34;]
+    P1 --&gt; C2[&#34;Conv2&lt;br/&gt;5×5, 256&#34;] --&gt; R2[&#34;ReLU+LRN&#34;] --&gt; P2[&#34;MaxPool&lt;br/&gt;3×3, s2&#34;]
+    P2 --&gt; C3[&#34;Conv3&lt;br/&gt;3×3, 384&#34;] --&gt; R3[&#34;ReLU&#34;]
+    R3 --&gt; C4[&#34;Conv4&lt;br/&gt;3×3, 384&#34;] --&gt; R4[&#34;ReLU&#34;]
+    R4 --&gt; C5[&#34;Conv5&lt;br/&gt;3×3, 256&#34;] --&gt; R5[&#34;ReLU&#34;] --&gt; P3[&#34;MaxPool&lt;br/&gt;3×3, s2&#34;]
+    P3 --&gt; FL[&#34;Flatten&lt;br/&gt;6×6×256=9216&#34;]
+    FL --&gt; F6[&#34;FC6&lt;br/&gt;4096&#34;] --&gt; D1[&#34;ReLU+Dropout&#34;]
+    D1 --&gt; F7[&#34;FC7&lt;br/&gt;4096&#34;] --&gt; D2[&#34;ReLU+Dropout&#34;]
+    D2 --&gt; F8[&#34;FC8&lt;br/&gt;1000&#34;] --&gt; SM[&#34;Softmax&#34;]</pre><blockquote><p>Conv1<del>Conv5는 <strong>특징 추출부</strong>, FC6</del>FC8은 <strong>분류부</strong>로 <a class=inline-link href=./1.CNN.md#-2-%ec%a0%84%ec%b2%b4-%ea%b5%ac%ec%a1%b0-architecture>CNN 전체 구조</a>
+와 동일한 큰 그림을 따른다.</p></blockquote><h3 id=-2-gpu-분할-구조-alexnet의-상징적인-특징>📌 2-GPU 분할 구조 (AlexNet의 상징적인 특징)</h3><p>당시 GPU(GTX 580) 메모리가 <strong>3GB</strong>로 한 장에 전체 모델이 올라가지 않아, 저자들은 네트워크를 <strong>2개의 GPU에 절반씩 나눠</strong> 학습시켰다. 이는 알고리즘적 아이디어가 아니라 <strong>하드웨어 제약이 낳은 설계</strong>다.</p><pre class=mermaid>flowchart LR
+    IN[&#34;입력&lt;br/&gt;227×227×3&#34;] --&gt; C1[&#34;Conv1&lt;br/&gt;96 filters&#34;]
+    subgraph GPU1[&#34;GPU 1&#34;]
+        direction TB
+        G1C2[&#34;Conv2&lt;br/&gt;128&#34;] --&gt; G1C3[&#34;Conv3&lt;br/&gt;192&#34;]
+        G1C3 --&gt; G1C4[&#34;Conv4&lt;br/&gt;192&#34;] --&gt; G1C5[&#34;Conv5&lt;br/&gt;128&#34;]
+    end
+    subgraph GPU2[&#34;GPU 2&#34;]
+        direction TB
+        G2C2[&#34;Conv2&lt;br/&gt;128&#34;] --&gt; G2C3[&#34;Conv3&lt;br/&gt;192&#34;]
+        G2C3 --&gt; G2C4[&#34;Conv4&lt;br/&gt;192&#34;] --&gt; G2C5[&#34;Conv5&lt;br/&gt;128&#34;]
+    end
+    C1 --&gt; G1C2
+    C1 --&gt; G2C2
+    G1C2 -.-&gt;|&#34;Conv3만 교차 연결&#34;| G2C3
+    G2C2 -.-&gt;|&#34;Conv3만 교차 연결&#34;| G1C3
+    G1C5 --&gt; FC[&#34;FC6~FC8&lt;br/&gt;(양쪽 결과 합침)&#34;]
+    G2C5 --&gt; FC</pre><ul><li>Conv2, Conv4, Conv5는 <strong>같은 GPU 안의 feature map끼리만</strong> 연결(채널을 반씩 나눠 독립적으로 처리)</li><li><strong>Conv3만 예외적으로 양쪽 GPU의 feature map을 모두 입력받는다</strong> (두 GPU 간 통신은 이 지점 하나뿐 → 통신 비용 최소화)</li><li>오늘날 GPU는 메모리가 충분하므로, 최신 구현체들은 이 분할 없이 <strong>하나의 GPU에서 전체 채널을 그대로 연결</strong>한 버전으로 재현하는 경우가 많다.</li></ul><hr><h2 id=-3-레이어별-상세-입출력-크기-계산>🔷 3. 레이어별 상세 (입출력 크기 계산)</h2><p><a class=inline-link href=./1.CNN.md#-5-%ec%b6%9c%eb%a0%a5-%ed%81%ac%ea%b8%b0-%ea%b3%84%ec%82%b0-%ea%b3%b5%ec%8b%9d>CNN 출력 크기 공식</a>
+$O = \lfloor (N+2P-F)/S \rfloor + 1$ 을 그대로 적용한다. (아래는 2-GPU 분할을 무시하고 전체 채널 기준으로 계산 — 채널 수 자체는 분할 여부와 무관)</p><table><thead><tr><th>층</th><th>종류</th><th>필터/커널</th><th>Stride</th><th>Padding</th><th>출력 크기</th><th>비고</th></tr></thead><tbody><tr><td>Input</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$227\times227\times3$</td><td></td></tr><tr><td>Conv1</td><td>Conv</td><td>$11\times11$, 96개</td><td>4</td><td>0</td><td>$55\times55\times96$</td><td>$(227-11)/4+1=55$</td></tr><tr><td>Pool1</td><td>MaxPool</td><td>$3\times3$</td><td>2</td><td>0</td><td>$27\times27\times96$</td><td>Overlapping Pooling</td></tr><tr><td>Conv2</td><td>Conv</td><td>$5\times5$, 256개</td><td>1</td><td>2</td><td>$27\times27\times256$</td><td></td></tr><tr><td>Pool2</td><td>MaxPool</td><td>$3\times3$</td><td>2</td><td>0</td><td>$13\times13\times256$</td><td>Overlapping Pooling</td></tr><tr><td>Conv3</td><td>Conv</td><td>$3\times3$, 384개</td><td>1</td><td>1</td><td>$13\times13\times384$</td><td>유일하게 두 GPU 교차 연결</td></tr><tr><td>Conv4</td><td>Conv</td><td>$3\times3$, 384개</td><td>1</td><td>1</td><td>$13\times13\times384$</td><td></td></tr><tr><td>Conv5</td><td>Conv</td><td>$3\times3$, 256개</td><td>1</td><td>1</td><td>$13\times13\times256$</td><td></td></tr><tr><td>Pool3</td><td>MaxPool</td><td>$3\times3$</td><td>2</td><td>0</td><td>$6\times6\times256$</td><td>Overlapping Pooling</td></tr><tr><td>Flatten</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$9216$</td><td>$6\times6\times256$</td></tr><tr><td>FC6</td><td>FC</td><td>-</td><td>-</td><td>-</td><td>$4096$</td><td>Dropout 0.5</td></tr><tr><td>FC7</td><td>FC</td><td>-</td><td>-</td><td>-</td><td>$4096$</td><td>Dropout 0.5</td></tr><tr><td>FC8</td><td>FC</td><td>-</td><td>-</td><td>-</td><td>$1000$</td><td>Softmax (ImageNet 클래스 수)</td></tr></tbody></table><h3 id=-파라미터-수-계산-예시>🧮 파라미터 수 계산 예시</h3><p><a class=inline-link href=./1.CNN.md#-8-%ed%8c%8c%eb%9d%bc%eb%af%b8%ed%84%b0-vs-%ed%95%98%ec%9d%b4%ed%8d%bc%ed%8c%8c%eb%9d%bc%eb%af%b8%ed%84%b0>CNN §8 공식</a>
+$\text{Params} = (F\times F\times C_{in}+1)\times C_{out}$ 을 적용하면:</p><div class=math-block>\[\text{Conv1} = (11\times11\times3 + 1)\times 96 = 34{,}944\]</div><div class=math-block>\[\text{FC6} = (9216 + 1)\times 4096 \approx 37{,}750{,}000\]</div><blockquote><p><strong>FC6 하나의 파라미터 수가 Conv1~Conv5 전체(약 230만 개)보다 훨씬 크다.</strong> Flatten 직후의 FC layer가 파라미터 대부분을 차지하는 구조적 특징은 <a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+에서도 동일하게 나타나며, 이후 <a class=inline-link href=./1.CNN.md#-7-%eb%b6%84%eb%a5%98%eb%b6%80-classification-head--%ec%a0%84%ed%86%b5-%eb%b0%a9%ec%8b%9d-vs-%ed%98%84%eb%8c%80-%eb%b0%a9%ec%8b%9d>Global Average Pooling</a>
+이 등장하는 배경이 된다.
+전체 파라미터는 약 <strong>6,200만 개</strong>.</p></blockquote><hr><h2 id=-4-핵심-기여--혁신-포인트>🔷 4. 핵심 기여 / 혁신 포인트</h2><p>AlexNet이 CNN 이론 자체를 새로 만든 것은 아니지만, 아래 6가지를 실전 규모에서 처음으로 함께 입증했다.</p><h3 id=-relu-활성화-함수>① ReLU 활성화 함수</h3><p>기존 CNN들은 <a class=inline-link href=/Study/mldnn/basics/30_activation_functions/1.sigmoid/>Sigmoid</a>
+/Tanh를 사용했는데, 이는 입력이 커지면 기울기가 0에 가까워지는 <strong>포화(saturation)</strong> 문제가 있어 학습이 느렸다.</p><p>AlexNet은 <a class=inline-link href=/Study/mldnn/basics/30_activation_functions/3.relu/>ReLU</a>
+$f(x)=\max(0,x)$ 를 사용해 <strong>동일한 에러율 도달까지 Tanh 대비 약 6배 빠르게 수렴</strong>함을 실험으로 보였다. 이후 거의 모든 CNN의 기본 활성화 함수가 되었다.</p><h3 id=-overlapping-pooling>② Overlapping Pooling</h3><p>일반적인 풀링은 stride $S$ = 커널 크기 $F$ 로 영역이 겹치지 않게 설계하지만, AlexNet은 $F=3, S=2$ 로 <strong>커널이 서로 겹치도록(overlap)</strong> 풀링했다.</p><ul><li>효과: top-1/top-5 에러를 각각 0.4%p/0.3%p 감소시키고, 약간의 과적합 억제 효과도 관찰됨</li></ul><h3 id=-local-response-normalization-lrn>③ Local Response Normalization (LRN)</h3><p>생물학적 뉴런의 <strong>측면 억제(lateral inhibition)</strong> — 강하게 활성화된 뉴런이 주변 뉴런의 반응을 억제하는 현상 — 에서 착안한 정규화 기법. 같은 위치 $(x,y)$에서 <strong>인접한 채널끼리</strong> 정규화한다.</p><div class=math-block>\[b^{i}_{x,y} = \dfrac{a^{i}_{x,y}}{\left(k + \alpha \sum_{j=\max(0,i-n/2)}^{\min(N-1,i+n/2)} \left(a^{j}_{x,y}\right)^2\right)^{\beta}}\]</div><p>논문에서 사용한 값: $k=2,\ n=5,\ \alpha=10^{-4},\ \beta=0.75$. Conv1, Conv2 이후에 적용되어 top-1/top-5 에러를 각각 1.4%p/1.2%p 낮췄다고 보고됨.</p><blockquote><p>⚠️ <strong>이후 <a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+논문 등에서 LRN이 실제로는 정확도 향상에 거의 기여하지 않고 연산·메모리만 늘린다는 것이 밝혀져 폐기되었다.</strong> 현재는 Batch Normalization 등으로 대체되어, 최신 아키텍처에서 LRN을 보기는 어렵다.</p></blockquote><h3 id=-dropout>④ Dropout</h3><p>FC6, FC7에 <strong>확률 0.5</strong>로 적용. 학습 시 매 forward pass마다 각 뉴런을 랜덤하게 꺼서(출력을 0으로 만들어) 특정 뉴런 조합에 과도하게 의존(co-adaptation)하는 것을 막는다.</p><ul><li>직관: 매번 다른 부분망(sub-network)을 학습시키는 것과 같아, 여러 모델을 <strong>암묵적으로 앙상블</strong>하는 효과</li><li>테스트 시에는 모든 뉴런을 사용하되, 학습 때 꺼졌던 비율만큼 출력을 스케일링해 학습/추론 시 기대값을 맞춘다</li><li>대신 수렴에 필요한 반복 횟수가 약 2배로 늘어난다는 트레이드오프가 있음</li></ul><h3 id=-데이터-증강-data-augmentation>⑤ 데이터 증강 (Data Augmentation)</h3><p>라벨 데이터가 있어도 6,000만 파라미터 모델은 과적합되기 쉬워, <strong>레이블은 그대로 두고 이미지만 변형</strong>해 데이터를 늘렸다.</p><table><thead><tr><th>기법</th><th>방법</th></tr></thead><tbody><tr><td><strong>Crop + 수평 뒤집기</strong></td><td>$256\times256$ 원본에서 $224\times224$ 패치를 랜덤 위치로 추출 + 좌우 반전 → 이론상 데이터 약 2048배 증강 효과</td></tr><tr><td><strong>PCA Color Augmentation</strong></td><td>학습셋 전체 RGB 픽셀 값에 PCA를 수행, 주성분 방향으로 색상값을 랜덤하게 미세 조정 → 조명/색상 변화에 강건해짐</td></tr></tbody></table><h3 id=-gpu-병렬-학습>⑥ GPU 병렬 학습</h3><p>위 §2의 2-GPU 분할 구조. 순수 알고리즘 기여는 아니지만, <strong>&ldquo;딥러닝은 GPU로 학습한다"는 표준을 확립</strong>한 실용적 기여로 평가받는다.</p><hr><h2 id=-5-학습-설정-training-details>🔷 5. 학습 설정 (Training Details)</h2><table><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>Optimizer</td><td>SGD + Momentum ($0.9$)</td></tr><tr><td>Weight Decay</td><td>$0.0005$ (단순 규제가 아니라 학습 오차 자체를 줄이는 효과도 있었다고 저자들이 언급)</td></tr><tr><td>Batch Size</td><td>128</td></tr><tr><td>초기 Learning Rate</td><td>$0.01$, validation error가 개선되지 않으면 10으로 나눔 (총 3회 감소)</td></tr><tr><td>가중치 초기화</td><td>평균 0, 표준편차 0.01인 정규분포</td></tr><tr><td>Bias 초기화</td><td>Conv2/4/5, FC layer는 1 (초기 ReLU 활성을 촉진), Conv1/3은 0</td></tr><tr><td>학습 기간</td><td>90 epoch, GTX 580(3GB) 2장으로 약 5~6일 소요</td></tr></tbody></table><hr><h2 id=-6-결과-ilsvrc-2012>🔷 6. 결과 (ILSVRC 2012)</h2><table><thead><tr><th>모델</th><th>Top-5 Error</th></tr></thead><tbody><tr><td>기존 최고 성적 (SIFT + Fisher Vector 등)</td><td>26.2%</td></tr><tr><td><strong>AlexNet (단일 모델)</strong></td><td><strong>18.2%</strong></td></tr><tr><td><strong>AlexNet (7개 모델 앙상블)</strong></td><td><strong>15.3%</strong></td></tr></tbody></table><p>기존 방식 대비 top-5 에러를 <strong>10%p 이상</strong> 낮추며 압도적인 격차로 우승했다.</p><hr><h2 id=-7-한계점>🔷 7. 한계점</h2><ul><li><strong>Flatten → FC 구조의 파라미터 폭증</strong>: FC6 하나가 전체 conv layer 파라미터 총합을 넘어섬 (§3 참고). 이 문제는 이후 <a class=inline-link href=./1.CNN.md#-7-%eb%b6%84%eb%a5%98%eb%b6%80-classification-head--%ec%a0%84%ed%86%b5-%eb%b0%a9%ec%8b%9d-vs-%ed%98%84%eb%8c%80-%eb%b0%a9%ec%8b%9d>Global Average Pooling</a>
+으로 해결된다.</li><li><strong>LRN의 실효성 부족</strong>: §4-③에서 설명했듯 이후 연구에서 효과가 미미함이 밝혀져 폐기됨.</li><li><strong>큰 필터($11\times11$, $5\times5$)</strong>: 한 번에 넓은 영역을 보지만 파라미터 대비 비효율적. <a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+는 <strong>$3\times3$ 필터를 깊게 쌓는 것</strong>이 같은 <a class=inline-link href=./1.CNN.md#-3-%ed%95%a9%ec%84%b1%ea%b3%b1convolution-%ec%97%b0%ec%82%b0>수용영역(receptive field)</a>
+을 더 적은 파라미터로 얻을 수 있음을 보여 이 설계를 대체했다.</li><li><strong>2-GPU 분할</strong>: 순수 하드웨어 메모리 제약에 따른 설계라, 메모리가 넉넉한 현대 GPU 환경에서는 불필요한 구조.</li></ul><hr><h2 id=-8-의의-legacy>🔷 8. 의의 (Legacy)</h2><ul><li>ImageNet 우승으로 <strong>&ldquo;깊은 CNN + GPU + 대용량 데이터&rdquo;</strong> 조합이 실제로 통한다는 것을 최초로 실증 → 이후 학계·산업계 전반의 <strong>딥러닝 붐</strong>을 촉발.</li><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+, GoogLeNet, <a class=inline-link href=/Study/mldnn/dnn/2_backbone/4.resnet/>ResNet</a>
+등 후속 <a class=inline-link href=/Study/mldnn/basics/10_components/backbone/>Backbone</a>
+아키텍처 연구가 폭발적으로 이어짐.</li><li>객체 탐지 분야에서도 초기 <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+이 region proposal마다 특징을 추출하는 CNN으로 AlexNet을 그대로 채택했다.</li><li>ReLU, Dropout, 데이터 증강 등은 지금도 대부분의 딥러닝 모델에서 기본값처럼 쓰이는 <strong>표준 구성 요소</strong>가 되었다.</li></ul><hr><h2 id=-참조>📌 참조</h2><ul><li>원 논문: Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). <em>ImageNet Classification with Deep Convolutional Neural Networks</em>. NeurIPS 2012.</li><li>관련 문서: <a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>CNN</a>
+· <a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+· <a class=inline-link href=/Study/mldnn/dnn/2_backbone/4.resnet/>ResNet</a>
+· <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+· <a class=inline-link href=/Study/mldnn/basics/30_activation_functions/3.relu/>ReLU</a>
+· <a class=inline-link href=/Study/mldnn/basics/30_activation_functions/2.softmax/>Softmax</a>
+· <a class=inline-link href=/Study/mldnn/basics/30_activation_functions/1.sigmoid/>Sigmoid</a>
+· <a class=inline-link href=/Study/mldnn/basics/10_components/backbone/>Backbone</a></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

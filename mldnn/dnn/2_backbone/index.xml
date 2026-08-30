@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Backbone on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/</link><description>Recent content in Backbone on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/1.cnn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/1.cnn/</guid><description>&lt;h1 id="cnn-convolutional-neural-networks"&gt;CNN (Convolutional Neural Networks)&lt;/h1&gt;
+&lt;p&gt;📄 관련 논문: &lt;a class="inline-link" href="https://doi.org/10.1109/5.726791"&gt;Gradient-Based Learning Applied to Document Recognition (LeNet-5)&lt;/a&gt;
+ — LeCun et al., Proceedings of the IEEE 1998&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;합성곱 신경망&lt;/strong&gt; — 이미지/영상 데이터의 &lt;strong&gt;공간 정보(spatial information)&lt;/strong&gt; 를 유지한 채 특징을 추출하도록 설계된 신경망.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;대부분의 객체 탐지/세그멘테이션 모델(&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/2.r-cnn/"&gt;R-CNN&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/"&gt;Fast R-CNN&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/"&gt;Faster R-CNN&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+)은 이 CNN을 &lt;strong&gt;feature extractor(&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/backbone/"&gt;Backbone&lt;/a&gt;
+)&lt;/strong&gt; 로 사용한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-1-왜-cnn인가-dnn의-한계"&gt;🔷 1. 왜 CNN인가? (DNN의 한계)&lt;/h2&gt;
+&lt;p&gt;일반적인 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/00_foundations/0.basic/"&gt;DNN(MLP)&lt;/a&gt;
+은 이미지를 입력으로 받으려면 2차원 이미지를 1차원 벡터로 펴야 한다 (&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/vectorization_flattening/"&gt;Flattening&lt;/a&gt;
+).&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/2.alexnet/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/2.alexnet/</guid><description>&lt;h1 id="alexnet-2012"&gt;AlexNet (2012)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html"&gt;ImageNet Classification with Deep Convolutional Neural Networks&lt;/a&gt;
+ — Krizhevsky, Sutskever &amp;amp; Hinton, NeurIPS 2012&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Krizhevsky, Sutskever, Hinton&lt;/strong&gt;이 발표한 CNN. &lt;strong&gt;ILSVRC 2012&lt;/strong&gt;(ImageNet 대회)에서 top-5 에러율 **15.3%**로 2위(26.2%)를 압도적으로 이기며 우승했다.
+&amp;ldquo;딥러닝이 실제로 통한다&amp;quot;는 것을 대규모 실전 데이터로 증명한 첫 사례로, 이후 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/3.vgg/"&gt;VGG&lt;/a&gt;
+·GoogLeNet·&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/4.resnet/"&gt;ResNet&lt;/a&gt;
+ 등으로 이어지는 &lt;strong&gt;딥러닝 붐의 시발점&lt;/strong&gt;이 된 모델이다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/1.cnn/"&gt;CNN&lt;/a&gt;
+의 기본 개념(합성곱, 풀링, Flatten+FC)을 먼저 이해하고 오면 이 문서를 읽기 수월하다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="-1-등장-배경--왜-alexnet이-중요한가"&gt;🔷 1. 등장 배경 — 왜 AlexNet이 중요한가&lt;/h2&gt;
+&lt;p&gt;2012년 이전까지 이미지 인식은 &lt;strong&gt;SIFT, HOG 같은 사람이 직접 설계한 특징(hand-crafted feature)&lt;/strong&gt; + SVM 조합이 주류였고, ILSVRC 최고 성적도 top-5 에러 &lt;strong&gt;26%대&lt;/strong&gt;에 머물러 있었다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/3.vgg/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/3.vgg/</guid><description>&lt;h1 id="vgg-2014"&gt;VGG (2014)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1409.1556"&gt;Very Deep Convolutional Networks for Large-Scale Image Recognition&lt;/a&gt;
+ — Simonyan &amp;amp; Zisserman, ICLR 2015&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;$3\times3$ 필터만 깊게 쌓는 단순·균일한 구조로 깊이(depth)의 효과를 보인 backbone. ILSVRC 2014 준우승.
+앞: &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/2.alexnet/"&gt;AlexNet&lt;/a&gt;
+ / 뒤: &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/4.resnet/"&gt;ResNet&lt;/a&gt;
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;(본문 작성 예정 — 현재는 논문 링크만 정리해 둔 상태)&lt;/em&gt;&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/4.resnet/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/4.resnet/</guid><description>&lt;h1 id="resnet-2015"&gt;ResNet (2015)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1512.03385"&gt;Deep Residual Learning for Image Recognition&lt;/a&gt;
+ — He et al., CVPR 2016&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Residual(skip) connection으로 100층 이상의 깊은 네트워크 학습을 가능하게 한 backbone. ILSVRC 2015 우승.
+앞: &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/2_backbone/3.vgg/"&gt;VGG&lt;/a&gt;
+ / 이후 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/"&gt;Faster R-CNN&lt;/a&gt;
+, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/"&gt;Mask R-CNN&lt;/a&gt;
+ 등 대부분의 detection 모델이 기본 backbone으로 사용한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;(본문 작성 예정 — 현재는 논문 링크만 정리해 둔 상태)&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>

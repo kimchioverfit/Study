@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>20 training on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/</link><description>Recent content in 20 training on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/20_training/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/autograd/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/autograd/</guid><description>&lt;h1 id="autograd-자동-미분"&gt;Autograd (자동 미분)&lt;/h1&gt;
+&lt;p&gt;Autograd = &lt;strong&gt;Auto&lt;/strong&gt;matic &lt;strong&gt;Grad&lt;/strong&gt;ient.&lt;/p&gt;
+&lt;p&gt;순전파(forward) 연산을 수행하면서 &lt;strong&gt;연산 그래프(computational graph)&lt;/strong&gt; 를 자동으로 기록해두고,
+&lt;code&gt;backward()&lt;/code&gt; 호출 시 그 그래프를 거꾸로 타고 내려가며 &lt;strong&gt;연쇄 법칙(chain rule)&lt;/strong&gt; 으로 기울기를 계산해주는 엔진.&lt;/p&gt;
+&lt;p&gt;즉, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/20_training/dn_training_pipeline/"&gt;학습 파이프라인&lt;/a&gt;
+의 4~6단계에서&lt;/p&gt;
+&lt;pre class="mermaid"&gt;flowchart LR
+ A[&amp;#34;Forward&amp;lt;br/&amp;gt;(그래프 기록)&amp;#34;] --&amp;gt; B[&amp;#34;Loss&amp;#34;] --&amp;gt; C[&amp;#34;loss.backward()&amp;lt;br/&amp;gt;(그래프 역주행)&amp;#34;] --&amp;gt; D[&amp;#34;param.grad 채워짐&amp;#34;] --&amp;gt; E[&amp;#34;optimizer.step()&amp;#34;]&lt;/pre&gt;&lt;p&gt;&lt;code&gt;Backpropagation&lt;/code&gt; 을 사람이 직접 미분식으로 짜지 않아도 되게 해주는 것이 autograd 의 역할이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="1-왜-필요한가"&gt;1. 왜 필요한가&lt;/h2&gt;
+&lt;p&gt;미분을 구하는 방법은 크게 3가지가 있다.&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;방법&lt;/th&gt;
+					&lt;th&gt;설명&lt;/th&gt;
+					&lt;th&gt;문제점&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;수치 미분 (Numerical)&lt;/td&gt;
+					&lt;td&gt;$\frac{f(x+h)-f(x)}{h}$&lt;/td&gt;
+					&lt;td&gt;파라미터 1개당 forward 2번 → 수억 개 파라미터에서는 불가능. 오차도 큼&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;기호 미분 (Symbolic)&lt;/td&gt;
+					&lt;td&gt;수식을 미분한 수식을 유도&lt;/td&gt;
+					&lt;td&gt;식이 폭발적으로 커짐 (expression swell)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;자동 미분 (Automatic)&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;기본 연산의 미분 규칙을 알고 있고, chain rule 로 조합&lt;/td&gt;
+					&lt;td&gt;정확하고, 역전파 1번이면 &lt;strong&gt;모든 파라미터&lt;/strong&gt;의 기울기를 얻음&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Autograd 는 세 번째 방식이며, 그중에서도 &lt;strong&gt;reverse mode&lt;/strong&gt;(역방향 모드) 자동 미분이다.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/dn_training_pipeline/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/dn_training_pipeline/</guid><description>&lt;h1 id="deep-learning-training-pipeline"&gt;Deep learning training pipeline&lt;/h1&gt;
+&lt;p&gt;딥러닝의 순서&lt;/p&gt;
+&lt;img src="https://kimchioverfit.github.io/Study/imgs/DNN.png"&gt;
+&lt;pre class="mermaid"&gt;flowchart LR
+ A[&amp;#34;Input&amp;#34;] --&amp;gt; B[&amp;#34;Model&amp;#34;] --&amp;gt; C[&amp;#34;Prediction&amp;#34;] --&amp;gt; D[&amp;#34;Loss function&amp;#34;] --&amp;gt; E[&amp;#34;Gradient descent&amp;#34;] --&amp;gt; F[&amp;#34;Backpropagation&amp;#34;]&lt;/pre&gt;&lt;p&gt;Model 내부에는 활성함수가 들어가있고, 그 결과값을 가지고&lt;/p&gt;
+&lt;p&gt;손실함수를 계산한다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;Input Layer
+예: 이미지, 텍스트, 센서값 등
+↓&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/hidden_layer/"&gt;Hidden Layers (Fully Connected or CNN)&lt;/a&gt;
+
+다양한 비선형 변환을 통해 특징 추출
+ReLU 같은 활성화 함수 사용
+Input layer 와 Output layer 사이의 모든 층.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/10_components/nnfunction/"&gt;&lt;code&gt;nn.Linear, nn.Conv2d&lt;/code&gt;&lt;/a&gt;
+, torch.reshape 등 차원축소하는 여러 함수들이 특징 추출 레이어로 사용됨.&lt;br&gt;
+↓&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href=""&gt;Output Layer&lt;/a&gt;
+
+↓&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/20_training/loss_function/"&gt;Loss Function (손실함수)&lt;/a&gt;
+
+↓&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href=""&gt;Optimizer&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/loss_function/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/20_training/loss_function/</guid><description>&lt;h1 id="loss-function"&gt;Loss function&lt;/h1&gt;
+&lt;p&gt;손실 함수&lt;/p&gt;
+&lt;p&gt;손실 함수는 분류에 따라 다른 함수를 사용한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/50_methods/classification/"&gt;Classification&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/50_methods/regression/"&gt;Regression&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/basics/50_methods/etc/"&gt;ETC&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;</description></item></channel></rss>

@@ -1,0 +1,63 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_cs/concurrency/>Concurrency</a></div><h1>Parallel Models</h1></header><div class="doc-body post-body"><h1 id=병렬-프로그래밍-모델--태스크-병렬-vs-스레드-병렬>병렬 프로그래밍 모델 — 태스크 병렬 vs 스레드 병렬</h1><p>&ldquo;루프를 병렬로 돌린다"는 같은 목표를 두고 Windows(PPL), 리눅스(pthread/OpenMP/TBB), C++ 표준이 각자 어떤 추상화를 제공하는지 비교. 개념 자체는 OS 무관이다.</p><h2 id=1-추상화-레벨의-차이>1. 추상화 레벨의 차이</h2><p>Windows PPL(Parallel Patterns Library)의 <code>concurrency::parallel_for</code>는 pthread와 <strong>추상화 레벨 자체가 다르다.</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// Windows PPL — &#34;무엇을 병렬로 할지&#34;만 선언
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;ppl.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>concurrency<span style=color:#f92672>::</span>parallel_for(<span style=color:#ae81ff>0</span>, N, [<span style=color:#f92672>&amp;</span>](<span style=color:#66d9ef>int</span> i) {
+</span></span><span style=display:flex><span>    results[i] <span style=color:#f92672>=</span> heavy_compute(data[i]);
+</span></span><span style=display:flex><span>});</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>// pthread — 스레드 수 결정, 범위 분할, 생성, join까지 전부 수동
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> t <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; t <span style=color:#f92672>&lt;</span> NTHREAD; t<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>    range[t] <span style=color:#f92672>=</span> (<span style=color:#66d9ef>range_t</span>){ .start <span style=color:#f92672>=</span> t <span style=color:#f92672>*</span> N <span style=color:#f92672>/</span> NTHREAD, .end <span style=color:#f92672>=</span> (t <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>*</span> N <span style=color:#f92672>/</span> NTHREAD };
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pthread_create</span>(<span style=color:#f92672>&amp;</span>tid[t], NULL, worker, <span style=color:#f92672>&amp;</span>range[t]);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> t <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; t <span style=color:#f92672>&lt;</span> NTHREAD; t<span style=color:#f92672>++</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pthread_join</span>(tid[t], NULL);</span></span></code></pre></div><table><thead><tr><th>항목</th><th><code>concurrency::parallel_for</code> (PPL)</th><th>pthread</th></tr></thead><tbody><tr><td>추상화 레벨</td><td><strong>태스크 병렬</strong> — 작업을 선언하면 런타임이 알아서 분배</td><td><strong>스레드 병렬</strong> — 실행 흐름을 직접 관리</td></tr><tr><td>스레드 관리</td><td>내장 스레드 풀 + 워크 스틸링 스케줄러가 자동 처리</td><td>생성/분할/join 전부 수동</td></tr><tr><td>부하 불균형</td><td>워크 스틸링으로 자동 완화 (i마다 작업량이 달라도 OK)</td><td>정적 분할이면 가장 느린 스레드가 전체를 지배</td></tr><tr><td>세밀 제어 (affinity, RT 우선순위, 스택)</td><td>❌ 런타임에 위임</td><td>✅ 전부 가능</td></tr><tr><td>이식성</td><td>Windows 전용 (MSVC)</td><td>POSIX 전 플랫폼</td></tr></tbody></table><p><strong>워크 스틸링(work stealing)</strong>: 스레드 풀의 각 워커가 자기 작업 큐를 갖고, 자기 큐가 비면 <strong>다른 워커의 큐에서 작업을 훔쳐온다.</strong> 작업량이 불균등해도 놀고 있는 코어가 저절로 일을 가져가므로 부하가 균형 잡힌다 — PPL, TBB, Go 런타임, Java ForkJoinPool이 모두 이 방식이다.</p><h2 id=2-리눅스표준-쪽의-대응물>2. 리눅스/표준 쪽의 대응물</h2><p>pthread로 직접 짜는 것 외에, PPL과 같은 레벨의 선택지들:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>// 1. OpenMP — 컴파일러 지시자 방식 (HPC/임베디드에서 광범위)
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#pragma omp parallel for
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> N; i<span style=color:#f92672>++</span>) results[i] <span style=color:#f92672>=</span> heavy_compute(data[i]);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 2. C++17 병렬 알고리즘 — 표준, 이식성 최고
+</span></span></span><span style=display:flex><span>std<span style=color:#f92672>::</span>for_each(std<span style=color:#f92672>::</span>execution<span style=color:#f92672>::</span>par, v.begin(), v.end(), heavy_compute);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 3. Intel TBB — PPL과 가장 유사 (PPL 자체가 TBB의 영향을 받아 API가 닮음)
+</span></span></span><span style=display:flex><span>tbb<span style=color:#f92672>::</span>parallel_for(<span style=color:#ae81ff>0</span>, N, [<span style=color:#f92672>&amp;</span>](<span style=color:#66d9ef>int</span> i) { results[i] <span style=color:#f92672>=</span> heavy_compute(data[i]); });</span></span></code></pre></div><table><thead><tr><th>선택지</th><th>성격</th><th>비고</th></tr></thead><tbody><tr><td>OpenMP</td><td>지시자(pragma) 방식</td><td>컴파일러 지원 필요 (<code>-fopenmp</code>). C/C++/Fortran, 임베디드~HPC까지 가장 널리 퍼짐</td></tr><tr><td>C++17 <code>std::execution::par</code></td><td>언어 표준</td><td>이식성 최고. 단 세부 튜닝 수단이 거의 없음 (GCC/libstdc++는 내부적으로 TBB 사용)</td></tr><tr><td>Intel TBB (oneTBB)</td><td>라이브러리</td><td>PPL의 원형에 가까움. 파이프라인, 동시 컨테이너 등 도구 풍부</td></tr><tr><td>pthread 직접</td><td>저수준</td><td>아래 &ldquo;언제 내려가는가&rdquo; 참고</td></tr></tbody></table><h2 id=3-관계-정리--언제-어느-레벨을-쓰는가>3. 관계 정리 — 언제 어느 레벨을 쓰는가</h2><p>PPL/TBB/OpenMP는 pthread(Windows에서는 Win32 스레드) <strong>위에 얹힌 상위 레이어</strong>다.</p><ul><li><strong>데이터 병렬 루프</strong>가 목적이면: 상위 레이어(태스크 병렬)가 생산성과 부하 분산에서 거의 항상 유리하다</li><li><strong>하드웨어에 붙는 제어</strong>가 필요하면: RT 우선순위, CPU affinity, NUMA 배치, 스택 크기 같은 것은 상위 레이어가 숨겨버리므로 pthread 레벨로 내려와야 한다 — <a class=inline-link href=/Study/linux/multi_thread/pthread_api/>Pthread API</a>
+의 attr/affinity 장, <a class=inline-link href=/Study/linux/multi_thread/multi_thread_diff/>Multi_Thread_Diff</a>
+의 std::thread vs pthread 표와 같은 구도</li><li>장시간 사는 워커(이벤트 루프, RT 주기 태스크)는 태스크 병렬 모델과 맞지 않는다 — 스레드를 직접 만들고 수명을 관리하는 것이 맞다</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

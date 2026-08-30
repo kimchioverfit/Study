@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Transformer on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/</link><description>Recent content in Transformer on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/</guid><description>&lt;h1 id="attention-is-all-you-need-transformer"&gt;Attention is all you need (Transformer)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1706.03762"&gt;Attention Is All You Need&lt;/a&gt;
+ — Vaswani et al., NeurIPS 2017&lt;/p&gt;
+&lt;p&gt;트랜스포머 구조가 처음 등장한 논문&lt;/p&gt;
+&lt;h3 id="1-목표"&gt;1. 목표&lt;/h3&gt;
+&lt;p&gt;RNN이나 CNN 없이, 오직 어텐션 메커니즘만으로 시퀀스-투-시퀀스(seq2seq) 문제 해결하기.
+번역(translation), 요약(summarization), 질의응답 등 다양한 NLP 작업에 적용 가능.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="2-기존-접근법의-문제점"&gt;2. 기존 접근법의 문제점&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;방식&lt;/th&gt;
+					&lt;th&gt;문제점&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RNN / LSTM&lt;/td&gt;
+					&lt;td&gt;순차 처리로 인해 병렬화 어려움, 긴 문장 기억 어려움 (vanishing gradient)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CNN&lt;/td&gt;
+					&lt;td&gt;병렬화는 가능하나, 문맥을 장기적으로 파악하기 어려움&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="3-핵심-아이디어-트랜스포머-transformer"&gt;3. 핵심 아이디어: 트랜스포머 (Transformer)&lt;/h3&gt;
+&lt;p&gt;🔥 &amp;ldquo;시퀀스 모델링은 오직 Attention만으로도 충분하다!&amp;rdquo;&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/embedding_layer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/embedding_layer/</guid><description>&lt;h1 id="embedding-layer"&gt;Embedding Layer&lt;/h1&gt;
+&lt;h3 id="임베딩-레이어란"&gt;임베딩 레이어란?&lt;/h3&gt;
+&lt;p&gt;Token을 n Dimension으로 변환하는 과정.&lt;/p&gt;
+&lt;h3 id="왜-필요할까"&gt;왜 필요할까?&lt;/h3&gt;
+&lt;p&gt;컴퓨터는 문자열을 직접 이해하지 못하므로, 거리나 유사도 개념이 없어서 학습이 불가능하다.&lt;/p&gt;
+&lt;p&gt;이런 상황에서, 각 Token에 대한 ID를 이용하여
+key-value 구조로 Vector값을 갖게 하는 것.&lt;/p&gt;
+&lt;p&gt;이걸 해줘야 Model 이 Token을 이해 가능.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;#34;페페&amp;#34; 라는 Token ID : 1234
+Value[1234] = [0.23, 0.17, ...] (weight들)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이런 식의 변환이라고 보면 된다.&lt;/p&gt;
+&lt;p&gt;임베딩 차원이 높을 수록 더욱 다양한 정보를 저장 가능하다.&lt;/p&gt;</description></item></channel></rss>

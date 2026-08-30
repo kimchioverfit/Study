@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>functional interfaces on Study Notes</title><link>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/</link><description>Recent content in functional interfaces on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/callback_function/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/callback_function/</guid><description>&lt;h1 id="callback-function"&gt;Callback function&lt;/h1&gt;
+&lt;p&gt;콜백함수란?&lt;/p&gt;
+&lt;p&gt;콜백 함수(callback function)는 어떤 함수의 인자로 전달되어, 그 함수 내부에서 호출되는 함수.
+다시 말해, &amp;ldquo;나중에 호출될 함수&amp;quot;를 미리 전달해두는 것&lt;/p&gt;
+&lt;p&gt;🎯 왜 쓰나?
+유연한 동작 지정
+함수 동작 중 일부만 사용자에게 위임 → 사용자 정의 동작 가능&lt;/p&gt;
+&lt;p&gt;이벤트 기반 프로그래밍
+사용자 입력, 네트워크 수신 등 &amp;ldquo;이벤트&amp;quot;에 반응&lt;/p&gt;
+&lt;p&gt;라이브러리/프레임워크 확장성
+내부 로직은 숨기고, 외부에서 특정 동작만 바꿀 수 있도록 함&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;compare&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; b) { &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; a &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; b; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;sort(arr, arr &lt;span style="color:#f92672"&gt;+&lt;/span&gt; n, compare); &lt;span style="color:#75715e"&gt;// compare는 함수 포인터
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 케이스를 보면 알 수 있듯이, 함수를 파라미터로 쓸 수 있고,&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/function_pointer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/function_pointer/</guid><description>&lt;h1 id="function-pointer"&gt;Function pointer&lt;/h1&gt;
+&lt;p&gt;함수를 가리키는 포인터,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#960050;background-color:#1e0010"&gt;반환형&lt;/span&gt; (&lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#960050;background-color:#1e0010"&gt;포인터이름&lt;/span&gt;)(&lt;span style="color:#960050;background-color:#1e0010"&gt;매개변수&lt;/span&gt; &lt;span style="color:#960050;background-color:#1e0010"&gt;타입&lt;/span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;으로 사용함.&lt;/p&gt;
+&lt;h3 id="사용-이유"&gt;사용 이유&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Callback function&lt;/li&gt;
+&lt;li&gt;Strategy Pattern&lt;/li&gt;
+&lt;li&gt;Table based dispatch&lt;/li&gt;
+&lt;li&gt;Plugin system&lt;/li&gt;
+&lt;li&gt;C - style 연동 (callback function)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;C-style 연동&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;C 라이브러리는 객체지향 기능이 없기 때문에,
+콜백(callback)을 넘길 때는 &lt;strong&gt;함수 포인터&lt;/strong&gt;를 씀.&lt;/p&gt;
+&lt;p&gt;🧩 C에서는?
+상태(state) 없이 함수만 전달할 수 있다.&lt;/p&gt;
+&lt;p&gt;void (*callback)(int) 같은 식으로 정적 함수 주소만 넘길 수 있음&lt;/p&gt;
+&lt;p&gt;객체나 캡처된 환경은 못 넘깁니다.&lt;/p&gt;
+&lt;p&gt;C는 this 포인터 같은 게 없기 때문에, 콜백 함수 내부에서 어떤 컨텍스트도 유지할 수 없음&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/lambda_function/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/lambda_function/</guid><description>&lt;h1 id="lambda-function"&gt;Lambda function&lt;/h1&gt;
+&lt;p&gt;짧은 람다함수는 컴파일러가 inline화 시켜줌&lt;/p&gt;
+&lt;p&gt;지역성을 높여서 cache 효율성도 올려줌&lt;/p&gt;
+&lt;p&gt;사용방법&lt;/p&gt;
+&lt;p&gt;&lt;a class="inline-link" href="parameter"&gt;capture&lt;/a&gt;
+{defenition};&lt;/p&gt;
+&lt;p&gt;여기서, capture 의 존재 이유는, 외부의 변수를 함수 내에서 이용할 때 필요한 것.&lt;/p&gt;
+&lt;p&gt;의문 : 그냥 Parameter를 여러개 받게 만들면 되는 것 아닌가?
+답변 : 어떤 함수들은 parameter로 함수를 받을 수 있는데, (STL, Callback, 비동기 framework 등) 그때 인자로 람다함수를 넣을 수 있다.
+문제는 인자로 사용되는 함수를 단항 함수로만 받을 수 있는 함수들이 있는데 (std::remove_if 등) 이런 함수에 파라미터로 넣으려면 어쩔 수 없음.&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/table_based_dispatch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/basic_c++/functional_interfaces/table_based_dispatch/</guid><description>&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;cmdA&lt;/span&gt;() { cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;A&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;cmdB&lt;/span&gt;() { cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;B&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; (&lt;span style="color:#f92672"&gt;*&lt;/span&gt;command_table[&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;])() &lt;span style="color:#f92672"&gt;=&lt;/span&gt; { cmdA, cmdB };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;command_table[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;](); &lt;span style="color:#75715e"&gt;// &amp;#34;A&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;switch 문 보다 빠르게 분기 처리가 가능함.&lt;/p&gt;
+&lt;p&gt;switch 문은 런타임에 체크를 하는데,&lt;/p&gt;
+&lt;p&gt;함수 포인터의 경우 분기 조건없이 바로 함수로 점프함. (어셈블리 점프)&lt;/p&gt;
+&lt;p&gt;근데 어차피 함수가 돌아가는 시간은 동일하기 때문에 큰 차이는 아닐 수 있음.&lt;/p&gt;</description></item></channel></rss>

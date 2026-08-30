@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Multi Thread on Study Notes</title><link>https://kimchioverfit.github.io/Study/linux/multi_thread/</link><description>Recent content in Multi Thread on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/linux/multi_thread/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/linux/multi_thread/multi_thread_diff/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/multi_thread/multi_thread_diff/</guid><description>&lt;h1 id="diff-between-posix--cpp-standard"&gt;Diff between POSIX &amp;amp; CPP standard&lt;/h1&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;항목&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;std::thread&lt;/code&gt;&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;pthread&lt;/code&gt;&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;함수 시그니처&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;void func(int)&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;void* func(void*)&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;인자 전달&lt;/td&gt;
+					&lt;td&gt;타입 안전 (직접 전달)&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;void*&lt;/code&gt;로 변환 필요&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;자원 해제&lt;/td&gt;
+					&lt;td&gt;RAII (&lt;code&gt;join()&lt;/code&gt; 깜빡하면 오류)&lt;/td&gt;
+					&lt;td&gt;수동 (&lt;code&gt;pthread_join&lt;/code&gt; 필수)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;예외 처리&lt;/td&gt;
+					&lt;td&gt;예외 전파 가능&lt;/td&gt;
+					&lt;td&gt;예외 처리 불가 (C 스타일)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;저수준에서 사용하려면 POSIX가 나음.&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;기능&lt;/th&gt;
+					&lt;th&gt;std::thread&lt;/th&gt;
+					&lt;th&gt;pthread&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CPU 바인딩 (Affinity)&lt;/td&gt;
+					&lt;td&gt;❌&lt;/td&gt;
+					&lt;td&gt;✅&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;스택 사이즈 설정&lt;/td&gt;
+					&lt;td&gt;❌&lt;/td&gt;
+					&lt;td&gt;✅&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;스케줄 정책 설정&lt;/td&gt;
+					&lt;td&gt;❌&lt;/td&gt;
+					&lt;td&gt;✅&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;실시간 우선순위 설정&lt;/td&gt;
+					&lt;td&gt;❌&lt;/td&gt;
+					&lt;td&gt;✅&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;NUMA 제어&lt;/td&gt;
+					&lt;td&gt;❌&lt;/td&gt;
+					&lt;td&gt;✅&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;동기화 세부제어 (&lt;code&gt;futex&lt;/code&gt;)&lt;/td&gt;
+					&lt;td&gt;❌&lt;/td&gt;
+					&lt;td&gt;✅&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;POSIX 호환 시스템 통합&lt;/td&gt;
+					&lt;td&gt;제한적&lt;/td&gt;
+					&lt;td&gt;완전&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/linux/multi_thread/multi_thread_image_pipeline/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/multi_thread/multi_thread_image_pipeline/</guid><description>&lt;h1 id="multi-thread-image-pipeline--safequeue"&gt;Multi-thread Image Pipeline — SafeQueue&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;condition_variable&lt;/code&gt; + &lt;code&gt;unique_lock&lt;/code&gt; + move 의미론으로 만드는 3단계 이미지 파이프라인.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;[Capture 1개] → SafeQueue(q_raw) → [Process 워커 2개] → SafeQueue(q_done) → [Writer 1개]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;빌드: &lt;code&gt;g++ -std=c++17 -pthread Multi_Thread_Image_Pipeline.cpp -o pipeline&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="1-전체-코드"&gt;1. 전체 코드&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;chrono&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;condition_variable&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;cstdint&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;cstdio&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;mutex&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;optional&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;queue&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;thread&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Image&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; id &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;uint8_t&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; pixels; &lt;span style="color:#75715e"&gt;// 실제로는 수 MB — 복사하면 안 되는 이유
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;template&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;typename&lt;/span&gt; T&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SafeQueue&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;explicit&lt;/span&gt; SafeQueue(size_t capacity &lt;span style="color:#f92672"&gt;=&lt;/span&gt; SIZE_MAX) &lt;span style="color:#f92672"&gt;:&lt;/span&gt; cap_(capacity) {}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// [생산자용] 자리가 날 때까지 대기 후 push. 큐가 닫혔으면 false
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;push&lt;/span&gt;(T v) { &lt;span style="color:#75715e"&gt;// v는 파라미터 = lvalue (→ 2-4)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;unique_lock&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;mutex&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; lk(m_); &lt;span style="color:#75715e"&gt;// lk는 매 호출 스택에 생성 (→ 2-3)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; not_full_.wait(lk, [&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;] { &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; q_.size() &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; cap_ &lt;span style="color:#f92672"&gt;||&lt;/span&gt; closed_; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (closed_) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q_.push(std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;move(v)); &lt;span style="color:#75715e"&gt;// 버퍼 소유권만 큐로 이동 (→ 2-4)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; lk.unlock(); &lt;span style="color:#75715e"&gt;// notify 전에 unlock (→ 2-5)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; not_empty_.notify_one();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// [소비자용] 데이터가 올 때까지 대기. 닫히고 비었으면 nullopt = 종료 신호
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;optional&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;T&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; pop() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;unique_lock&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;mutex&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; lk(m_);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; not_empty_.wait(lk, [&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;] { &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#f92672"&gt;!&lt;/span&gt;q_.empty() &lt;span style="color:#f92672"&gt;||&lt;/span&gt; closed_; }); &lt;span style="color:#75715e"&gt;// (→ 2-5)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (q_.empty()) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;nullopt; &lt;span style="color:#75715e"&gt;// closed &amp;amp;&amp;amp; empty → 종료
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; T v &lt;span style="color:#f92672"&gt;=&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;move(q_.front()); &lt;span style="color:#75715e"&gt;// front()는 T&amp;amp; = lvalue (→ 2-4)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q_.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; lk.unlock();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; not_full_.notify_one(); &lt;span style="color:#75715e"&gt;// 자리 났다고 생산자에게 알림
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; v;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// [종료용] 닫고, 잠들어 있는 스레드 전원을 깨워 내보낸다
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;close&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;lock_guard&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;mutex&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; lk(m_); &lt;span style="color:#75715e"&gt;// 플래그만 바꾸므로 lock_guard (→ 2-2)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; closed_ &lt;span style="color:#f92672"&gt;=&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#75715e"&gt;// ← 블록 끝 = RAII unlock
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; not_empty_.notify_all(); &lt;span style="color:#75715e"&gt;// 대기자 전원이 나가야 하므로 all
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; not_full_.notify_all();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;private&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;T&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; q_;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;mutex m_; &lt;span style="color:#75715e"&gt;// 공유되는 잠금 &amp;#34;실체&amp;#34; (→ 2-3)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;condition_variable not_empty_; &lt;span style="color:#75715e"&gt;// 소비자가 기다리는 조건
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;condition_variable not_full_; &lt;span style="color:#75715e"&gt;// 생산자가 기다리는 조건 (bounded)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; size_t cap_;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; closed_ &lt;span style="color:#f92672"&gt;=&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ---------------------------------------------------------------- stages
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;static&lt;/span&gt; SafeQueue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;Image&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; q_raw(&lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// bounded: 카메라가 앞서가지 못하게 (→ 2-1)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;static&lt;/span&gt; SafeQueue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;Image&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; q_done(&lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;capture_stage&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n_frames) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n_frames; &lt;span style="color:#f92672"&gt;++&lt;/span&gt;i) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Image img;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; img.id &lt;span style="color:#f92672"&gt;=&lt;/span&gt; i;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; img.pixels.assign(&lt;span style="color:#ae81ff"&gt;640&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;480&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;static_cast&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;uint8_t&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;(i));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;printf(&lt;span style="color:#e6db74"&gt;&amp;#34;[capture] frame %d&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, img.id);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q_raw.push(std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;move(img)); &lt;span style="color:#75715e"&gt;// img는 이후 moved-from 상태 (→ 2-4)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;this_thread&lt;span style="color:#f92672"&gt;::&lt;/span&gt;sleep_for(std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;chrono&lt;span style="color:#f92672"&gt;::&lt;/span&gt;milliseconds(&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;process_stage&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; worker_id) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; img &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q_raw.pop()) { &lt;span style="color:#75715e"&gt;// nullopt(큐 닫힘)이면 루프 종료
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;px : img&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;pixels)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; px &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;static_cast&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;uint8_t&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;255&lt;/span&gt; &lt;span style="color:#f92672"&gt;-&lt;/span&gt; px); &lt;span style="color:#75715e"&gt;// &amp;#34;처리&amp;#34; 흉내: 반전
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;printf(&lt;span style="color:#e6db74"&gt;&amp;#34;[process %d] frame %d done&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, worker_id, img&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;id);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q_done.push(std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;move(&lt;span style="color:#f92672"&gt;*&lt;/span&gt;img));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;writer_stage&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; count &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; img &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q_done.pop()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;printf(&lt;span style="color:#e6db74"&gt;&amp;#34;[writer] frame %d saved (%zu bytes)&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, img&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;id, img&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;pixels.size());
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;++&lt;/span&gt;count;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;printf(&lt;span style="color:#e6db74"&gt;&amp;#34;[writer] total %d frames&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;, count);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;constexpr&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; kFrames &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;20&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;thread&lt;/span&gt; cap(capture_stage, kFrames);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;thread&lt;/span&gt; w1(process_stage, &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;thread&lt;/span&gt; w2(process_stage, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;thread&lt;/span&gt; wr(writer_stage);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cap.join(); &lt;span style="color:#75715e"&gt;// 1) 생산이 끝날 때까지 대기 (→ 2-6)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q_raw.close(); &lt;span style="color:#75715e"&gt;// 2) 상류 큐 닫기 → 워커들 drain 후 탈출
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; w1.join();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; w2.join(); &lt;span style="color:#75715e"&gt;// 3) 워커 전원 종료 = 하류로 갈 데이터 없음
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q_done.close(); &lt;span style="color:#75715e"&gt;// 4) 하류 큐 닫기 → writer 탈출
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; wr.join();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="2-설명"&gt;2. 설명&lt;/h2&gt;
+&lt;h3 id="2-1-safequeue-설계--cv-2개짜리-bounded-queue"&gt;2-1. SafeQueue 설계 — cv 2개짜리 bounded queue&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;std::queue&lt;/code&gt;는 스레드 안전하지 않으므로, 모든 접근(push/pop/close)을 &lt;strong&gt;하나의 mutex &lt;code&gt;m_&lt;/code&gt;&lt;/strong&gt; 로 감싼다&lt;/li&gt;
+&lt;li&gt;조건 변수를 &lt;strong&gt;2개로 나눈 이유&lt;/strong&gt;: 기다리는 조건이 두 종류이기 때문. 소비자는 &amp;ldquo;비어있지 않음&amp;rdquo;(&lt;code&gt;not_empty_&lt;/code&gt;)을, 생산자는 &amp;ldquo;가득 차지 않음&amp;rdquo;(&lt;code&gt;not_full_&lt;/code&gt;)을 기다린다. cv 하나로도 되지만 push가 생산자까지 깨우는 헛깨움이 생긴다&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;capacity 제한(bounded)&lt;/strong&gt;: 카메라(생산)가 처리(소비)보다 빠르면 큐가 무한정 자란다. 용량을 4로 제한하면 큐가 차는 순간 생산자가 &lt;code&gt;not_full_&lt;/code&gt;에서 잠들어 &lt;strong&gt;자연스럽게 속도가 맞춰진다(backpressure)&lt;/strong&gt; — 이미지처럼 항목 하나가 큰 파이프라인에서 필수 설계&lt;/li&gt;
+&lt;li&gt;조건 변수의 기본 원리(뮤텍스와 세트로 쓰는 이유, while 재검사)는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/multi_thread/pthread_api/"&gt;Pthread API&lt;/a&gt;
+ 3장 참고 — 이 파일은 그 C++ 표준 라이브러리 버전이다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-2-unique_lock-vs-lock_guard--둘-다-raii-차이는-중간-조작"&gt;2-2. unique_lock vs lock_guard — 둘 다 RAII, 차이는 &amp;ldquo;중간 조작&amp;rdquo;&lt;/h3&gt;
+&lt;p&gt;둘 다 &lt;strong&gt;RAII lock&lt;/strong&gt;이다: 생성자에서 lock을 잡고 소멸자에서 unlock하므로, &lt;code&gt;return&lt;/code&gt;이든 예외든 어떤 경로로 스코프를 벗어나도 unlock이 보장된다. 수동 &lt;code&gt;m_.lock()/unlock()&lt;/code&gt;이었다면 &lt;code&gt;if (closed_) return false;&lt;/code&gt; 같은 early return마다 unlock을 챙겨야 했다 (RAII 개념: &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/basic_c&amp;#43;&amp;#43;/idioms/rule_of_five_zero/"&gt;Rule of Five/Zero&lt;/a&gt;
+ 서두).&lt;/p&gt;</description></item><item><title/><link>https://kimchioverfit.github.io/Study/linux/multi_thread/pthread_api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/multi_thread/pthread_api/</guid><description>&lt;h1 id="pthread-api"&gt;Pthread API&lt;/h1&gt;
+&lt;p&gt;POSIX 스레드(pthread)의 대표 함수 정리. 스레드가 커널 관점에서 &lt;code&gt;clone(CLONE_VM | ...)&lt;/code&gt;으로 만들어진 실행 흐름이라는 배경은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/linux/process/fork/"&gt;Process/Fork&lt;/a&gt;
+ 문서 4장 참고.&lt;/p&gt;
+&lt;h2 id="1-스레드-생성과-종료"&gt;1. 스레드 생성과 종료&lt;/h2&gt;
+&lt;h3 id="1-1-pthread_create"&gt;1-1. pthread_create()&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;pthread.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;pthread_create&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;pthread_t&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;thread&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// [out] 생성된 스레드 핸들
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pthread_attr_t&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;attr, &lt;span style="color:#f92672"&gt;//&lt;/span&gt; &lt;span style="color:#960050;background-color:#1e0010"&gt;속성&lt;/span&gt; (NULL &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#960050;background-color:#1e0010"&gt;기본값&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;(&lt;span style="color:#f92672"&gt;*&lt;/span&gt;start_routine)(&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;), &lt;span style="color:#75715e"&gt;// 스레드가 실행할 함수
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;arg); &lt;span style="color:#75715e"&gt;// 함수에 넘길 인자
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;성공 시 0, 실패 시 &lt;strong&gt;에러 번호를 직접 반환&lt;/strong&gt;한다 (&lt;code&gt;errno&lt;/code&gt;가 아님 — pthread 계열 공통 규칙)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;arg&lt;/code&gt;는 &lt;code&gt;void*&lt;/code&gt; 하나뿐이므로 여러 값을 넘기려면 구조체로 묶어서 포인터를 넘긴다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;흔한 실수 — 지역 변수의 주소를 arg로 넘기기:&lt;/strong&gt;&lt;/p&gt;</description></item></channel></rss>

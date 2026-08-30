@@ -1,0 +1,72 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/algorithm/algorithm_theory/>Algorithm theory</a></div><h1>Palindrome</h1></header><div class="doc-body post-body"><h1 id=-회문-palindrome>📌 회문 (Palindrome)</h1><h3 id=-시간-복잡도>🕐 시간 복잡도</h3><ul><li>최소 O(N): 전체 문자 확인이 필요</li></ul><h3 id=-해법-1-해시맵-이용>✅ 해법 1: 해시맵 이용</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>isPalindromeMap</span>(<span style=color:#66d9ef>const</span> std<span style=color:#f92672>::</span>string<span style=color:#f92672>&amp;</span> s) {
+</span></span><span style=display:flex><span>    std<span style=color:#f92672>::</span>unordered_map<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>char</span>, <span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> freq;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>char</span> c : s) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (std<span style=color:#f92672>::</span>isalpha(c)) freq[std<span style=color:#f92672>::</span>tolower(c)]<span style=color:#f92672>++</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> oddCount <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>const</span> <span style=color:#66d9ef>auto</span><span style=color:#f92672>&amp;</span> p : freq) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (p.second <span style=color:#f92672>%</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>!=</span> <span style=color:#ae81ff>0</span>) oddCount<span style=color:#f92672>++</span>;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (oddCount <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>) <span style=color:#66d9ef>return</span> false;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> true;
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><h3 id=-해법-2-비트-벡터-이용-공간-최적화>✅ 해법 2: 비트 벡터 이용 (공간 최적화)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>isPalindromePermutation</span>(<span style=color:#66d9ef>const</span> std<span style=color:#f92672>::</span>string<span style=color:#f92672>&amp;</span> s) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> bitVector <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>char</span> c : s) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (std<span style=color:#f92672>::</span>isalpha(c)) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> index <span style=color:#f92672>=</span> std<span style=color:#f92672>::</span>tolower(c) <span style=color:#f92672>-</span> <span style=color:#e6db74>&#39;a&#39;</span>;
+</span></span><span style=display:flex><span>            bitVector <span style=color:#f92672>^=</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>&lt;&lt;</span> index);  <span style=color:#75715e>// 해당 비트를 XOR 연산으로 토글
+</span></span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> bitVector <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>||</span> (bitVector <span style=color:#f92672>&amp;</span> (bitVector <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>)) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><h4 id=-설명>🔍 설명</h4><ul><li><strong>bitVector는 int형(32bit)으로 충분</strong>한다. 알파벳은 소문자 기준 26자이므로 32비트 내에 모두 저장 가능한다.</li><li><strong>초기 상태</strong>는 <code>00000000 00000000 00000000 00000000</code>.</li><li>예를 들어 문자열에 <code>'b'</code>가 있다면:<ul><li><code>'b' - 'a' = 1</code> → <code>1 &lt;&lt; 1 = 0b10</code> → <code>bitVector ^= 0b10</code>로 해당 비트를 1로 설정</li></ul></li><li>동일한 문자가 다시 등장하면 XOR로 해당 비트가 다시 꺼집니다 (즉, 짝수 번 등장하면 0).</li><li>결국 <strong>bitVector가 0</strong>이면 모든 문자가 짝수 번 등장한 것.</li><li>하지만 문자열 길이가 홀수이면 <strong>1개의 문자는 홀수번 등장</strong>해도 회문 가능 → 이때는 <code>bitVector</code>에 <strong>1개의 비트만 켜져 있어야 함</strong>.<ul><li>이를 판별하는 조건이 <code>bitVector & (bitVector - 1) == 0</code>. (1비트만 켜져 있으면 참)</li><li>이게 어렵다면: 문자열 길이가 홀수면 <code>bitVector == 1</code>, 짝수면 <code>bitVector == 0</code>을 각각 확인해도 됩니다.</li></ul></li><li><strong>시간 복잡도</strong>는 <code>O(N)</code>.</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>bool</span> <span style=color:#a6e22e>isPalindromePermutation</span>(<span style=color:#66d9ef>const</span> std<span style=color:#f92672>::</span>string<span style=color:#f92672>&amp;</span> s) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> bitVector <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>char</span> c : s) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (std<span style=color:#f92672>::</span>isalpha(c)) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> index <span style=color:#f92672>=</span> std<span style=color:#f92672>::</span>tolower(c) <span style=color:#f92672>-</span> <span style=color:#e6db74>&#39;a&#39;</span>;
+</span></span><span style=display:flex><span>            bitVector <span style=color:#f92672>^=</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>&lt;&lt;</span> index);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> bitVector <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>||</span> (bitVector <span style=color:#f92672>&amp;</span> (bitVector <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>)) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><ul><li>짝수 길이 → 모든 비트가 0</li><li>홀수 길이 → 하나의 비트만 1일 수 있음</li><li>시간 복잡도: O(N)</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

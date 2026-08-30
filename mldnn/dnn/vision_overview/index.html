@@ -1,0 +1,112 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/>DNN</a></div><h1>Vision Overview</h1></header><div class="doc-body post-body"><h1 id=vision-역사-한눈에-보기-computer-vision-overview>Vision 역사 한눈에 보기 (Computer Vision Overview)</h1><blockquote><p>Region Proposal(저수준 분할) → Backbone(특징 추출) → Object Detection/Segmentation → Transformer 기반 최신 Vision 모델로 이어지는 <strong>컴퓨터 비전 발전사</strong>를 한눈에 정리한 문서.
+각 항목은 실제 정리 문서로 연결되며, 아직 문서가 없는 항목은 링크 없이 이름만 표기했다. (전체 작성 현황은 <strong>§7</strong> 참고)</p></blockquote><hr><h2 id=-1-전체-흐름-한눈에-보기>🔷 1. 전체 흐름 한눈에 보기</h2><pre class=mermaid>flowchart TD
+    A[Low-level segmentation / region proposal] --&gt; A1[Efficient Graph-Based Segmentation]
+    A --&gt; A2[Selective Search]
+
+    A2 --&gt; Z[CNN 기본 개념]
+    Z --&gt; B[Backbone CNN evolution]
+    B --&gt; B1[AlexNet]
+    B1 --&gt; B2[VGG]
+    B2 --&gt; B2b[&#34;GoogLeNet / Inception&#34;]
+    B2b --&gt; B3[ResNet]
+    B3 --&gt; B4[EfficientNet]
+
+    B4 --&gt; C[Object Detection]
+
+    C --&gt; C1[&#34;OverFeat\nsliding window&#34;]
+    C --&gt; C2[R-CNN family]
+    C2 --&gt; D1[R-CNN]
+    D1 --&gt; D2[Fast R-CNN]
+    D2 --&gt; D3[Faster R-CNN]
+    D3 --&gt; D4[FPN]
+    D4 --&gt; D5[Mask R-CNN]
+
+    C --&gt; C3[One-stage detectors]
+    C3 --&gt; E1[SSD]
+    C3 --&gt; E2[YOLO]
+    C3 --&gt; E3[&#34;RetinaNet\nFocal Loss&#34;]
+
+    C --&gt; C4[Anchor-free]
+    C4 --&gt; F1[FCOS]
+
+    C --&gt; C5[Transformer detection]
+    C5 --&gt; G1[DETR]
+
+    B4 --&gt; H[Segmentation]
+    H --&gt; H1[U-Net]
+    H --&gt; H2[DeepLab]
+    H --&gt; H3[Mask R-CNN]
+
+    G1 --&gt; I[Modern Vision]
+    I --&gt; I1[ViT]
+    I1 --&gt; I2[Swin Transformer]
+    I1 --&gt; I4[&#34;EfficientFormer\nmobile latency&#34;]
+    I --&gt; I3[SAM]</pre><blockquote><p>화살표는 <strong>개념적 발전 순서</strong>(A가 B의 문제의식/기반이 됨)이지, 실제 논문 인용 관계와 완전히 같지는 않다.</p></blockquote><hr><h2 id=-2-low-level-segmentation--region-proposal>🔷 2. Low-level Segmentation / Region Proposal</h2><p>CNN이 대중화되기 전, &ldquo;물체가 있을 법한 영역"을 먼저 좁히기 위해 쓰이던 방식들.</p><table><thead><tr><th>방법</th><th>핵심 아이디어</th><th>문서</th><th>논문</th></tr></thead><tbody><tr><td>Efficient Graph-Based Segmentation</td><td>픽셀을 그래프로 보고 유사도 기준으로 영역을 병합</td><td><a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/1.efficient_graph_based_segmentation/>문서</a></td><td><a class=inline-link href=https://cs.brown.edu/people/pfelzens/papers/seg-ijcv.pdf>IJCV 2004 (PDF)</a></td></tr><tr><td>Selective Search</td><td>위 저수준 분할을 여러 스케일로 수행 후 계층적으로 병합해 region proposal 생성</td><td><a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/2.selective_search/>문서</a></td><td><a class=inline-link href=https://doi.org/10.1007/s11263-013-0620-5>IJCV 2013</a></td></tr></tbody></table><hr><h2 id=-3-backbone-evolution-특징-추출기의-발전>🔷 3. Backbone Evolution (특징 추출기의 발전)</h2><p>이미지를 벡터/feature map으로 바꾸는 <strong><a class=inline-link href=/Study/mldnn/basics/10_components/backbone/>Backbone</a>
+</strong>자체의 발전 흐름. 객체 탐지·분할 모델들은 대부분 이 중 하나를 feature extractor로 가져다 쓴다.</p><table><thead><tr><th>연도</th><th>모델</th><th>핵심 기여</th><th>문서</th><th>논문</th></tr></thead><tbody><tr><td>1998</td><td>LeNet-5</td><td>최초의 실용 CNN (손글씨 인식)</td><td>— (<a class=inline-link href=./2_Backbone/1.CNN.md#-10-%eb%8c%80%ed%91%9c-cnn-%ec%95%84%ed%82%a4%ed%85%8d%ec%b2%98-%eb%b0%9c%ec%a0%84-%ed%9d%90%eb%a6%84>CNN 문서</a>
+§10 참고)</td><td><a class=inline-link href=https://doi.org/10.1109/5.726791>Proc. IEEE 1998</a></td></tr><tr><td>-</td><td>CNN (개념)</td><td>합성곱·풀링·Flatten+FC의 기본 원리</td><td><a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>문서</a></td><td>—</td></tr><tr><td>2012</td><td><strong>AlexNet</strong></td><td>ReLU·Dropout·GPU 학습 도입, ImageNet 우승 → 딥러닝 붐 시작</td><td><a class=inline-link href=/Study/mldnn/dnn/2_backbone/2.alexnet/>문서</a></td><td><a class=inline-link href=https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html>NeurIPS 2012</a></td></tr><tr><td>2014</td><td>VGG</td><td>$3\times3$ 필터만 깊게 쌓는 단순·균일 구조</td><td><a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>문서</a>
+<em>(작성 중)</em></td><td><a class=inline-link href=https://arxiv.org/abs/1409.1556>arXiv:1409.1556</a></td></tr><tr><td>2014</td><td>GoogLeNet / Inception</td><td>다양한 크기 필터를 병렬로, GAP로 분류 헤드 대체</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/1409.4842>arXiv:1409.4842</a></td></tr><tr><td>2015</td><td>ResNet</td><td>Residual(skip) connection으로 100층 이상 학습 가능</td><td><a class=inline-link href=/Study/mldnn/dnn/2_backbone/4.resnet/>문서</a>
+<em>(작성 중)</em></td><td><a class=inline-link href=https://arxiv.org/abs/1512.03385>arXiv:1512.03385</a></td></tr><tr><td>2019</td><td>EfficientNet</td><td>깊이·너비·해상도를 동시에 조절하는 Compound Scaling</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/1905.11946>arXiv:1905.11946</a></td></tr></tbody></table><hr><h2 id=-4-object-detection>🔷 4. Object Detection</h2><h3 id=41-classical--two-stage>4.1 Classical / Two-stage</h3><p>Region proposal을 먼저 뽑고, 각 후보에 대해 분류/회귀를 수행하는 방식.</p><table><thead><tr><th>모델</th><th>핵심 기여</th><th>문서</th><th>논문</th></tr></thead><tbody><tr><td>OverFeat (2013)</td><td>Sliding window 기반, CNN으로 분류+검출 동시 수행</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/1.overfeat/>문서</a></td><td><a class=inline-link href=https://arxiv.org/abs/1312.6229>arXiv:1312.6229</a></td></tr><tr><td>R-CNN (2014)</td><td>Selective Search + CNN(AlexNet) feature + SVM 분류</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>문서</a></td><td><a class=inline-link href=https://arxiv.org/abs/1311.2524>arXiv:1311.2524</a></td></tr><tr><td>Fast R-CNN (2015)</td><td>ROI Pooling으로 이미지당 CNN 1회만 수행, Multi-task loss</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>문서</a></td><td><a class=inline-link href=https://arxiv.org/abs/1504.08083>arXiv:1504.08083</a></td></tr><tr><td>Faster R-CNN (2015)</td><td>RPN 도입으로 Selective Search(느림) 제거</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/>문서</a></td><td><a class=inline-link href=https://arxiv.org/abs/1506.01497>arXiv:1506.01497</a></td></tr><tr><td>FPN (2017)</td><td>여러 스케일의 feature map을 피라미드로 결합, 작은 물체 탐지 개선</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/1612.03144>arXiv:1612.03144</a></td></tr><tr><td>Mask R-CNN (2017)</td><td>Faster R-CNN + Mask Head, ROI Align으로 Instance Segmentation</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>문서</a>
+<em>(보완 필요)</em></td><td><a class=inline-link href=https://arxiv.org/abs/1703.06870>arXiv:1703.06870</a></td></tr></tbody></table><h3 id=42-one-stage>4.2 One-stage</h3><p>Region proposal 단계 없이 이미지 전체에서 한 번에 클래스+박스를 예측 → 빠름.</p><ul><li>SSD (2016) — <a class=inline-link href=https://arxiv.org/abs/1512.02325>arXiv:1512.02325</a>
+, YOLO (2016) — <a class=inline-link href=https://arxiv.org/abs/1506.02640>arXiv:1506.02640</a>
+. 문서 없음</li></ul><h3 id=43-improvement>4.3 Improvement</h3><ul><li>RetinaNet (2017) — Focal Loss로 One-stage의 클래스 불균형(class imbalance) 문제 해결. 문서 없음. <a class=inline-link href=https://arxiv.org/abs/1708.02002>arXiv:1708.02002</a></li></ul><h3 id=44-anchor-free>4.4 Anchor-free</h3><ul><li>FCOS (2019) — Anchor box 없이 픽셀 단위로 직접 회귀. 문서 없음. <a class=inline-link href=https://arxiv.org/abs/1904.01355>arXiv:1904.01355</a></li></ul><h3 id=45-transformer-based>4.5 Transformer-based</h3><ul><li>DETR (2020) — Transformer로 anchor/NMS 없이 집합 예측(set prediction)으로 검출. 문서 없음. <a class=inline-link href=https://arxiv.org/abs/2005.12872>arXiv:2005.12872</a>
+. 기반 개념은 <a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Transformer(Attention Is All You Need)</a>
+참고.</li></ul><hr><h2 id=-5-segmentation>🔷 5. Segmentation</h2><table><thead><tr><th>모델</th><th>핵심 기여</th><th>문서</th><th>논문</th></tr></thead><tbody><tr><td>U-Net (2015)</td><td>Encoder-Decoder + skip connection, 의료 영상 분할에 강함</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/1505.04597>arXiv:1505.04597</a></td></tr><tr><td>DeepLab</td><td>Atrous(dilated) convolution으로 해상도 유지하며 넓은 수용영역 확보</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/1606.00915>arXiv:1606.00915</a></td></tr><tr><td>Mask R-CNN</td><td>§4.1 참고 (Instance Segmentation)</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>문서</a>
+<em>(보완 필요)</em></td><td><a class=inline-link href=https://arxiv.org/abs/1703.06870>arXiv:1703.06870</a></td></tr></tbody></table><p><strong>Amodal Segmentation</strong> (가려진 부분까지 포함한 전체 모양 예측) — Mask R-CNN 계열에서 파생된 별도 갈래. 2016년 문제 정의부터 2026년 SAM 기반 open-world 확장까지의 핵심 논문 7개는 <a class=inline-link href=/Study/mldnn/dnn/amodal_segmentation/0.amodal_segmentation_overview/>Amodal Segmentation 개요</a>
+참고.</p><hr><h2 id=-6-modern-vision--foundation-models>🔷 6. Modern Vision / Foundation Models</h2><table><thead><tr><th>모델</th><th>핵심 기여</th><th>문서</th><th>논문</th></tr></thead><tbody><tr><td>ViT (2020)</td><td>이미지를 patch로 잘라 Transformer에 그대로 입력, CNN 없이 분류</td><td><a class=inline-link href=/Study/mldnn/dnn/vit/transformer_for_image_recognition_at_scale/>문서</a>
+<em>(작성 중)</em></td><td><a class=inline-link href=https://arxiv.org/abs/2010.11929>arXiv:2010.11929</a></td></tr><tr><td>Swin Transformer (2021)</td><td>Window 기반 attention으로 ViT의 연산량 문제 완화, 계층적 feature map</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/2103.14030>arXiv:2103.14030</a></td></tr><tr><td><strong>EfficientFormer (2022)</strong></td><td>실측 지연시간 기준으로 ViT의 병목(patch embed·reshape·LN) 제거 → MobileNet 속도의 순수 트랜스포머</td><td><a class=inline-link href=/Study/mldnn/dnn/vit/efficientformer/>문서</a></td><td><a class=inline-link href=https://arxiv.org/abs/2206.01191>arXiv:2206.01191</a></td></tr><tr><td>SAM (2023)</td><td>프롬프트(점/박스) 기반 범용 Segmentation 파운데이션 모델</td><td>문서 없음</td><td><a class=inline-link href=https://arxiv.org/abs/2304.02643>arXiv:2304.02643</a></td></tr></tbody></table><blockquote><p>ViT 계열은 <a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Transformer(Attention Is All You Need)</a>
+의 self-attention 개념을 이미지에 적용한 것이므로, 먼저 읽어두면 이해가 빠르다.</p></blockquote><hr><h2 id=-7-문서-작성-현황-한눈에-보기>🔷 7. 문서 작성 현황 (한눈에 보기)</h2><table><thead><tr><th>상태</th><th>문서</th></tr></thead><tbody><tr><td>✅ 작성 완료</td><td><a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>CNN</a>
+, <a class=inline-link href=/Study/mldnn/dnn/2_backbone/2.alexnet/>AlexNet</a>
+, <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/1.overfeat/>OverFeat</a>
+, <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a>
+, <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a>
+, <a class=inline-link href=/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/>Faster R-CNN</a>
+, <a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/2.selective_search/>Selective Search</a>
+, <a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/1.efficient_graph_based_segmentation/>Efficient Graph-Based Segmentation</a>
+, <a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+, <a class=inline-link href=/Study/mldnn/dnn/vit/efficientformer/>EfficientFormer</a></td></tr><tr><td>🟡 초안/보완 필요</td><td><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a></td></tr><tr><td>⚪ 논문 링크만 있는 문서</td><td><a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a>
+, <a class=inline-link href=/Study/mldnn/dnn/2_backbone/4.resnet/>ResNet</a>
+, <a class=inline-link href=/Study/mldnn/dnn/vit/transformer_for_image_recognition_at_scale/>ViT</a></td></tr><tr><td>⬜ 문서 없음</td><td>GoogLeNet/Inception, EfficientNet, FPN, SSD, YOLO, RetinaNet, FCOS, DETR, U-Net, DeepLab, Swin Transformer, SAM</td></tr></tbody></table><hr><h2 id=-8-recommended-study-order>🔷 8. Recommended Study Order</h2><ol><li><a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/1.efficient_graph_based_segmentation/>Efficient Graph-Based Segmentation</a></li><li><a class=inline-link href=/Study/mldnn/dnn/1_region_proposal/2.selective_search/>Selective Search</a></li><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/1.cnn/>CNN</a></li><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/2.alexnet/>AlexNet</a></li><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/3.vgg/>VGG</a></li><li><a class=inline-link href=/Study/mldnn/dnn/2_backbone/4.resnet/>ResNet</a></li><li>EfficientNet</li><li><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/1.overfeat/>OverFeat</a></li><li><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/2.r-cnn/>R-CNN</a></li><li><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/3.fast_r-cnn/>Fast R-CNN</a></li><li><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/4.faster_r-cnn/>Faster R-CNN</a></li><li>FPN</li><li><a class=inline-link href=/Study/mldnn/dnn/3_object_detection/5.mask_r-cnn/>Mask R-CNN</a></li><li>SSD / YOLO</li><li>RetinaNet</li><li>FCOS</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need (Transformer)</a></li><li>DETR</li><li>U-Net / DeepLab</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/transformer_for_image_recognition_at_scale/>ViT</a>
+/ Swin Transformer</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/efficientformer/>EfficientFormer</a>
+— 모바일 지연시간 관점의 ViT 최적화</li><li>SAM (optional)</li></ol><hr><h2 id=-9-key-axes-to-understand>🔷 9. Key Axes to Understand</h2><ul><li>Region proposal vs sliding window</li><li>Two-stage vs One-stage detection</li><li>Anchor-based vs Anchor-free</li><li>CNN vs Transformer</li><li>Semantic vs Instance segmentation</li><li>Multi-scale feature (FPN)</li><li>Class imbalance (Focal Loss)</li></ul><hr></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

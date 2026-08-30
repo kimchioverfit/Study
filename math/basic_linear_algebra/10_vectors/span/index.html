@@ -1,0 +1,85 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/math/basic_linear_algebra/10_vectors/>10 vectors</a></div><h1>Span</h1></header><div class="doc-body post-body"><h1 id=span>Span</h1><p>생성집합(span)은 어떤 벡터들의 모든 선형결합으로 만들 수 있는 벡터들의 집합이다.</p><p>벡터 $v_1, v_2, \dots, v_k$가 있을 때,</p><div class=math-block>\[\mathrm{span}(v_1, v_2, \dots, v_k)
+=
+\left\{
+a_1 v_1 + a_2 v_2 + \cdots + a_k v_k
+\;\middle|\;
+a_1, a_2, \dots, a_k \in \mathbb{R}
+\right\}\]</div><p>로 정의한다.</p><hr><h2 id=의미>의미</h2><p>span은 주어진 벡터들로 어디까지 만들 수 있는지를 나타낸다.</p><ul><li>한 벡터의 span: 직선</li><li>두 개의 독립인 벡터의 span: 평면</li><li>세 개의 독립인 벡터의 span: 3차원 공간</li></ul><p>즉, span은 벡터들이 만들어내는 공간 자체라고 보면 된다.</p><hr><h2 id=예시-1>예시 1</h2><div class=math-block>\[v_1 =
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\quad
+v_2 =
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}\]</div><p>이면</p><div class=math-block>\[\mathrm{span}(v_1, v_2) = \mathbb{R}^2\]</div><p>이다.</p><p>왜냐하면 임의의 벡터</p><div class=math-block>\[\begin{bmatrix}
+x\\
+y
+\end{bmatrix}
+=
+x
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}
++
+y
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}\]</div><p>로 표현할 수 있기 때문이다.</p><hr><h2 id=예시-2>예시 2</h2><div class=math-block>\[v_1 =
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix},
+\quad
+v_2 =
+\begin{bmatrix}
+2\\
+4
+\end{bmatrix}\]</div><p>이면 $v_2 = 2v_1$ 이므로 두 벡터는 같은 방향이다.</p><p>따라서</p><div class=math-block>\[\mathrm{span}(v_1, v_2)\]</div><p>는 평면 전체가 아니라 하나의 직선만 만든다.</p><hr><h2 id=생성한다는-말의-의미>생성한다는 말의 의미</h2><p>벡터 집합 $S$가 어떤 공간 $V$를 생성한다는 것은</p><div class=math-block>\[\mathrm{span}(S) = V\]</div><p>라는 뜻이다.</p><p>즉, 그 공간의 모든 벡터를 $S$의 선형결합으로 표현할 수 있어야 한다.</p><hr><h2 id=기저와의-관계>기저와의 관계</h2><p>span만으로는 충분하지 않다.</p><p>벡터를 많이 넣으면 같은 공간을 생성할 수는 있지만 중복이 생길 수 있다.</p><p>그래서 보통은</p><ul><li>공간을 생성하고</li><li>서로 선형 독립인</li></ul><p>벡터 집합을 찾고 싶다.</p><p>그런 집합이 <a class=inline-link href=/Study/math/basic_linear_algebra/10_vectors/basis/>Basis</a>
+이다.</p><p>관련 문서:</p><ul><li><a class=inline-link href=/Study/math/basic_linear_algebra/10_vectors/linear_independence/>Linear Independence</a></li><li><a class=inline-link href=/Study/math/basic_linear_algebra/10_vectors/basis/>Basis</a></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

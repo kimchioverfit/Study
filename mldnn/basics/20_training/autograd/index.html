@@ -1,0 +1,128 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/basics/20_training/>20 training</a></div><h1>Autograd</h1></header><div class="doc-body post-body"><h1 id=autograd-자동-미분>Autograd (자동 미분)</h1><p>Autograd = <strong>Auto</strong>matic <strong>Grad</strong>ient.</p><p>순전파(forward) 연산을 수행하면서 <strong>연산 그래프(computational graph)</strong> 를 자동으로 기록해두고,
+<code>backward()</code> 호출 시 그 그래프를 거꾸로 타고 내려가며 <strong>연쇄 법칙(chain rule)</strong> 으로 기울기를 계산해주는 엔진.</p><p>즉, <a class=inline-link href=/Study/mldnn/basics/20_training/dn_training_pipeline/>학습 파이프라인</a>
+의 4~6단계에서</p><pre class=mermaid>flowchart LR
+    A[&#34;Forward&lt;br/&gt;(그래프 기록)&#34;] --&gt; B[&#34;Loss&#34;] --&gt; C[&#34;loss.backward()&lt;br/&gt;(그래프 역주행)&#34;] --&gt; D[&#34;param.grad 채워짐&#34;] --&gt; E[&#34;optimizer.step()&#34;]</pre><p><code>Backpropagation</code> 을 사람이 직접 미분식으로 짜지 않아도 되게 해주는 것이 autograd 의 역할이다.</p><hr><h2 id=1-왜-필요한가>1. 왜 필요한가</h2><p>미분을 구하는 방법은 크게 3가지가 있다.</p><table><thead><tr><th>방법</th><th>설명</th><th>문제점</th></tr></thead><tbody><tr><td>수치 미분 (Numerical)</td><td>$\frac{f(x+h)-f(x)}{h}$</td><td>파라미터 1개당 forward 2번 → 수억 개 파라미터에서는 불가능. 오차도 큼</td></tr><tr><td>기호 미분 (Symbolic)</td><td>수식을 미분한 수식을 유도</td><td>식이 폭발적으로 커짐 (expression swell)</td></tr><tr><td><strong>자동 미분 (Automatic)</strong></td><td>기본 연산의 미분 규칙을 알고 있고, chain rule 로 조합</td><td>정확하고, 역전파 1번이면 <strong>모든 파라미터</strong>의 기울기를 얻음</td></tr></tbody></table><p>Autograd 는 세 번째 방식이며, 그중에서도 <strong>reverse mode</strong>(역방향 모드) 자동 미분이다.</p><blockquote><p>출력이 스칼라 1개(loss)이고 입력(파라미터)이 매우 많은 딥러닝 구조에서는
+reverse mode 가 압도적으로 유리하다. (forward mode 는 입력 개수만큼 반복해야 함)</p></blockquote><hr><h2 id=2-연산-그래프>2. 연산 그래프</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>x <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor(<span style=color:#ae81ff>2.0</span>, requires_grad<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>y <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor(<span style=color:#ae81ff>3.0</span>, requires_grad<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>z <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> y      <span style=color:#75715e># MulBackward</span>
+</span></span><span style=display:flex><span>out <span style=color:#f92672>=</span> z <span style=color:#f92672>+</span> x<span style=color:#f92672>**</span><span style=color:#ae81ff>2</span> <span style=color:#75715e># AddBackward, PowBackward</span></span></span></code></pre></div><p>내부적으로 아래와 같은 DAG(방향 비순환 그래프)가 만들어진다.</p><pre class=mermaid>flowchart LR
+    X[&#34;x (leaf)&#34;] --&gt; M[&#34;Mul&#34;]
+    Y[&#34;y (leaf)&#34;] --&gt; M
+    X --&gt; P[&#34;Pow(2)&#34;]
+    M --&gt; A[&#34;Add&#34;]
+    P --&gt; A
+    A --&gt; O[&#34;out&#34;]</pre><ul><li><strong>노드(node)</strong> : 연산 (<code>MulBackward0</code>, <code>AddBackward0</code> …)</li><li><strong>엣지(edge)</strong> : 텐서의 흐름</li><li><strong>leaf</strong> : 사용자가 직접 만든 텐서 (모델 파라미터, 입력). 여기에 <code>.grad</code> 가 쌓인다.</li></ul><p>PyTorch 는 이 그래프를 <strong>forward 를 실행하면서 그때그때 만든다(define-by-run)</strong>.
+그래서 <code>if</code>, <code>for</code>, 파이썬 제어문을 그대로 써도 되고, 매 iteration 마다 다른 모양의 그래프를 만들 수 있다.</p><table><thead><tr><th></th><th>Dynamic graph (define-by-run)</th><th>Static graph (define-and-run)</th></tr></thead><tbody><tr><td>예</td><td>PyTorch, JAX(추적 시점 제외)</td><td>TensorFlow 1.x, ONNX 내보내기</td></tr><tr><td>장점</td><td>디버깅 쉬움, 파이썬 제어문 자유</td><td>그래프 전체를 보고 최적화 가능</td></tr><tr><td>단점</td><td>최적화 여지가 적음</td><td>디버깅 어려움</td></tr></tbody></table><hr><h2 id=3-텐서의-세-가지-속성>3. 텐서의 세 가지 속성</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>x <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor(<span style=color:#ae81ff>2.0</span>, requires_grad<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>z <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>x<span style=color:#f92672>.</span>requires_grad   <span style=color:#75715e># True  : 이 텐서에 대한 기울기를 추적할지 여부</span>
+</span></span><span style=display:flex><span>z<span style=color:#f92672>.</span>grad_fn         <span style=color:#75715e># &lt;MulBackward0&gt; : 나를 만든 연산 (leaf 는 None)</span>
+</span></span><span style=display:flex><span>x<span style=color:#f92672>.</span>grad            <span style=color:#75715e># backward() 후에 채워지는 기울기 (leaf 에만 저장)</span></span></span></code></pre></div><ul><li><code>requires_grad=True</code> 인 텐서가 하나라도 섞이면 결과 텐서도 <code>requires_grad=True</code> 가 된다 (전파).</li><li><code>nn.Parameter</code> 는 기본적으로 <code>requires_grad=True</code>.</li><li>중간 텐서의 <code>.grad</code> 는 메모리 절약을 위해 저장하지 않는다. 필요하면 <code>z.retain_grad()</code>.</li></ul><hr><h2 id=4-backward-가-하는-일>4. backward() 가 하는 일</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>x <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor(<span style=color:#ae81ff>2.0</span>, requires_grad<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>y <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor(<span style=color:#ae81ff>3.0</span>, requires_grad<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>out <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> y <span style=color:#f92672>+</span> x<span style=color:#f92672>**</span><span style=color:#ae81ff>2</span>      <span style=color:#75715e># out = xy + x^2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>out<span style=color:#f92672>.</span>backward()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>x<span style=color:#f92672>.</span>grad  <span style=color:#75715e># y + 2x = 3 + 4 = 7</span>
+</span></span><span style=display:flex><span>y<span style=color:#f92672>.</span>grad  <span style=color:#75715e># x         = 2</span></span></span></code></pre></div><p><code>out.backward()</code> 는</p><ol><li><code>out</code> 에 seed 기울기 $\frac{\partial out}{\partial out} = 1$ 을 넣고</li><li>그래프를 위상 정렬 역순으로 순회하며</li><li>각 연산의 국소 미분(local gradient)을 곱해 내려보내고 (chain rule)</li><li>leaf 텐서의 <code>.grad</code> 에 <strong>누적(<code>+=</code>)</strong> 한다</li><li>기본적으로 그래프를 해제한다 (<code>retain_graph=False</code>)</li></ol><h3 id=스칼라가-아니면>스칼라가 아니면?</h3><p><code>backward()</code> 는 스칼라에만 인자 없이 쓸 수 있다. 벡터라면 시작 기울기 $v$ 를 직접 줘야 한다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>z <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> y            <span style=color:#75715e># shape (3,)</span>
+</span></span><span style=display:flex><span>z<span style=color:#f92672>.</span>backward(torch<span style=color:#f92672>.</span>ones_like(z))   <span style=color:#75715e># 또는 z.sum().backward()</span></span></span></code></pre></div><p>이는 야코비안 $J$ 전체를 만들지 않고 <strong>벡터-야코비안 곱(VJP)</strong> $v^{T}J$ 만 계산하기 때문이다.
+loss 를 항상 스칼라로 만드는 이유이기도 하다.</p><hr><h2 id=5-기울기-누적과-zero_grad>5. 기울기 누적과 zero_grad</h2><p><code>.grad</code> 는 덮어쓰기가 아니라 <strong>누적</strong>된다. 그래서 학습 루프는 항상 이 순서다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>for</span> x, y <span style=color:#f92672>in</span> loader:
+</span></span><span style=display:flex><span>    optimizer<span style=color:#f92672>.</span>zero_grad()        <span style=color:#75715e># 이전 step 의 grad 제거</span>
+</span></span><span style=display:flex><span>    pred <span style=color:#f92672>=</span> model(x)
+</span></span><span style=display:flex><span>    loss <span style=color:#f92672>=</span> criterion(pred, y)
+</span></span><span style=display:flex><span>    loss<span style=color:#f92672>.</span>backward()              <span style=color:#75715e># grad 계산 (누적)</span>
+</span></span><span style=display:flex><span>    optimizer<span style=color:#f92672>.</span>step()             <span style=color:#75715e># 파라미터 갱신</span></span></span></code></pre></div><p><code>zero_grad()</code> 를 빼먹으면 이전 배치의 기울기가 계속 더해져 학습이 망가진다.</p><p>반대로 이 성질을 <strong>의도적으로</strong> 쓰는 것이 <strong>gradient accumulation</strong>
+(GPU 메모리가 부족할 때 작은 배치를 N번 누적해 큰 배치 효과를 내는 기법).</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>for</span> i, (x, y) <span style=color:#f92672>in</span> enumerate(loader):
+</span></span><span style=display:flex><span>    loss <span style=color:#f92672>=</span> criterion(model(x), y) <span style=color:#f92672>/</span> accum_steps
+</span></span><span style=display:flex><span>    loss<span style=color:#f92672>.</span>backward()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (i <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>%</span> accum_steps <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+</span></span><span style=display:flex><span>        optimizer<span style=color:#f92672>.</span>step()
+</span></span><span style=display:flex><span>        optimizer<span style=color:#f92672>.</span>zero_grad()</span></span></code></pre></div><hr><h2 id=6-그래프를-만들지-않기>6. 그래프를 만들지 않기</h2><p>추론(inference)이나 평가 때는 그래프를 만들 필요가 없다. 메모리와 속도를 크게 아낄 수 있다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():           <span style=color:#75715e># 블록 전체에서 추적 끄기</span>
+</span></span><span style=display:flex><span>    pred <span style=color:#f92672>=</span> model(x)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>@torch.no_grad</span>()                <span style=color:#75715e># 데코레이터로도 사용 가능</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>evaluate</span>(<span style=color:#f92672>...</span>): <span style=color:#f92672>...</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>inference_mode():    <span style=color:#75715e># no_grad 보다 더 공격적인 최적화 (PyTorch 1.9+)</span>
+</span></span><span style=display:flex><span>    pred <span style=color:#f92672>=</span> model(x)</span></span></code></pre></div><table><thead><tr><th>방법</th><th>의미</th></tr></thead><tbody><tr><td><code>torch.no_grad()</code></td><td>블록 안 연산을 그래프에 기록하지 않음</td></tr><tr><td><code>torch.inference_mode()</code></td><td>no_grad + 버전 카운터 등 추가 오버헤드까지 제거. 결과를 다시 autograd 에 넣을 수 없음</td></tr><tr><td><code>tensor.detach()</code></td><td>그래프에서 잘라낸 <strong>새 텐서</strong> 반환 (값 공유, 기울기 흐름 차단)</td></tr><tr><td><code>param.requires_grad = False</code></td><td>해당 파라미터를 freeze (transfer learning 에서 backbone 동결)</td></tr></tbody></table><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># backbone freeze 예시</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> p <span style=color:#f92672>in</span> model<span style=color:#f92672>.</span>backbone<span style=color:#f92672>.</span>parameters():
+</span></span><span style=display:flex><span>    p<span style=color:#f92672>.</span>requires_grad <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span></span></span></code></pre></div><hr><h2 id=7-커스텀-연산-torchautogradfunction>7. 커스텀 연산 (torch.autograd.Function)</h2><p>미분 규칙을 직접 정의하고 싶을 때 사용한다.
+(예: 미분 불가능한 연산의 근사, STE(Straight-Through Estimator), 메모리 최적화)</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MyReLU</span>(torch<span style=color:#f92672>.</span>autograd<span style=color:#f92672>.</span>Function):
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@staticmethod</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(ctx, x):
+</span></span><span style=display:flex><span>        ctx<span style=color:#f92672>.</span>save_for_backward(x)     <span style=color:#75715e># backward 에서 쓸 값 저장</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> x<span style=color:#f92672>.</span>clamp(min<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@staticmethod</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>backward</span>(ctx, grad_output):
+</span></span><span style=display:flex><span>        (x,) <span style=color:#f92672>=</span> ctx<span style=color:#f92672>.</span>saved_tensors
+</span></span><span style=display:flex><span>        grad_input <span style=color:#f92672>=</span> grad_output<span style=color:#f92672>.</span>clone()
+</span></span><span style=display:flex><span>        grad_input[x <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>        <span style=color:#75715e># dReLU/dx = 1 if x&gt;0 else 0</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> grad_input
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>y <span style=color:#f92672>=</span> MyReLU<span style=color:#f92672>.</span>apply(x)</span></span></code></pre></div><p><a class=inline-link href=/Study/mldnn/basics/60_model_optimization/quantization/2.qat/>Quantization</a>
+의 QAT 에서 <code>round()</code> 처럼
+기울기가 0 인 연산을 통과시킬 때 이 방식(STE)을 쓴다.</p><hr><h2 id=8-관련-api>8. 관련 API</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 그래프를 유지한 채 여러 번 backward</span>
+</span></span><span style=display:flex><span>loss<span style=color:#f92672>.</span>backward(retain_graph<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># .grad 에 누적하지 않고 기울기만 받아오기 (2차 미분, GAN, meta-learning 등)</span>
+</span></span><span style=display:flex><span>g <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>autograd<span style=color:#f92672>.</span>grad(loss, model<span style=color:#f92672>.</span>parameters(), create_graph<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 2차 미분 (create_graph=True 로 backward 그래프까지 미분 대상에 포함)</span>
+</span></span><span style=display:flex><span>grad1 <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>autograd<span style=color:#f92672>.</span>grad(y, x, create_graph<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>grad2 <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>autograd<span style=color:#f92672>.</span>grad(grad1, x)[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 수치 미분과 비교해 커스텀 Function 검증</span>
+</span></span><span style=display:flex><span>torch<span style=color:#f92672>.</span>autograd<span style=color:#f92672>.</span>gradcheck(MyReLU<span style=color:#f92672>.</span>apply, (x<span style=color:#f92672>.</span>double()<span style=color:#f92672>.</span>requires_grad_(),))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># NaN/inf 가 어디서 나왔는지 추적 (디버깅 시에만, 매우 느림)</span>
+</span></span><span style=display:flex><span>torch<span style=color:#f92672>.</span>autograd<span style=color:#f92672>.</span>set_detect_anomaly(<span style=color:#66d9ef>True</span>)</span></span></code></pre></div><hr><h2 id=9-자주-겪는-문제>9. 자주 겪는 문제</h2><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td><code>element 0 of tensors does not require grad</code></td><td>loss 가 그래프와 끊겨 있음 (<code>no_grad</code> 안에서 계산, <code>.detach()</code>, <code>.item()</code>, numpy 변환)</td><td>그래프 안에서 loss 를 계산</td></tr><tr><td><code>Trying to backward through the graph a second time</code></td><td>이미 해제된 그래프에 다시 backward</td><td><code>retain_graph=True</code> 또는 매 iteration 마다 forward 다시</td></tr><tr><td><code>.grad</code> 가 <code>None</code></td><td>leaf 가 아니거나 <code>requires_grad=False</code></td><td><code>retain_grad()</code>, <code>requires_grad_(True)</code> 확인</td></tr><tr><td>메모리가 계속 증가</td><td>loss 를 텐서째로 리스트에 쌓아 그래프가 살아있음</td><td><code>loss.item()</code> 또는 <code>loss.detach()</code> 로 저장</td></tr><tr><td>in-place 연산 에러 (<code>a leaf Variable that requires grad is being used in an in-place operation</code>)</td><td>backward 에 필요한 값을 덮어씀</td><td><code>x = x + 1</code> 처럼 새 텐서로, <code>relu(inplace=True)</code> 제거</td></tr><tr><td>학습이 안 됨</td><td><code>zero_grad()</code> 누락</td><td>루프 순서 확인</td></tr></tbody></table><hr><h2 id=10-메모리-관점>10. 메모리 관점</h2><p>Autograd 는 backward 에 필요한 중간 activation 을 전부 들고 있어야 한다.
+그래서 학습 시 메모리는 대략</p>$$
+\text{메모리} \approx \text{파라미터} + \text{기울기} + \text{옵티마이저 상태} + \textbf{중간 activation}
+$$<p>이고, 배치 크기를 키울 때 터지는 주범은 보통 마지막 항이다.</p><ul><li><strong>Gradient checkpointing</strong> : 중간 activation 을 저장하지 않고 backward 때 다시 forward 해서 재계산.
+메모리 ↓, 연산량 ↑ (<code>torch.utils.checkpoint.checkpoint</code>)</li><li><strong><code>no_grad</code> 추론</strong> : 평가 루프에서 activation 을 아예 저장하지 않음</li><li><strong>gradient accumulation</strong> : 배치를 쪼개서 activation 피크를 낮춤</li></ul><hr><h2 id=참고>참고</h2><ul><li><a class=inline-link href=/Study/mldnn/basics/20_training/dn_training_pipeline/>Deep learning training pipeline</a></li><li><a class=inline-link href=/Study/mldnn/basics/20_training/loss_function/>Loss function</a></li><li><a class=inline-link href=/Study/mldnn/basics/60_model_optimization/optimization/>Optimization</a></li><li><a class=inline-link href=/Study/mldnn/framework/torch/>PyTorch</a></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

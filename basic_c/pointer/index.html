@@ -1,0 +1,102 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class="nav-link is-active" href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/basic_c/>Basic C</a></div><h1>pointer</h1></header><div class="doc-body post-body"><h1 id=pointer란>Pointer란?</h1><p>메모리 주소를 저장하는 변수.</p><p>&와 *의 차이는 아래와 같다</p><ol><li><p>& (주소 연산자, address-of)
+변수 앞에 붙여서, 그 변수의 메모리 주소를 구한다.
+(타입 뒤에 붙는 & 는 참조자 (reference) 선언)</p></li><li><ul><li>(간접 참조 연산자, dereference)
+포인터 변수 앞에 붙여서, 그 포인터가 가리키는 주소의 값을 가져옵니다.
+즉, 주소를 “열어서 안에 있는 값”을 꺼내는 것.</li></ul></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>int</span> a <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>a;       <span style=color:#75715e>// p에 a의 주소 저장
+</span></span></span><span style=display:flex><span>printf(<span style=color:#e6db74>&#34;%d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#f92672>*</span>p); <span style=color:#75715e>// p가 가리키는 곳(a)의 값(10) 출력
+</span></span></span><span style=display:flex><span><span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#ae81ff>20</span>;            <span style=color:#75715e>// p가 가리키는 곳(a)의 값을 20으로 변경
+</span></span></span></code></pre></div><h1 id=초기화-해주지-않은-포인터의-예>초기화 해주지 않은 포인터의 예</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;iostream&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> p;  <span style=color:#75715e>// 초기화 안됨
+</span></span></span><span style=display:flex><span>    std<span style=color:#f92672>::</span>cout <span style=color:#f92672>&lt;&lt;</span> p <span style=color:#f92672>&lt;&lt;</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>;  <span style=color:#75715e>// p에 들어있는 임의의 메모리 주소 출력
+</span></span></span><span style=display:flex><span>}</span></span></code></pre></div><p>여러 번 실행해보면 쓰레기 값이 계속해서 바뀌면서 출력이됨.</p><p>이는 위험한 상황을 초래할 수도 있기 때문에, 웬만하면 int * p = nullptr; 로 초기화해주는 습관 필요.</p><h1 id=잘-되는-예-vs-일부러-터지는-예>잘 되는 예 vs (일부러) 터지는 예</h1><p>✅ 정상 예</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;iostream&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> a <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> p <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>a;   <span style=color:#75715e>// 주소 저장
+</span></span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#ae81ff>42</span>;       <span style=color:#75715e>// 역참조로 실제 메모리의 값을 수정
+</span></span></span><span style=display:flex><span>    std<span style=color:#f92672>::</span>cout <span style=color:#f92672>&lt;&lt;</span> a <span style=color:#f92672>&lt;&lt;</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>;   <span style=color:#75715e>// 42
+</span></span></span><span style=display:flex><span>}</span></span></code></pre></div><p>❌ 1) 초기화 안 된 포인터 역참조 (거의 100% 터짐)</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> p;   <span style=color:#75715e>// 쓰레기 주소
+</span></span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#ae81ff>7</span>;   <span style=color:#75715e>// 정의되지 않은 동작(UB): 보통 즉시 크래시(세그폴트)
+</span></span></span><span style=display:flex><span>}</span></span></code></pre></div><p>❌ 2) 널 포인터 역참조</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> p <span style=color:#f92672>=</span> nullptr;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#ae81ff>7</span>;   <span style=color:#75715e>// UB: 보통 크래시
+</span></span></span><span style=display:flex><span>}</span></span></code></pre></div><p>❌ 3) 댕글링 포인터(스코프 끝난 뒤의 주소 사용)</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> <span style=color:#a6e22e>leak</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> x <span style=color:#f92672>=</span> <span style=color:#ae81ff>123</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span>x;  <span style=color:#75715e>// 지역 변수 주소를 리턴 → 이미 무효가 될 주소
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> p <span style=color:#f92672>=</span> <span style=color:#a6e22e>leak</span>();
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;     <span style=color:#75715e>// UB: 운 좋으면 크래시, 운 나쁘면 조용히 데이터 깨짐
+</span></span></span><span style=display:flex><span>}</span></span></code></pre></div><p>❌ 4) 해제 후 사용(use-after-free)</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span><span style=color:#f92672>*</span> p <span style=color:#f92672>=</span> new <span style=color:#66d9ef>int</span>(<span style=color:#ae81ff>10</span>);
+</span></span><span style=display:flex><span>    delete p;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;     <span style=color:#75715e>// UB: 해제된 메모리 접근 → 크래시/데이터 훼손
+</span></span></span><span style=display:flex><span>}</span></span></code></pre></div><p>포인터 오류 3종(Dangling/NULL/Wild)의 비교는 <a class=inline-link href=/Study/basic_c/error_pointer/>Error_Pointer</a>
+참고.</p><h1 id=함수-포인터-function-pointer>함수 포인터 (Function Pointer)</h1><p>포인터는 변수의 주소뿐 아니라 <strong>함수의 주소</strong>도 담을 수 있다. 코드(<a class=inline-link href=/Study/basic_cs/memory/memory_layout/>.text 영역</a>
+)도 메모리에 있으므로 주소가 있기 때문.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;iostream&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>using</span> <span style=color:#66d9ef>namespace</span> std;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 함수 정의
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>sayHello</span>() {
+</span></span><span style=display:flex><span>    cout <span style=color:#f92672>&lt;&lt;</span> <span style=color:#e6db74>&#34;Hello!&#34;</span> <span style=color:#f92672>&lt;&lt;</span> endl;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 함수 포인터 타입 정의
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>typedef</span> <span style=color:#a6e22e>int</span> (<span style=color:#f92672>*</span>FuncType)();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 함수 포인터 변수 선언 (함수 이름 = 함수의 주소)
+</span></span></span><span style=display:flex><span>    FuncType funcPtr <span style=color:#f92672>=</span> sayHello;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 함수 포인터로 함수 호출
+</span></span></span><span style=display:flex><span>    funcPtr();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><ul><li>선언 문법: <code>반환타입 (*이름)(인자타입들)</code> — 예: <code>int (*fp)(int, int)</code>. 괄호가 없으면(<code>int *fp(int)</code>) &ldquo;포인터를 반환하는 함수&rdquo; 선언이 되므로 주의</li><li>용도: 콜백 등록(<code>qsort</code>의 비교 함수), 테이블 기반 분기, 플러그인 구조 등 — 상세와 활용 패턴은 <a class=inline-link href=/Study/basic_c++/functional_interfaces/function_pointer/>Function_Pointer</a>
+, <a class=inline-link href=/Study/basic_c++/functional_interfaces/callback_function/>Callback_function</a>
+참고</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>
