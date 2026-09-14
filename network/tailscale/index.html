@@ -1,0 +1,124 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class="nav-link is-active" href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/network/>Network</a></div><h1>Tailscale</h1></header><div class="doc-body post-body"><h1 id=tailscale--포트포워딩-없이-집-pc에-외부에서-접속하는-원리>Tailscale — 포트포워딩 없이 집 PC에 외부에서 접속하는 원리</h1><p>집 PC(Windows 11)를 카페 와이파이·폰 LTE 어디서든 원격 데스크톱(RDP)·SSH로 조작할 수 있게 만든 과정과, 그게 <strong>왜 되는지</strong>를 네트워크 관점에서 정리. 공유기 설정은 하나도 건드리지 않았음.</p><blockquote><p>결론부터 아주 쉽게:
+공유기 뒤에 숨은 PC는 밖에서 찾아 들어갈 방법이 없음. Tailscale은 반대로 <strong>PC가 스스로 밖으로 나가서</strong> 다른 기기와 중간에서 만나게 하고, 그 사이에 <strong>WireGuard 암호화 터널</strong>을 깔아 마치 같은 LAN에 있는 것처럼 보이게 함. RDP·SSH는 그 터널 위에서 평소처럼 동작할 뿐임.</p></blockquote><p>관련: <a class=inline-link href=/Study/network/osi_7_layer/>OSI 7계층</a>
+· 실제 설정 스크립트는 별도 저장소 <code>remote_computer</code>에 있음</p><h2 id=-1-30초-요약>🔷 1. 30초 요약</h2><pre class=mermaid>flowchart LR
+    subgraph 집[&#34;집 (공유기 A)&#34;]
+        PC[&#34;PC&lt;br/&gt;192.168.55.100&lt;br/&gt;Tailscale 100.101.1.1&#34;]
+    end
+    subgraph 밖[&#34;카페 (공유기 B)&#34;]
+        LT[&#34;노트북&lt;br/&gt;Tailscale 100.101.1.2&#34;]
+    end
+    CS[&#34;Tailscale 조정 서버&lt;br/&gt;(전화번호부: 누가 있고 공개키가 뭔지)&#34;]
+    DERP[&#34;DERP 릴레이&lt;br/&gt;(직접 연결 실패 시 우회)&#34;]
+
+    PC -. &#34;① 등록·키 교환&#34; .-&gt; CS
+    LT -. &#34;① 등록·키 교환&#34; .-&gt; CS
+    PC &lt;== &#34;② 직접 P2P (WireGuard, UDP)&#34; ==&gt; LT
+    PC -. &#34;③ 안 뚫리면&#34; .-&gt; DERP
+    DERP -. &#34;③&#34; .-&gt; LT</pre><table><thead><tr><th>단계</th><th>하는 일</th><th>데이터가 지나가는가</th></tr></thead><tbody><tr><td>① 조정 서버</td><td>로그인, 기기 목록·공개키·현재 주소 교환</td><td>❌ (메타데이터만)</td></tr><tr><td>② 직접 연결</td><td>STUN + 홀펀칭으로 두 공유기를 동시에 뚫고 P2P</td><td>✅ (암호화됨)</td></tr><tr><td>③ DERP 릴레이</td><td>②가 실패하면 HTTPS로 중계</td><td>✅ (암호화된 채로 통과, 내용 못 봄)</td></tr></tbody></table><h2 id=-2-문제의식--왜-집-pc는-밖에서-안-보이는가>🔷 2. 문제의식 — 왜 집 PC는 밖에서 안 보이는가</h2><h3 id=21-사설-ip와-nat>2.1 사설 IP와 NAT</h3><p>집 PC의 주소를 확인하면 <code>192.168.55.100</code>. 이건 <strong>사설 IP</strong>(RFC 1918)라 인터넷에서는 의미가 없음 — 전 세계 수억 대의 공유기가 똑같은 <code>192.168.x.x</code>를 쓰고 있음.</p><p>인터넷에서 보이는 건 공유기의 <strong>공인 IP</strong> 하나뿐(예: <code>211.x.x.x</code>). 집 안 기기들이 밖으로 나갈 때 공유기가 출발지 주소를 자기 공인 IP로 바꿔 쓰는데, 이게 <strong>NAT</strong>(Network Address Translation)임.</p><pre tabindex=0><code>PC → 공유기 : src 192.168.55.100:51000 → dst 8.8.8.8:53
+공유기 → 밖 : src 211.x.x.x:56926     → dst 8.8.8.8:53   ← 공유기가 바꿔 씀
+                                                          (NAT 테이블에 &#34;56926 ↔ 192.168.55.100:51000&#34; 기록)
+답장 → 공유기: dst 211.x.x.x:56926 → NAT 테이블 조회 → PC로 전달</code></pre><p>핵심은 마지막 줄. <strong>공유기는 &ldquo;안에서 먼저 나간 연결"의 답장만 안으로 넘김.</strong> 테이블에 없는 패킷이 밖에서 오면 누구한테 줄지 모르니 버림.</p><h3 id=22-그래서-밖에서-두드리면>2.2 그래서 밖에서 두드리면</h3><pre tabindex=0><code>카페 노트북 → 211.x.x.x:3389 (RDP)
+공유기: &#34;3389? NAT 테이블에 없음. 집 안 기기 중 누구 거야?&#34; → 버림</code></pre><p>이게 집 PC가 &ldquo;보이지 않는&rdquo; 이유임. 방화벽 때문이 아니라 <strong>NAT 구조상 목적지를 알 수 없기 때문</strong>임(방화벽은 그 위에 한 겹 더).</p><h3 id=23-전통적-해법과-그-문제>2.3 전통적 해법과 그 문제</h3><table><thead><tr><th>방법</th><th>원리</th><th>문제</th></tr></thead><tbody><tr><td>포트포워딩</td><td>공유기에 &ldquo;3389 오면 192.168.55.100으로&rdquo; 규칙 추가</td><td>전 세계에 3389가 열림. 봇이 24시간 비밀번호 대입함. 공인 IP가 바뀌면 DDNS도 필요</td></tr><tr><td>직접 VPN 서버(OpenVPN, WireGuard)</td><td>집에 VPN 서버를 세우고 그 포트만 포워딩</td><td>포워딩은 여전히 필요. 키 배포·IP 변경·NAT 종류 대응을 직접 해야 함</td></tr><tr><td>TeamViewer/AnyDesk 류</td><td>회사 서버가 항상 중계</td><td>화면 공유 전용. 트래픽이 회사 서버를 지나고 임의 프로토콜(SSH 등)엔 못 씀</td></tr></tbody></table><p>Tailscale은 두 번째(WireGuard)를 쓰되, 그 귀찮은 부분 — 키 배포, 주소 찾기, NAT 뚫기 — 를 자동화한 것임.</p><h2 id=-3-tailscale이란>🔷 3. Tailscale이란</h2><p><strong>WireGuard 기반 메시(mesh) VPN 서비스.</strong> 같은 계정으로 로그인한 기기들이 서로 직접 연결되어 하나의 사설망(<strong>tailnet</strong>)을 이룸.</p><table><thead><tr><th>구성요소</th><th>역할</th></tr></thead><tbody><tr><td><code>tailscaled</code> (각 기기의 데몬)</td><td>WireGuard 터널 관리, NAT 통과, 가상 네트워크 어댑터 운영</td></tr><tr><td>조정 서버 (control plane, <code>login.tailscale.com</code>)</td><td>로그인 처리, 기기 목록·공개키·엔드포인트 배포, ACL 정책. <strong>트래픽은 안 지나감</strong></td></tr><tr><td>DERP 서버</td><td>STUN 서버 + 직접 연결 실패 시 릴레이. 전 세계 분산(도쿄, 홍콩, …)</td></tr><tr><td>관리 콘솔</td><td>기기 관리, 키 만료, ACL, 공유</td></tr></tbody></table><p>몇 가지 특징:</p><ul><li><strong>주소</strong>: 기기마다 <code>100.64.0.0/10</code> 대역(RFC 6598, CGNAT 대역 — 일반 사설망과 충돌 안 나게 고른 것)에서 하나씩. 예: <code>100.101.1.1</code>. 기기가 어디로 이동해도 이 주소는 고정임.</li><li><strong>MagicDNS</strong>: <code>기기이름.tailnet이름.ts.net</code> 형태 이름이 자동으로 붙음. IP 안 외워도 됨.</li><li><strong>인증</strong>: Tailscale이 비밀번호를 직접 갖지 않고 Google/Microsoft/GitHub 같은 기존 IdP에 위임함.</li><li><strong>기본 정책</strong>: 같은 tailnet 안 기기끼리는 전부 통신 허용. ACL로 좁힐 수 있음.</li><li><strong>오픈소스</strong>: 클라이언트는 공개(BSD). 조정 서버는 비공개지만 호환 구현 Headscale이 있음. 무료 플랜(Personal)은 사용자 6명·기기 무제한이라 개인 용도엔 충분함.</li></ul><h2 id=-4-사용법>🔷 4. 사용법</h2><h3 id=41-서버-쪽-접속당할-pc-windows>4.1 서버 쪽 (접속당할 PC, Windows)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#75715e># 1. 설치 (관리자)</span>
+</span></span><span style=display:flex><span>winget install --id Tailscale.Tailscale -e
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 2. 로그인 — 브라우저가 열리고 Google 계정 등으로 로그인</span>
+</span></span><span style=display:flex><span>tailscale up
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 3. 확인</span>
+</span></span><span style=display:flex><span>tailscale status          <span style=color:#75715e># 내 IP, 같은 tailnet의 다른 기기 목록</span>
+</span></span><span style=display:flex><span>tailscale ip <span style=color:#ae81ff>-4</span>           <span style=color:#75715e># 내 Tailscale IPv4</span>
+</span></span><span style=display:flex><span>tailscale netcheck        <span style=color:#75715e># NAT 종류, 가장 가까운 DERP, 지연시간</span></span></span></code></pre></div><p>접속당할 서비스는 따로 켜야 함. Tailscale은 길만 놓아 줌:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#75715e># 원격 데스크톱 (RDP, 3389) — 설정 &gt; 시스템 &gt; 원격 데스크톱 켜기와 동일</span>
+</span></span><span style=display:flex><span>Set-ItemProperty <span style=color:#e6db74>&#39;HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server&#39;</span> -Name fDenyTSConnections -Value <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Set-ItemProperty <span style=color:#e6db74>&#39;HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#39;</span> -Name UserAuthentication -Value <span style=color:#ae81ff>1</span>  <span style=color:#75715e># NLA 강제</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># SSH 서버 (OpenSSH, 22)</span>
+</span></span><span style=display:flex><span>Add-WindowsCapability -Online -Name OpenSSH.Server~~~~<span style=color:#ae81ff>0.0</span>.1.0
+</span></span><span style=display:flex><span>Set-Service sshd -StartupType Automatic; Start-Service sshd</span></span></code></pre></div><blockquote><p>Tailscale SSH(Tailscale이 SSH 서버 역할까지 하는 기능)는 Linux/macOS 전용이라 Windows에서는 OpenSSH를 따로 켜야 함.</p></blockquote><h3 id=42-클라이언트-쪽-접속하는-노트북폰>4.2 클라이언트 쪽 (접속하는 노트북/폰)</h3><ol><li>Tailscale 설치 후 <strong>같은 계정</strong>으로 로그인 → 자동으로 같은 tailnet에 들어옴</li><li><code>tailscale status</code>에 집 PC가 보이면 끝</li><li>접속:</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>ssh user@100.101.1.1                      <span style=color:#75715e># 또는 ssh user@my-desktop.tailxxxx.ts.net</span>
+</span></span><span style=display:flex><span>mstsc /v:100.101.1.1                      <span style=color:#75715e># Windows 원격 데스크톱</span>
+</span></span><span style=display:flex><span>tailscale ping 100.101.1.1                <span style=color:#75715e># 직접 연결인지 릴레이인지 확인</span></span></span></code></pre></div><p><code>tailscale ping</code> 출력 예:</p><pre tabindex=0><code>pong from my-desktop (100.101.1.1) via DERP(tok) in 52ms     ← 아직 릴레이
+pong from my-desktop (100.101.1.1) via 211.x.x.x:56926 in 8ms  ← 홀펀칭 성공, 직접 연결로 전환</code></pre><p>첫 패킷은 DERP로 보내고, 뒤에서 홀펀칭을 시도해 성공하면 직접 연결로 갈아탐. 그래서 접속은 항상 즉시 되고, 몇 초 뒤 빨라짐.</p><h3 id=43-계정이-두-개인-점-주의>4.3 계정이 두 개인 점 주의</h3><table><thead><tr><th>무엇</th><th>어디에 씀</th></tr></thead><tbody><tr><td>Tailscale 로그인 계정 (Google 등)</td><td>기기를 tailnet에 넣을 때. 한 번만</td></tr><tr><td>Windows 사용자 계정 + 비밀번호</td><td>RDP/SSH 로그인할 때 매번. Microsoft 계정이면 <strong>PIN이 아니라 MS 계정 비밀번호</strong></td></tr></tbody></table><p>Tailscale은 &ldquo;누구 PC인지"만 보증하고, 그 PC에 로그인하는 건 여전히 OS 몫임.</p><h3 id=44-자주-쓰는-명령>4.4 자주 쓰는 명령</h3><table><thead><tr><th>명령</th><th>뜻</th></tr></thead><tbody><tr><td><code>tailscale up</code> / <code>down</code></td><td>연결 / 끊기 (설정은 유지)</td></tr><tr><td><code>tailscale status</code></td><td>기기 목록, 각 기기와의 연결 방식(direct/relay)</td></tr><tr><td><code>tailscale netcheck</code></td><td>내 NAT 환경 진단</td></tr><tr><td><code>tailscale ping &lt;ip></code></td><td>경로 확인</td></tr><tr><td><code>tailscale logout</code></td><td>이 기기를 tailnet에서 제거</td></tr></tbody></table><h2 id=-5-원리-1--wireguard-터널의-정체>🔷 5. 원리 1 — WireGuard: 터널의 정체</h2><p>Tailscale이 실제로 패킷을 나르는 건 <strong>WireGuard</strong>임. Linux 커널에 포함된 VPN 프로토콜로, 설계가 극단적으로 단순함(코어 약 4,000줄. OpenVPN은 10만 줄대).</p><h3 id=51-키쌍이-곧-신원>5.1 키쌍이 곧 신원</h3><p>WireGuard에는 사용자 이름·비밀번호·인증서가 없음. 기기마다 <strong>Curve25519 키쌍</strong> 하나가 전부임.</p><ul><li>비밀키: 기기 밖으로 절대 안 나감</li><li>공개키: 상대에게 알려 줌 = &ldquo;나한테 보낼 땐 이 키로 암호화해&rdquo;</li></ul><p>SSH 공개키 인증과 같은 발상임. Tailscale은 이 공개키를 조정 서버를 통해 같은 tailnet 기기끼리 자동 배포함 — 사람이 <code>wg0.conf</code>에 손으로 붙여 넣던 일을 대신하는 것임.</p><h3 id=52-cryptokey-routing>5.2 Cryptokey Routing</h3><p>WireGuard의 핵심 아이디어. <strong>&ldquo;공개키 ↔ 허용 IP&rdquo; 표 하나로 라우팅과 인증을 동시에 해결함.</strong></p><table><thead><tr><th>peer 공개키</th><th>AllowedIPs</th></tr></thead><tbody><tr><td><code>노트북 공개키</code></td><td><code>100.101.1.2/32</code></td></tr><tr><td><code>폰 공개키</code></td><td><code>100.101.1.3/32</code></td></tr></tbody></table><ul><li>보낼 때: 목적지 IP가 <code>100.101.1.2</code>면 → 표에서 그 IP를 가진 peer의 공개키로 암호화해서 보냄</li><li>받을 때: 복호화가 <code>노트북 공개키</code>로 성공했고, 안에 든 패킷의 출발지가 <code>100.101.1.2</code>면 통과. 아니면 버림</li></ul><p>즉 &ldquo;<code>100.101.1.2</code>에서 왔다"는 주장과 &ldquo;노트북 비밀키를 가졌다"는 증명이 <strong>같은 것</strong>이 됨. IP 스푸핑이 원천적으로 불가능함.</p><h3 id=53-가상-네트워크-어댑터>5.3 가상 네트워크 어댑터</h3><p>OS 입장에서 Tailscale은 네트워크 카드 하나로 보임(Windows: &ldquo;Tailscale Tunnel&rdquo;, Linux: <code>tailscale0</code>). 라우팅 테이블에 &ldquo;<code>100.64.0.0/10</code>은 이 어댑터로"가 등록되어 있음.</p><pre tabindex=0><code>앱: connect(100.101.1.1:3389)
+ → OS 라우팅: 100.x → Tailscale 어댑터
+ → tailscaled: Cryptokey routing → 상대 공개키로 암호화(ChaCha20-Poly1305)
+ → UDP 패킷으로 감싸서 실제 이더넷 어댑터로 송신
+ → 상대 tailscaled: 복호화 → 상대 OS의 Tailscale 어댑터에서 &#34;패킷 도착&#34;
+ → 상대 앱(RDP 서버, 3389)</code></pre><p>앱은 자기가 VPN 위에 있다는 걸 모름. 그래서 RDP, SSH, 파일 공유, 게임 뭐든 그냥 됨.</p><h3 id=54-왜-udp인가>5.4 왜 UDP인가</h3><p>WireGuard는 <strong>UDP만</strong> 씀. 이유 두 가지:</p><ol><li>안에 든 게 TCP면 TCP-over-TCP 문제(바깥 TCP와 안쪽 TCP가 서로 재전송해서 성능 붕괴)를 피해야 함</li><li>UDP는 연결 상태가 없어서 뒤에 나오는 <strong>홀펀칭이 훨씬 쉬움</strong></li></ol><h3 id=55-로밍>5.5 로밍</h3><p>WireGuard peer는 상대의 &ldquo;현재 주소"를 마지막으로 유효한 패킷이 온 곳으로 갱신함. 노트북이 와이파이에서 LTE로 바뀌어 공인 IP가 달라져도, 다음 패킷이 새 주소에서 오면 그냥 그리로 답함. 연결이 안 끊기는 이유임.</p><h2 id=-6-원리-2--조정-서버-전화번호부>🔷 6. 원리 2 — 조정 서버: 전화번호부</h2><p>WireGuard를 손으로 쓸 때 제일 귀찮은 게 &ldquo;상대 공개키와 현재 IP:포트를 어떻게 아는가"임. 조정 서버가 그걸 대신함.</p><pre class=mermaid>sequenceDiagram
+    participant PC as 집 PC
+    participant CS as 조정 서버
+    participant LT as 노트북
+    PC-&gt;&gt;CS: 로그인(Google OAuth), 내 WireGuard 공개키, 내 엔드포인트 후보들
+    LT-&gt;&gt;CS: 로그인(같은 계정), 내 공개키, 내 엔드포인트 후보들
+    CS--&gt;&gt;PC: netmap: {노트북: 공개키, 100.101.1.2, 엔드포인트 후보, DERP 홈}
+    CS--&gt;&gt;LT: netmap: {집 PC: 공개키, 100.101.1.1, 엔드포인트 후보, DERP 홈}
+    Note over PC,LT: 이제 서로 알고 있음 → 직접 WireGuard 핸드셰이크</pre><ul><li>조정 서버가 아는 것: 계정, 기기 목록, 공개키, 각 기기가 &ldquo;나 밖에서 보면 <code>211.x.x.x:56926</code>이야"라고 보고한 주소들</li><li>조정 서버가 모르는 것: <strong>비밀키, 트래픽 내용</strong>. 조정 서버가 뚫려도 기존 터널은 못 엿봄(새 기기를 몰래 끼워 넣는 건 가능하므로 Tailscale은 이걸 막는 tailnet lock 기능을 따로 둠)</li><li>조정 서버 연결이 잠깐 끊겨도 이미 받은 netmap으로 P2P는 계속 동작함</li></ul><h2 id=-7-원리-3--nat-통과-어떻게-양쪽-공유기를-뚫는가>🔷 7. 원리 3 — NAT 통과: 어떻게 양쪽 공유기를 뚫는가</h2><p>여기가 핵심. 2절에서 &ldquo;공유기는 안에서 먼저 나간 연결의 답장만 넣어 줌"이라고 했음. 그러면 <strong>양쪽 다 먼저 나간 것처럼 만들면 됨.</strong></p><h3 id=71-stun--내가-밖에서-어떻게-보이는지-알아내기>7.1 STUN — 내가 밖에서 어떻게 보이는지 알아내기</h3><p>PC는 자기 공인 주소를 모름(자기 눈엔 <code>192.168.55.100</code>). STUN(RFC 5389) 서버에 UDP 패킷을 하나 보내면, 서버가 &ldquo;네가 온 주소는 <code>211.x.x.x:56926</code>이야"라고 답해 줌. Tailscale은 DERP 서버들이 STUN 역할도 겸함.</p><p><code>tailscale netcheck</code> 결과가 바로 이것임:</p><pre tabindex=0><code>* UDP: true
+* IPv4: yes, 211.x.x.x:56926          ← STUN이 알려준 내 공인 주소:포트
+* MappingVariesByDestIP: false        ← 목적지가 달라도 같은 포트로 매핑됨 = &#34;쉬운 NAT&#34;
+* Nearest DERP: Tokyo (49.5ms)</code></pre><h3 id=72-홀펀칭--동시에-서로에게-쏘기>7.2 홀펀칭 — 동시에 서로에게 쏘기</h3><p>양쪽이 조정 서버를 통해 서로의 공인 주소:포트를 알게 됐음. 이제 <strong>동시에</strong> 상대 주소로 UDP를 보냄.</p><pre class=mermaid>sequenceDiagram
+    participant PC as 집 PC&lt;br/&gt;192.168.55.100
+    participant A as 공유기 A&lt;br/&gt;211.x.x.x
+    participant B as 공유기 B&lt;br/&gt;58.x.x.x
+    participant LT as 노트북&lt;br/&gt;10.0.0.7
+    PC-&gt;&gt;A: UDP → 58.x.x.x:40001
+    Note over A: NAT 테이블 기록:&lt;br/&gt;56926 ↔ PC, 상대 58.x.x.x:40001&lt;br/&gt;&#34;이제 거기서 오는 건 PC 거&#34;
+    A--xB: 첫 패킷은 B가 버림 (B 테이블에 아직 없음)
+    LT-&gt;&gt;B: UDP → 211.x.x.x:56926
+    Note over B: NAT 테이블 기록:&lt;br/&gt;40001 ↔ LT, 상대 211.x.x.x:56926
+    B-&gt;&gt;A: 도착
+    Note over A: 테이블에 있음 → PC로 전달 ✅
+    A-&gt;&gt;PC: 
+    PC-&gt;&gt;A: 재전송
+    A-&gt;&gt;B: 이번엔 B 테이블에도 있음 → LT로 전달 ✅
+    B-&gt;&gt;LT: 
+    Note over PC,LT: 양쪽 구멍 뚫림 → WireGuard 핸드셰이크 → P2P 완성</pre><p>각 공유기는 자기 쪽 기기가 &ldquo;먼저 나갔다"고 믿음. 실제로는 양쪽이 동시에 나간 것임. 이후 패킷은 조정 서버도 릴레이도 안 거치고 <strong>두 공유기 사이를 직접</strong> 오감.</p><h3 id=73-nat의-종류--왜-가끔-안-뚫리는가>7.3 NAT의 종류 — 왜 가끔 안 뚫리는가</h3><p>공유기가 NAT 테이블을 어떻게 만드느냐에 따라 난이도가 갈림(RFC 4787 용어).</p><table><thead><tr><th>NAT 유형</th><th>동작</th><th>홀펀칭</th></tr></thead><tbody><tr><td><strong>Endpoint-Independent Mapping</strong> (&ldquo;쉬운 NAT&rdquo;, 대부분 가정용 공유기)</td><td>내부 <code>PC:51000</code>은 목적지가 누구든 항상 <code>56926</code>으로 나감</td><td>✅ STUN이 알려준 포트를 그대로 쓰면 됨</td></tr><tr><td><strong>Endpoint-Dependent Mapping</strong> (&ldquo;어려운 NAT&rdquo;, 대칭형 NAT. 일부 기업망·통신사 CGNAT)</td><td>목적지마다 다른 포트를 배정. STUN 서버에게 보인 포트 ≠ 노트북에게 보일 포트</td><td>⚠️ 포트를 추측해야 함</td></tr></tbody></table><p><code>MappingVariesByDestIP: false</code>가 쉬운 NAT라는 뜻임. 어려운 NAT를 만나면 Tailscale은:</p><ol><li>한쪽만 어려우면: 쉬운 쪽이 여러 포트를 열어 두고, 어려운 쪽이 그중 하나를 맞히기를 기다림</li><li>양쪽 다 어려우면: 이른바 <strong>생일 공격</strong> — 양쪽이 수백 개의 랜덤 포트를 동시에 쏴서 하나라도 겹치길 노림(생일 역설 덕에 256개 정도면 확률이 꽤 높음)</li><li>UPnP / NAT-PMP / PCP로 공유기에 &ldquo;포트 하나만 열어 줘"라고 정식 요청(공유기가 지원할 때)</li><li>그래도 안 되면 DERP</li></ol><h3 id=74-derp--최후의-릴레이>7.4 DERP — 최후의 릴레이</h3><p><strong>D</strong>esignated <strong>E</strong>ncrypted <strong>R</strong>elay for <strong>P</strong>ackets. Tailscale이 전 세계에 둔 중계 서버. 각 기기는 가장 가까운 DERP(한국이면 도쿄)에 <strong>HTTPS(443) 아웃바운드</strong>로 항상 붙어 있음.</p><ul><li>443 아웃바운드는 어떤 방화벽도 막지 않으므로 <strong>항상 됨</strong></li><li>릴레이는 WireGuard 패킷을 그대로 넘길 뿐, 키가 없어 내용을 못 봄</li><li>왕복이 도쿄를 거치니 느림(위 예: 직접 8ms vs DERP 52ms). 그래서 DERP로 먼저 연결해 두고 뒤에서 홀펀칭을 계속 시도함</li></ul><p>즉 사용자 입장에선 &ldquo;접속은 무조건 되고, 대부분은 빠름"이 됨.</p><h2 id=-8-패킷-한-개의-여행--rdp-클릭-한-번이-지나는-길>🔷 8. 패킷 한 개의 여행 — RDP 클릭 한 번이 지나는 길</h2><p>카페 노트북에서 원격 데스크톱 창을 클릭했을 때, 그 마우스 이벤트가 집 PC까지 가는 경로를 <a class=inline-link href=/Study/network/osi_7_layer/>OSI 계층</a>
+으로 보면 터널이 어디에 끼는지 보임.</p><table><thead><tr><th>단계</th><th>계층</th><th>내용</th></tr></thead><tbody><tr><td>1</td><td>L7</td><td>RDP 프로토콜: &ldquo;좌표 (412, 300) 클릭&rdquo;</td></tr><tr><td>2</td><td>L4</td><td>TCP, 목적지 포트 3389</td></tr><tr><td>3</td><td>L3</td><td>IP: <code>100.101.1.2</code> → <code>100.101.1.1</code> — <strong>Tailscale 가상 어댑터로 라우팅</strong></td></tr><tr><td>4</td><td>—</td><td>tailscaled: 집 PC 공개키로 암호화(ChaCha20-Poly1305) → WireGuard 패킷</td></tr><tr><td>5</td><td>L4</td><td>이걸 다시 <strong>UDP</strong>에 담음. 목적지 <code>211.x.x.x:56926</code> (홀펀칭으로 뚫어 둔 구멍)</td></tr><tr><td>6</td><td>L3</td><td>IP: <code>10.0.0.7</code> → <code>211.x.x.x</code>. 카페 공유기가 NAT → <code>58.x.x.x:40001</code> → <code>211.x.x.x</code></td></tr><tr><td>7</td><td>L2/L1</td><td>와이파이 → 카페 공유기 → 인터넷 → 집 공유기</td></tr><tr><td>8</td><td>L3</td><td>집 공유기: NAT 테이블 조회 → <code>192.168.55.100</code>으로 전달</td></tr><tr><td>9</td><td>—</td><td>집 PC tailscaled: 복호화 → 원래 IP 패킷(3단계) 복원 → Tailscale 어댑터에 투입</td></tr><tr><td>10</td><td>L4/L7</td><td>Windows: 3389 포트 → 원격 데스크톱 서비스 → 마우스 클릭 발생</td></tr></tbody></table><p><strong>IP 패킷 안에 IP 패킷이 들어 있는 구조</strong>(3단계가 5~6단계 안에 캡슐화됨). 안쪽 주소는 tailnet 주소, 바깥 주소는 실제 인터넷 주소. 이게 &ldquo;터널"이라는 말의 정확한 의미임.</p><h2 id=-9-보안--무엇이-열리고-무엇이-안-열리는가>🔷 9. 보안 — 무엇이 열리고 무엇이 안 열리는가</h2><table><thead><tr><th>항목</th><th>상태</th></tr></thead><tbody><tr><td>공인 IP로 직접 접속</td><td>❌ 불가. 포트포워딩 없음. 인터넷에서 포트 스캔해도 아무것도 안 보임</td></tr><tr><td>tailnet 밖 기기에서 <code>100.101.1.1</code> 접속</td><td>❌ 불가. 그 주소는 tailnet 안에서만 존재</td></tr><tr><td>tailnet 안 기기</td><td>✅ 기본 ACL은 전부 허용. 필요하면 관리 콘솔에서 &ldquo;노트북만 PC의 3389·22 허용"으로 좁힘</td></tr><tr><td>전송 암호화</td><td>WireGuard (Curve25519 키 교환, ChaCha20-Poly1305, BLAKE2s). 릴레이 포함 전 구간</td></tr><tr><td>Tailscale 계정 탈취 시</td><td>공격자가 자기 기기를 tailnet에 추가할 수 있음 → <strong>IdP 계정 2단계 인증 필수</strong>. tailnet lock을 켜면 기존 기기의 서명 없이는 새 기기가 못 들어옴</td></tr><tr><td>키 만료</td><td>기기 키는 기본 180일 후 재로그인 요구. 서버용 PC는 콘솔에서 만료 해제 가능</td></tr><tr><td>Windows 방화벽 프로필</td><td>Tailscale 어댑터는 <strong>Private</strong>, 이더넷은 <strong>Public</strong>으로 잡히므로 &ldquo;Private 전용&rdquo; 방화벽 규칙(OpenSSH 기본값)은 자연히 Tailscale 경유로만 열림</td></tr><tr><td>RDP 자체</td><td>NLA(네트워크 수준 인증) 켜서 로그인 전 화면 노출 차단. 그래도 OS 계정 비밀번호가 최종 관문</td></tr></tbody></table><p>정리하면 공격면이 &ldquo;인터넷 전체"에서 &ldquo;내 Tailscale 계정에 로그인한 기기"로 줄어듦. 그 계정을 지키는 게 곧 PC를 지키는 것임.</p><h2 id=-10-qa>🔷 10. Q&amp;A</h2><p><strong>Q. VPN이라는데 인터넷 트래픽이 전부 Tailscale을 지나는 건가?</strong>
+아님. 기본은 <code>100.64.0.0/10</code> 대역만 터널로 감(split tunnel). 유튜브는 평소처럼 감. 원하면 한 기기를 exit node로 지정해 전체 트래픽을 그리로 보낼 수 있음(해외에서 한국 IP 쓰기 등).</p><p><strong>Q. 집 공유기가 이중 NAT(통신사 CGNAT + 내 공유기)면?</strong>
+그래도 됨. NAT가 몇 겹이든 &ldquo;안에서 밖으로"는 되니 STUN·홀펀칭·DERP 모두 동작함. 통신사 CGNAT가 대칭형이면 직접 연결 확률이 낮아져 DERP 비중이 늘 뿐임.</p><p><strong>Q. 조정 서버(Tailscale 회사)가 죽으면?</strong>
+이미 연결된 기기끼리는 계속 통신함(netmap 캐시). 새 기기 추가·키 교체만 안 됨. 회사 자체를 못 믿겠으면 Headscale로 조정 서버를 직접 운영할 수 있음.</p><p><strong>Q. WireGuard를 그냥 직접 쓰면 안 되나?</strong>
+됨. 다만 (1) 집 공유기에 UDP 포트 하나 포워딩, (2) DDNS, (3) 기기마다 키를 손으로 교환, (4) 폰이 LTE↔와이파이 오갈 때 엔드포인트 갱신 — 을 직접 해야 함. Tailscale은 이 네 가지를 없앤 것임.</p><p><strong>Q. 폰 데이터로도 되나?</strong>
+됨. 폰이 어떤 NAT 뒤에 있든 상관없음. 홀펀칭이 실패하면 DERP로 감.</p><p><strong>Q. PC가 꺼져 있으면?</strong>
+안 됨. Tailscale은 네트워크만 담당. 전원 연결 시 절전을 끄거나, 다른 기기가 Wake-on-LAN 매직 패킷을 같은 LAN에서 쏴 줘야 함.</p><p><strong>Q. <code>100.x.x.x</code>가 왜 사설 IP 대역(<code>10.</code>, <code>172.16.</code>, <code>192.168.</code>)이 아닌가?</strong>
+그 대역은 집·회사 LAN이 이미 쓰고 있어 충돌 위험이 큼. <code>100.64.0.0/10</code>은 통신사 내부용(CGNAT, RFC 6598)이라 개인 LAN에서 쓸 일이 거의 없어 골랐음.</p><h2 id=-11-한-줄-요약>🔷 11. 한 줄 요약</h2><p><strong>밖에서 안으로 못 들어오니, 양쪽이 동시에 밖으로 나가 중간에서 만나고(홀펀칭), 그 위에 키쌍 기반 암호화 터널(WireGuard)을 깔아 같은 LAN처럼 쓰는 것. 실패하면 릴레이(DERP). 주소록 관리는 조정 서버가.</strong></p><h2 id=-12-참고>🔷 12. 참고</h2><ul><li>Tailscale, <a class=inline-link href=https://tailscale.com/blog/how-nat-traversal-works>How NAT traversal works</a>
+— 7절의 원전. 그림이 좋음</li><li>Tailscale, <a class=inline-link href=https://tailscale.com/blog/how-tailscale-works>How Tailscale works</a></li><li>Jason A. Donenfeld, <a class=inline-link href=https://www.wireguard.com/papers/wireguard.pdf>WireGuard: Next Generation Kernel Network Tunnel</a>
+(NDSS 2017)</li><li>RFC 1918 (사설 IP), RFC 6598 (100.64.0.0/10), RFC 4787 (NAT 동작 분류), RFC 5389/8489 (STUN)</li><li>실제 설정 스크립트·검증 로그: 별도 저장소 <code>remote_computer/scripts/</code></li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

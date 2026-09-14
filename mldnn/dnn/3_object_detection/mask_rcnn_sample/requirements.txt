@@ -1,0 +1,13 @@
+# Mask R-CNN 샘플 학습 코드 의존성
+#
+# CPU 전용 설치 (가장 간단, 학습용으로 충분):
+#   pip install -r requirements.txt
+#
+# CUDA GPU 사용 시에는 아래 페이지에서 자신의 CUDA 버전에 맞는 명령을 확인하세요:
+#   https://pytorch.org/get-started/locally/
+#   예) pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+torch>=1.13
+torchvision>=0.14
+numpy>=1.21
+Pillow>=9.0

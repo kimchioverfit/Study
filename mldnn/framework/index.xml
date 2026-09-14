@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Framework on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/framework/</link><description>Recent content in Framework on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/framework/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/mldnn/framework/torch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/framework/torch/</guid><description>&lt;h1 id="pytorch"&gt;Pytorch&lt;/h1&gt;
+&lt;h3 id="torchprofile"&gt;torch.profile&lt;/h3&gt;
+&lt;p&gt;PyTorch에서 모델의 성능 분석(Performance Profiling) 을 위해 사용하는 성능 프로파일링 도구&lt;/p&gt;
+&lt;p&gt;주로 연산별 시간, CUDA 사용량, CPU/메모리 소비, 오퍼레이션별 병목 현상 등을 파악하는 데 사용&lt;/p&gt;
+&lt;h3 id="jit"&gt;JIT&lt;/h3&gt;</description></item></channel></rss>

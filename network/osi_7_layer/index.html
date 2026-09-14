@@ -1,0 +1,51 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class="nav-link is-active" href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/network/>Network</a></div><h1>OSI 7 Layer</h1></header><div class="doc-body post-body"><h1 id=osi-7계층--패킷이-지나는-층을-나누는-이유>OSI 7계층 — 패킷이 지나는 층을 나누는 이유</h1><p>네트워크를 7개의 층으로 나눠 각 층이 바로 아래층만 의존하게 만든 참조 모델. 실제 인터넷은 이걸 그대로 구현한 게 아니라 TCP/IP 4층 모델에 가깝지만, &ldquo;이 문제는 몇 계층 문제인가"를 말하는 공용어로 쓰임.</p><blockquote><p>결론부터 아주 쉽게:
+편지를 보낼 때 내용(7)·봉투(4)·주소(3)·우체부(2)·도로(1)가 따로 있듯, 각 층은 자기 일만 하고 아래층에 넘김. 받는 쪽은 거꾸로 벗겨 냄. 그래서 와이파이를 이더넷으로 바꿔도(1~2층) 웹 브라우저(7층)는 아무것도 몰라도 됨.</p></blockquote><p>관련: <a class=inline-link href=/Study/network/tailscale/>Tailscale</a>
+— 이 문서의 예시가 나온 곳</p><h2 id=-1-7개-층>🔷 1. 7개 층</h2><table><thead><tr><th>층</th><th>이름</th><th>단위</th><th>하는 일</th><th>대표 예</th><th>주소</th></tr></thead><tbody><tr><td>7</td><td>응용 (Application)</td><td>데이터</td><td>사용자가 쓰는 프로토콜</td><td>HTTP, SSH, RDP, DNS</td><td>—</td></tr><tr><td>6</td><td>표현 (Presentation)</td><td>데이터</td><td>인코딩·암호화·압축</td><td>TLS, JPEG, UTF-8</td><td>—</td></tr><tr><td>5</td><td>세션 (Session)</td><td>데이터</td><td>대화의 시작·유지·종료</td><td>(실무에선 7과 뭉뚱그림)</td><td>—</td></tr><tr><td>4</td><td>전송 (Transport)</td><td>세그먼트</td><td>프로세스 간 전달, 신뢰성</td><td><strong>TCP</strong>, <strong>UDP</strong></td><td><strong>포트</strong> (22, 3389)</td></tr><tr><td>3</td><td>네트워크 (Network)</td><td>패킷</td><td>네트워크 간 경로 선택</td><td><strong>IP</strong>, ICMP</td><td><strong>IP 주소</strong></td></tr><tr><td>2</td><td>데이터링크 (Data Link)</td><td>프레임</td><td>같은 링크 안의 기기 간 전달</td><td>이더넷, Wi-Fi, ARP</td><td><strong>MAC 주소</strong></td></tr><tr><td>1</td><td>물리 (Physical)</td><td>비트</td><td>전기·빛·전파로 바꿈</td><td>UTP 케이블, 광, 2.4/5GHz</td><td>—</td></tr></tbody></table><p>외우는 법: 위에서부터 <strong>A</strong>ll <strong>P</strong>eople <strong>S</strong>eem <strong>T</strong>o <strong>N</strong>eed <strong>D</strong>ata <strong>P</strong>rocessing.</p><p>실무에서 실제로 구분해 부르는 건 <strong>L2(스위치, MAC), L3(라우터, IP), L4(포트, TCP/UDP), L7(앱)</strong> 네 개임. 5·6층은 대부분 앱 안에 녹아 있음.</p><h2 id=-2-캡슐화--내려갈-때-씌우고-올라올-때-벗김>🔷 2. 캡슐화 — 내려갈 때 씌우고 올라올 때 벗김</h2><p>보내는 쪽은 위층 데이터 앞에 자기 헤더를 붙여 아래로 넘김. 받는 쪽은 반대로 벗기며 올림.</p><pre tabindex=0><code>L7  [RDP: 클릭 (412,300)]
+L4  [TCP 헤더: dst port 3389][RDP: ...]
+L3  [IP 헤더: dst 100.101.1.1][TCP ...][RDP ...]
+L2  [이더넷 헤더: dst MAC][IP ...][TCP ...][RDP ...][FCS]
+L1  0101101001...</code></pre><p>각 층은 <strong>자기 헤더만 보고</strong> 나머지는 그냥 짐(payload)으로 취급함. 라우터(L3)는 IP 헤더만 보고 포트나 내용은 안 봄. 스위치(L2)는 MAC만 봄.</p><h2 id=-3-예시--원격-데스크톱-한-번-클릭>🔷 3. 예시 — 원격 데스크톱 한 번 클릭</h2><p><a class=inline-link href=/Study/network/tailscale/>Tailscale</a>
+문서의 8절 상황. 카페 노트북에서 집 PC로 RDP 클릭을 보내면:</p><table><thead><tr><th>층</th><th>밖(실제 인터넷)</th><th>안(터널 속)</th></tr></thead><tbody><tr><td>L7</td><td>—</td><td>RDP &ldquo;클릭&rdquo;</td></tr><tr><td>L4</td><td>UDP, dst <code>56926</code> (WireGuard)</td><td>TCP, dst <code>3389</code> (RDP)</td></tr><tr><td>L3</td><td>IP <code>58.x.x.x</code> → <code>211.x.x.x</code> (공인)</td><td>IP <code>100.101.1.2</code> → <code>100.101.1.1</code> (tailnet)</td></tr><tr><td>L2</td><td>Wi-Fi (카페) → … → 이더넷 (집)</td><td>(없음 — 가상 어댑터는 L3부터)</td></tr></tbody></table><p><strong>터널 = L3 패킷을 통째로 L4 UDP 페이로드에 넣는 것.</strong> 그래서 안쪽 스택(L3~L7)이 한 번 더 있음. VPN, VXLAN, GRE 모두 이 구조임.</p><h2 id=-4-몇-계층-문제인가로-디버깅하기>🔷 4. &ldquo;몇 계층 문제인가"로 디버깅하기</h2><table><thead><tr><th>증상</th><th>계층</th><th>확인</th></tr></thead><tbody><tr><td>케이블 뽑힘, 와이파이 안 잡힘</td><td>L1</td><td>링크 LED, <code>Get-NetAdapter</code> Status</td></tr><tr><td>같은 공유기 기기끼리도 안 됨</td><td>L2</td><td><code>arp -a</code>, MAC 필터</td></tr><tr><td>공유기는 되는데 인터넷이 안 됨</td><td>L3</td><td><code>ping 8.8.8.8</code> (IP), <code>tracert</code></td></tr><tr><td>ping은 되는데 접속 안 됨</td><td>L4</td><td><code>Test-NetConnection -Port 3389</code>, 방화벽, 서비스가 LISTEN 중인지</td></tr><tr><td>포트는 열렸는데 로그인 실패</td><td>L7</td><td>계정·비밀번호, 프로토콜 버전(NLA 등)</td></tr></tbody></table><p>위에서 아래로가 아니라 <strong>아래에서 위로</strong> 올라가며 확인하는 게 빠름. 아래층이 죽으면 위층은 전부 죽으니까.</p><h2 id=-5-한-줄-요약>🔷 5. 한 줄 요약</h2><p><strong>각 층은 자기 헤더만 보고 나머지는 짐으로 넘기는 구조. 터널은 그 짐 안에 스택이 하나 더 들어 있는 것.</strong></p></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>
