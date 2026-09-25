@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vision Transformer on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/</link><description>Recent content in Vision Transformer on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/index.xml" rel="self" type="application/rss+xml"/><item><title>ViT (2020)</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/</guid><description>&lt;h1 id="vit--an-image-is-worth-16x16-words-2020"&gt;ViT — An Image is Worth 16x16 Words (2020)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2010.11929"&gt;An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale&lt;/a&gt;
+ — Dosovitskiy et al. (Google Research, Brain Team), ICLR 2021 · &lt;a class="inline-link" href="https://github.com/google-research/vision_transformer"&gt;공식 구현&lt;/a&gt;
+ · &lt;a class="inline-link" href="https://research.google/blog/transformers-for-image-recognition-at-scale/"&gt;Google Research 블로그 소개글&lt;/a&gt;
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;이미지를 16×16 조각(패치)으로 잘라 단어처럼 한 줄로 세운 뒤, NLP에서 쓰던 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Transformer&lt;/a&gt;
+ 인코더에 거의 그대로 넣었더니 CNN 없이도 이미지 분류가 된다&amp;rdquo;&lt;/strong&gt; 는 것을 보인 논문임.
+단, 조건이 있음. &lt;strong&gt;데이터가 아주 많아야 함.&lt;/strong&gt; ImageNet(130만 장)만으로 학습하면 ResNet보다 못하지만, JFT-300M(3억 장)으로 사전학습하면 당시 SOTA를 넘어섬 (ImageNet top-1 &lt;strong&gt;88.55%&lt;/strong&gt;).
+모바일 지연시간 관점의 후속 개선은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/efficientformer/"&gt;EfficientFormer&lt;/a&gt;
+ 참고.&lt;/p&gt;</description></item><item><title>DETR (2020)</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/detr/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/detr/</guid><description>&lt;h1 id="detr--end-to-end-object-detection-with-transformers-2020"&gt;DETR — End-to-End Object Detection with Transformers (2020)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2005.12872"&gt;End-to-End Object Detection with Transformers&lt;/a&gt;
+ — Carion, Massa, Synnaeve, Usunier, Kirillov, Zagoruyko (Facebook AI), &lt;strong&gt;ECCV 2020&lt;/strong&gt; · &lt;a class="inline-link" href="https://github.com/facebookresearch/detr"&gt;공식 구현&lt;/a&gt;
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;물체 검출을 &amp;lsquo;후보 박스를 잔뜩 뽑고 걸러내는 문제&amp;rsquo;가 아니라 &amp;lsquo;집합(set)을 한 번에 예측하는 문제&amp;rsquo;로 바꿈.&amp;rdquo;&lt;/strong&gt; 학습되는 벡터 N개(object query)를 Transformer 디코더에 넣으면 각 벡터가 물체 하나씩을 맡아 (클래스, 박스)를 내놓음. anchor도, NMS도, region proposal도 없음.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/"&gt;ViT&lt;/a&gt;
+의 [class] 토큰이 &amp;ldquo;이미지 전체 → 클래스 하나&amp;quot;를 담는 빈 그릇이었다면, DETR의 object query는 &lt;strong&gt;&amp;ldquo;물체 하나 → (클래스, 박스)&amp;ldquo;를 담는 빈 그릇 N개&lt;/strong&gt;임. 이 아이디어가 Mask2Former를 거쳐 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/eomt/"&gt;EoMT&lt;/a&gt;
+까지 이어짐.&lt;/p&gt;</description></item><item><title>EfficientFormer (2022)</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/efficientformer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/efficientformer/</guid><description>&lt;h1 id="efficientformer--vision-transformers-at-mobilenet-speed-2022"&gt;EfficientFormer — Vision Transformers at MobileNet Speed (2022)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2206.01191"&gt;EfficientFormer: Vision Transformers at MobileNet Speed&lt;/a&gt;
+ — Yanyu Li et al. (Snap Inc. &amp;amp; Northeastern University), NeurIPS 2022 · &lt;a class="inline-link" href="https://github.com/snap-research/EfficientFormer"&gt;공식 구현&lt;/a&gt;
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;ViT가 모바일에서 느린 진짜 이유를 실제 기기에서 하나씩 측정해서 찾아내고, 그 병목들을 전부 걷어낸 순수 트랜스포머 구조를 만든 논문.&amp;rdquo;&lt;/strong&gt;
+그 결과 &lt;strong&gt;EfficientFormer-L1이 iPhone 12에서 1.6 ms에 ImageNet top-1 79.2%&lt;/strong&gt; — &lt;a class="inline-link" href="https://arxiv.org/abs/1801.04381"&gt;MobileNetV2&lt;/a&gt;
+×1.4와 &lt;strong&gt;같은 속도로 4.5%p 더 정확&lt;/strong&gt;함.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/"&gt;ViT&lt;/a&gt;
+와 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Attention Is All You Need&lt;/a&gt;
+의 self-attention 개념을 먼저 보고 오면 읽기 수월함.&lt;/p&gt;</description></item><item><title>EoMT (2026)</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/eomt/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/vit/eomt/</guid><description>&lt;h1 id="eomt--your-vit-is-secretly-an-image-segmentation-model-2025"&gt;EoMT — Your ViT is Secretly an Image Segmentation Model (2025)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/2503.19108"&gt;Your ViT is Secretly an Image Segmentation Model&lt;/a&gt;
+ — Kerssies et al. (TU Eindhoven · Politecnico di Torino · RWTH Aachen), &lt;strong&gt;CVPR 2025 Highlight&lt;/strong&gt; · &lt;a class="inline-link" href="https://www.tue-mps.org/eomt/"&gt;프로젝트 페이지&lt;/a&gt;
+ · &lt;a class="inline-link" href="https://github.com/tue-mps/eomt"&gt;공식 구현&lt;/a&gt;
+ · &lt;a class="inline-link" href="https://huggingface.co/models?other=eomt"&gt;Hugging Face&lt;/a&gt;
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: &lt;strong&gt;&amp;ldquo;ViT로 segmentation을 하려고 그동안 덕지덕지 붙이던 부가 장치(adapter, pixel decoder, Transformer decoder)는 모델이 충분히 크고 사전학습이 충분하면 전부 필요 없음. 쿼리 토큰 몇 개만 ViT에 끼워 넣으면 ViT 자체가 segmentation 모델임.&amp;rdquo;&lt;/strong&gt;
+그 결과 ViT-L 기준 &lt;strong&gt;Mask2Former + ViT-Adapter 대비 4.4배 빠르면서 PQ는 1.1밖에 안 떨어짐&lt;/strong&gt; (COCO panoptic 57.1 → 56.0, 29 → 128 FPS).
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/"&gt;ViT&lt;/a&gt;
+ 원논문이 &amp;ldquo;데이터가 많으면 CNN의 inductive bias가 필요 없다&amp;quot;고 한 것을, &lt;strong&gt;segmentation용 부가 구조의 inductive bias&lt;/strong&gt;로 확장한 논문임. &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/"&gt;ViT&lt;/a&gt;
+ 문서의 §4(inductive bias)와 §8(한계: dense prediction)을 먼저 보고 오면 이해가 빠름.&lt;/p&gt;</description></item></channel></rss>

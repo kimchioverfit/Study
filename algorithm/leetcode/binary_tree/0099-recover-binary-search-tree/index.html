@@ -1,0 +1,133 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>99. Recover Binary Search Tree | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/algorithm/leetcode/binary_tree/>Binary Tree</a></div><h1>99. Recover Binary Search Tree</h1></header><div class="doc-body post-body"><h1 id=99-recover-binary-search-tree>99. Recover Binary Search Tree</h1><p>Binary Search Tree</p><p>You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.</p><p>Example 1:</p><img src="../../imgs/Recover Binary Search Tree_1.jpg" alt="Validate Binary Search Tree_1" width=300><br><pre tabindex=0><code>Input: root = [1,3,null,null,2]
+Output: [3,1,null,null,2]
+Explanation: 3 cannot be a left child of 1 because 3 &gt; 1. Swapping 1 and 3 makes the BST valid.</code></pre><p>Example 2:</p><img src="../../imgs/Recover Binary Search Tree_2.jpg" alt="Validate Binary Search Tree_2" width=300><br><pre tabindex=0><code>Input: root = [3,1,4,null,null,2]
+Output: [2,1,4,null,null,3]
+Explanation: 2 cannot be in the right subtree of 3 because 2 &lt; 3. Swapping 2 and 3 makes the BST valid.</code></pre><h3 id=풀이-실패>풀이 실패</h3><h3 id=내-코드>내 코드</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e> * Definition for a binary tree node.
+</span></span></span><span style=display:flex><span><span style=color:#75715e> * struct TreeNode {
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     int val;
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode *left;
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode *right;
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+</span></span></span><span style=display:flex><span><span style=color:#75715e> * };
+</span></span></span><span style=display:flex><span><span style=color:#75715e> */</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span> {
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> myfunction(TreeNode<span style=color:#f92672>*</span> node,vector<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;&amp;</span> results,TreeNode<span style=color:#f92672>*</span>minNode, TreeNode<span style=color:#f92672>*</span> maxNode){
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span>(node<span style=color:#f92672>==</span><span style=color:#66d9ef>nullptr</span>){
+</span></span><span style=display:flex><span>            cout <span style=color:#f92672>&lt;&lt;</span><span style=color:#e6db74>&#34;0&#34;</span><span style=color:#f92672>&lt;&lt;</span>endl;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        myfunction(node<span style=color:#f92672>-&gt;</span>left,results,<span style=color:#66d9ef>nullptr</span>,node);
+</span></span><span style=display:flex><span>        myfunction(node<span style=color:#f92672>-&gt;</span>right,results,node,<span style=color:#66d9ef>nullptr</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span>(minNode<span style=color:#f92672>!=</span><span style=color:#66d9ef>nullptr</span> <span style=color:#f92672>&amp;&amp;</span> node<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>&lt;</span> minNode<span style=color:#f92672>-&gt;</span>val){
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> temp <span style=color:#f92672>=</span> minNode<span style=color:#f92672>-&gt;</span>val;
+</span></span><span style=display:flex><span>            minNode<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>=</span> node<span style=color:#f92672>-&gt;</span>val;
+</span></span><span style=display:flex><span>            node<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>=</span> temp;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span>(maxNode<span style=color:#f92672>!=</span><span style=color:#66d9ef>nullptr</span> <span style=color:#f92672>&amp;&amp;</span> node<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>&gt;</span> maxNode<span style=color:#f92672>-&gt;</span>val){
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> temp <span style=color:#f92672>=</span> maxNode<span style=color:#f92672>-&gt;</span>val;
+</span></span><span style=display:flex><span>            maxNode<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>=</span> node<span style=color:#f92672>-&gt;</span>val;
+</span></span><span style=display:flex><span>            node<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>=</span> temp;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        results.push_back(node<span style=color:#f92672>-&gt;</span>val);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>recoverTree</span>(TreeNode<span style=color:#f92672>*</span> root) {
+</span></span><span style=display:flex><span>        vector<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;</span> results;
+</span></span><span style=display:flex><span>        myfunction(root,results,<span style=color:#66d9ef>nullptr</span>,<span style=color:#66d9ef>nullptr</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>};</span></span></code></pre></div><p><strong>잘못된 부분 설명</strong></p><ol><li>중위 순회를 제대로 구현하지 못함</li></ol><p>중위 순회는 왼쪽 노드 -> 현재 노드 -> 오른쪽 노드 순이어야 하지만,</p><p>기존 함수는 <u>왼쪽과 오른쪽 자식 노드를 오가며 잘못된 위치 검사만 수행</u></p><p>→ 중위 순회를 할 때에는 꼭</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>        inorder(root<span style=color:#f92672>-&gt;</span>left,...);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//추가 코드//
+</span></span></span><span style=display:flex><span>        inorder(root<span style=color:#f92672>-&gt;</span>right,...);</span></span></code></pre></div><p>위의 형태를 지키도록 하자.</p><ol start=2><li>부모와 자식 1세대만 가지고는 풀 수가 없다.</li></ol><p>기본적으로 이 문제 같은 경우에는 subtree까지 전부 확인해야하므로,</p><p>단순히 1세대비교만으로는 구조적으로 불가능하다.</p><p>때문에, 3개의 TreeNode ptr을 만들어 2세대간 비교를 할 수 있게 해야한다.</p><h3 id=풀이법>풀이법</h3><p><strong><code>1. Three Pointer 풀이법</code></strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e> * Definition for a binary tree node.
+</span></span></span><span style=display:flex><span><span style=color:#75715e> * struct TreeNode {
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     int val;
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode *left;
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode *right;
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+</span></span></span><span style=display:flex><span><span style=color:#75715e> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+</span></span></span><span style=display:flex><span><span style=color:#75715e> * };
+</span></span></span><span style=display:flex><span><span style=color:#75715e> */</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span> {
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    TreeNode<span style=color:#f92672>*</span> first <span style=color:#f92672>=</span> <span style=color:#66d9ef>nullptr</span>;
+</span></span><span style=display:flex><span>    TreeNode<span style=color:#f92672>*</span> second <span style=color:#f92672>=</span> <span style=color:#66d9ef>nullptr</span>;
+</span></span><span style=display:flex><span>    TreeNode<span style=color:#f92672>*</span> prevNode <span style=color:#f92672>=</span> <span style=color:#66d9ef>nullptr</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>myfunction</span>(TreeNode<span style=color:#f92672>*</span> node) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (node <span style=color:#f92672>==</span> <span style=color:#66d9ef>nullptr</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        myfunction(node<span style=color:#f92672>-&gt;</span>left);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (prevNode <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nullptr</span> <span style=color:#f92672>&amp;&amp;</span> node<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>&lt;</span> prevNode<span style=color:#f92672>-&gt;</span>val) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> (first <span style=color:#f92672>==</span> <span style=color:#66d9ef>nullptr</span>) {
+</span></span><span style=display:flex><span>                first <span style=color:#f92672>=</span> prevNode;
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>            second <span style=color:#f92672>=</span> node;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        prevNode <span style=color:#f92672>=</span> node;
+</span></span><span style=display:flex><span>        myfunction(node<span style=color:#f92672>-&gt;</span>right);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>recoverTree</span>(TreeNode<span style=color:#f92672>*</span> root) {
+</span></span><span style=display:flex><span>        myfunction(root);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (first <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nullptr</span> <span style=color:#f92672>&amp;&amp;</span> second <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nullptr</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> temp <span style=color:#f92672>=</span> first<span style=color:#f92672>-&gt;</span>val;
+</span></span><span style=display:flex><span>            first<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>=</span> second<span style=color:#f92672>-&gt;</span>val;
+</span></span><span style=display:flex><span>            second<span style=color:#f92672>-&gt;</span>val <span style=color:#f92672>=</span> temp;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>};</span></span></code></pre></div><ol start=98><li>Validate Binary Search Tree 문제의 경우</li></ol><p>Pointer가 추가적으로 2개면 충분했다. (교환이 아닌 검증이기 때문에)</p><p>그러나 이 경우에는 교환작업이 필요하므로, 포인터가 3개 필요하다.</p><p><strong>prev 포인터</strong></p><ul><li>역할 : 중위 순회를 하면서 이전 노드를 추적합니다.</li><li>이유 : 이진 검색 트리(BST)에서 중위 순회는 값이 오름차순으로 되기 때문에, 현재 노드의 값은 이전 노드(prev)의 값보다 커야 합니다. 이를 통해 현재 노드와 이전 노드를 비교하여 교환이 필요한 노드를 탐지할 수 있습니다.</li></ul><p><strong>first 포인터</strong></p><ul><li>역할 : 잘못된 노드쌍 중 첫 번째 노드를 저장합니다.</li><li>이유 : 최초로 발견된 순서가 잘못된 노드(prev > 현재 노드)를 가리킵니다. 이 노드는 교체 대상 중 하나입니다. 여러 번 발견될 수도 있지만, 우리는 처음 발견된 노드를 저장합니다.</li></ul><p><strong>second 포인터</strong></p><ul><li>역할 : 잘못된 노드쌍 중 두 번째 노드를 저장합니다.</li><li>이유 : 이후에 발견된 순서가 잘못된 노드(prev > 현재 노드)를 가리킵니다. 이 노드는 두 번째 교체 대상입니다. 만약 여러 번 발견되더라도 마지막에 발견된 노드를 저장합니다.</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,78 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>53. Maximum Subarray | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/algorithm/leetcode/dynamic_programming/>Dynamic Programming</a></div><h1>53. Maximum Subarray</h1></header><div class="doc-body post-body"><h1 id=53-maximum-subarray>53. Maximum Subarray</h1><p>Given an integer array nums, find the
+subarray
+with the largest sum, and return its sum.</p><blockquote><p><strong>Example 1</strong></p><p>Input: nums = [-2,1,-3,4,-1,2,1,-5,4]</p><p>Output: 6</p><p>Explanation: The subarray [4,-1,2,1] has the largest sum 6.</p></blockquote><blockquote><p><strong>Example 2</strong></p><p>Input: nums = [1]</p><p>Output: 1</p><p>Explanation: The subarray [1] has the largest sum 1.</p></blockquote><blockquote><p><strong>Example 3</strong></p><p>Input: nums = [5,4,-1,7,8]</p><p>Output: 23</p><p>Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.</p></blockquote><p>같은 스타일인데 계속 같이 틀림..</p><p><a class=inline-link href=#kadanes-algorithm>카데인 알고리즘</a>
+이거 제대로 공부안하면 부분합 계속 틀릴듯</p><h3 id=solution-failed-bruth-force>Solution (Failed, Bruth force)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span> {
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> maxSubArray(vector<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;&amp;</span> nums) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> n <span style=color:#f92672>=</span> nums.size();
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> maxSum <span style=color:#f92672>=</span> INT_MIN; <span style=color:#75715e>// 가능한 최소값으로 초기화
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 모든 가능한 subarray를 탐색
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> n; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> currentSum <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#75715e>// 현재 subarray의 합계
+</span></span></span><span style=display:flex><span>            <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> j <span style=color:#f92672>=</span> i; j <span style=color:#f92672>&lt;</span> n; j<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>                currentSum <span style=color:#f92672>+=</span> nums[j]; <span style=color:#75715e>// subarray [i, j]의 합계 계산
+</span></span></span><span style=display:flex><span>                maxSum <span style=color:#f92672>=</span> max(maxSum, currentSum); <span style=color:#75715e>// 최대값 갱신
+</span></span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> maxSum;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>};</span></span></code></pre></div><p>위와 같이 브루트 포스를 이용해서 풀려고 하면, 시간초과가 발생한다.</p><p>Time Complexity : O(N^2)</p><p>Space Complexity : O(1)</p><h3 id=solution-kadane>Solution (Kadane)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span> {
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> maxSubArray(std<span style=color:#f92672>::</span>vector<span style=color:#f92672>&lt;</span><span style=color:#66d9ef>int</span><span style=color:#f92672>&gt;&amp;</span> nums) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> maxSum <span style=color:#f92672>=</span> nums[<span style=color:#ae81ff>0</span>]; 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> currentSum <span style=color:#f92672>=</span> nums[<span style=color:#ae81ff>0</span>]; 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; i <span style=color:#f92672>&lt;</span> nums.size(); <span style=color:#f92672>++</span>i) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>int</span> temp <span style=color:#f92672>=</span> currentSum <span style=color:#f92672>+</span> nums[i];
+</span></span><span style=display:flex><span>            currentSum <span style=color:#f92672>=</span> max(nums[i], temp);
+</span></span><span style=display:flex><span>            maxSum <span style=color:#f92672>=</span> max(maxSum, currentSum);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> maxSum;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>};</span></span></code></pre></div><p>Time Complexity : O(N)</p><p>Space Complexity : O(1)</p><h3 id=kadanes-algorithm><code>Kadane's Algorithm</code></h3><p>Dynamic programming</p><p>(하위 문제들의 결과를 저장하고, 이를 이용해서 전체 문제를 해결)</p><p>DP 문제를 해결할 때 쓰이는 알고리즘 중 하나</p><p>Time complexity : O(n)이므로 가장 효율적이다.</p><p>A = [-2, 1, -3, 4, -1, 2, 1, -5, 4]; 가 있다고 할 때,</p><p>Maximum Subarray 를 찾아보자.</p><img src=../../imgs/Kadane1.jfif alt=Kadane1 width=300><p>위 그림을 보면 알 수 있겠지만,</p><img src=../../imgs/Kadane2.jfif alt=Kadane2 width=300><p>굳이 회색 영역을 매번 계산해줄 필요가 없다.</p><p>첫번째 빨간색 화살표는 A[5] 이고,</p><p>두번째 빨간색 화살표는 A[4]의 부분합을 포함하고있는 A[5]의 부분합 중</p><p>가장 큰 값인 A[4]의 localMaximum + A[5]이다.</p><p>이 두 값만 비교해서 더 큰 값을 A[5]의 localMaximum 값으로 보면 된다.</p><p>식으로 표현하면 아래와 같다.</p><blockquote><p>localMaximum[i] = max(A[i], A[i] + localMaximum[i-1])</p></blockquote></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

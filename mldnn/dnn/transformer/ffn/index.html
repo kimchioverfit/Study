@@ -1,0 +1,75 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>FFN (MLP) | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/transformer/>Transformer</a></div><h1>FFN (MLP)</h1></header><div class="doc-body post-body"><h1 id=ffn-mlp--position-wise-feed-forward-network>FFN (MLP) — Position-wise Feed-Forward Network</h1><blockquote><p>Transformer 블록의 두 번째 절반. <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>attention</a>
+이 <strong>토큰끼리 정보를 섞는</strong> 단계라면, FFN은 <strong>토큰 하나하나를 따로 가공하는</strong> 단계임.
+논문에 따라 FFN, MLP, MLP block이라고 부르는데 전부 같은 것임 (<a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+는 FFN, <a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+·<a class=inline-link href=/Study/mldnn/dnn/vit/eomt/>EoMT</a>
+는 MLP).</p></blockquote><hr><h2 id=1-정의>1. 정의</h2>$$
+\text{FFN}(x) = \sigma(xW_1 + b_1)\,W_2 + b_2
+$$<ul><li>$W_1 \in \mathbb{R}^{D \times D_{ff}}$ : 차원을 <strong>키움</strong> (보통 $D_{ff} = 4D$)</li><li>$\sigma$ : 활성함수. 원조 Transformer는 ReLU, ViT/BERT/GPT-2 이후는 GELU, LLaMA 계열은 SwiGLU</li><li>$W_2 \in \mathbb{R}^{D_{ff} \times D}$ : 다시 <strong>줄임</strong></li></ul><pre tabindex=0><code>(B, N, D) ─ Linear(D→4D) ─ 활성함수 ─ Linear(4D→D) ─▶ (B, N, D)</code></pre><p>입출력 shape가 같아서 residual로 더할 수 있음: $x + \text{FFN}(\text{LN}(x))$</p><hr><h2 id=2-position-wise의-뜻>2. &ldquo;Position-wise"의 뜻</h2><p><strong>같은 $W_1, W_2$ 를 모든 토큰(위치)에 독립적으로 적용</strong>한다는 뜻임.
+토큰 $i$의 출력은 토큰 $i$의 입력에만 의존하고, 옆 토큰은 전혀 안 봄.</p><ul><li>시퀀스 길이 $N$이 얼마든 파라미터 수는 같음</li><li>구현상 <strong>kernel 1×1 conv</strong>와 완전히 동일함. <a class=inline-link href=/Study/mldnn/dnn/vit/efficientformer/>EfficientFormer</a>
+가 FFN을 <code>Conv1x1-BN</code>으로 바꿔 쓸 수 있는 이유</li><li>토큰 간 정보 교환은 attention이 이미 했으므로, FFN은 그 결과를 각자 소화하는 역할임</li></ul><table><thead><tr><th></th><th>Attention</th><th>FFN</th></tr></thead><tbody><tr><td>토큰 간 정보 교환</td><td>O (모든 쌍)</td><td>X (토큰별 독립)</td></tr><tr><td>역할</td><td>문맥 수집 — &ldquo;다른 토큰이 뭐라고 하나&rdquo;</td><td>표현 가공 — &ldquo;모은 정보를 어떻게 해석하나&rdquo;</td></tr><tr><td>파라미터</td><td>$4D^2$ (Q, K, V, O)</td><td>$8D^2$ ($D \to 4D \to D$)</td></tr></tbody></table><hr><h2 id=3-왜-4배로-키우나>3. 왜 4배로 키우나</h2><ul><li>한 번 넓은 공간으로 펼쳐서 비선형을 먹여야 표현력이 생김. $D \to D$ 두 층이면 사실상 선형 변환 하나와 별 차이 없음</li><li>4는 원조 논문의 경험적 선택($D=512, D_{ff}=2048$)이고 이후 대부분 관례로 따름. SwiGLU를 쓰는 모델은 게이트 때문에 $\tfrac{8}{3}D$ 정도로 줄여 파라미터 수를 맞춤</li></ul><hr><h2 id=4-알아두면-좋은-점>4. 알아두면 좋은 점</h2><ul><li><strong>파라미터의 2/3가 FFN에 있음</strong> — 블록 하나에서 attention $4D^2$ vs FFN $8D^2$. 그래서 <a class=inline-link href=/Study/mldnn/basics/model_optimization/pruning/structured_pruning/>Structured Pruning</a>
+이나 양자화에서 FFN 차원($D_{ff}$)이 주요 타깃임</li><li><strong>key-value 메모리 해석</strong> — $W_1$의 각 행이 &ldquo;패턴 감지기(key)&rdquo;, $W_2$의 각 열이 &ldquo;그 패턴에 대응하는 출력(value)&ldquo;처럼 동작한다는 분석이 있음. LLM의 사실 지식이 주로 FFN에 저장된다는 연구가 여기서 나옴</li><li><strong>MoE (Mixture of Experts)</strong> — FFN을 여러 개 두고 토큰마다 일부만 골라 쓰는 구조. attention이 아니라 FFN을 여러 개로 만드는 이유가 바로 &ldquo;토큰별 독립 + 파라미터 대부분이 여기 있음&rdquo; 때문임</li></ul><hr><h2 id=5-코드>5. 코드</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn <span style=color:#66d9ef>as</span> nn
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>FFN</span>(nn<span style=color:#f92672>.</span>Module):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self, dim, mlp_ratio<span style=color:#f92672>=</span><span style=color:#ae81ff>4.0</span>, drop<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0</span>):
+</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
+</span></span><span style=display:flex><span>        hidden <span style=color:#f92672>=</span> int(dim <span style=color:#f92672>*</span> mlp_ratio)
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>fc1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(dim, hidden)     <span style=color:#75715e># D -&gt; 4D</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>act <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>GELU()
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>fc2 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(hidden, dim)     <span style=color:#75715e># 4D -&gt; D</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>drop <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Dropout(drop)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):                     <span style=color:#75715e># x: (B, N, D) — 토큰마다 독립 적용</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>drop(self<span style=color:#f92672>.</span>fc2(self<span style=color:#f92672>.</span>drop(self<span style=color:#f92672>.</span>act(self<span style=color:#f92672>.</span>fc1(x)))))</span></span></code></pre></div><hr><h2 id=참고>참고</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+— 원조 정의 (§8)</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention</a>
+— FFN 바로 앞 단계. 토큰끼리 정보를 섞는 쪽</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/cross_attention/>Cross-Attention</a>
+— 디코더 블록에서 FFN 앞에 하나 더 붙는 단계</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/dimension/>Dimension</a>
+— $D$ 를 키울 때 파라미터가 $D^2$ 로 느는 이유</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+§3.1 — MSA vs MLP 역할 비교</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/efficientformer/>EfficientFormer</a>
+— FFN을 1×1 conv로 구현 (MetaFormer 관점)</li><li><a class=inline-link href=/Study/mldnn/basics/model_optimization/pruning/structured_pruning/>Structured Pruning</a>
+— FFN 차원 프루닝</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

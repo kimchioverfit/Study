@@ -1,0 +1,57 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>| Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/math/basic_linear_algebra/20_matrix_types/>20 matrix types</a></div><h1>Symmetric matrix</h1></header><div class="doc-body post-body"><h1 id=-대칭-행렬-symmetric-matrix>🔁 대칭 행렬 (Symmetric Matrix)</h1><h2 id=-정의>✅ 정의</h2><p>대칭 행렬(Symmetric Matrix)은 **전치행렬(transpose)**과 자기 자신이 같은 <strong>정방행렬</strong>.</p><p>즉, 행렬 $ A $가 다음을 만족하면:</p>$$
+A^T = A
+$$<p>→ $ A $는 <strong>대칭 행렬</strong>.</p><hr><h2 id=-예시>🧮 예시</h2><p>다음은 대칭 행렬의 예:</p>$$
+A =
+\begin{bmatrix}
+2 & 3 & 4 \\
+3 & 5 & 6 \\
+4 & 6 & 7
+\end{bmatrix}
+$$<ul><li>$ A_{ij} = A_{ji} $ → 모든 원소가 대각선 기준으로 대칭</li></ul><hr><h2 id=-전치행렬과-비교>🔄 전치행렬과 비교</h2><p>전치행렬이란 행과 열을 뒤바꾸는 연산:</p>$$
+A^T_{ij} = A_{ji}
+$$<p>대칭 행렬은 전치해도 변하지 않음:<br>$ A = A^T $</p><hr><h2 id=-성질>📌 성질</h2><ol><li><strong>실수 대칭 행렬</strong>은 항상 **실수 고유값(real eigenvalues)**을 가짐.</li><li><strong>직교대각화(orthogonal diagonalization)</strong> 가능 → $ A = Q \Lambda Q^T $</li><li><strong>대칭 행렬의 행렬식</strong>은 일반 행렬과 동일한 방식으로 계산</li><li>$ A + A^T $는 항상 대칭 행렬임.</li><li>$ A \cdot A^T $도 항상 대칭 행렬임.</li></ol><hr><h2 id=-활용-분야>🧠 활용 분야</h2><ul><li><strong>공분산 행렬(Covariance Matrix)</strong> → 항상 대칭</li><li><strong>물리 시뮬레이션</strong>의 강성 행렬(Stiffness Matrix)</li><li><strong>고유값 분해(Eigendecomposition)</strong> → 주성분 분석(PCA), 스펙트럼 분해 등</li><li><strong>최적화 문제</strong>에서 헤세 행렬(Hessian)은 대칭행렬</li></ul><hr><h2 id=-요약>✳️ 요약</h2><table><thead><tr><th>특성</th><th>설명</th></tr></thead><tbody><tr><td>정의</td><td>$ A^T = A $</td></tr><tr><td>구조</td><td>대각선 기준으로 대칭</td></tr><tr><td>고유값</td><td>항상 실수</td></tr><tr><td>대각화</td><td>직교 행렬 $ Q $로 가능</td></tr><tr><td>예시</td><td>공분산 행렬, 그래프의 라플라시안 행렬 등</td></tr></tbody></table></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

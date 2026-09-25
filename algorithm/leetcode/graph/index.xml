@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Graph on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/</link><description>Recent content in Graph on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/index.xml" rel="self" type="application/rss+xml"/><item><title>130. Surrounded Regions</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0130-surrounded-regions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0130-surrounded-regions/</guid><description>&lt;h1 id="130-surrounded-regions"&gt;130. Surrounded Regions&lt;/h1&gt;
+&lt;p&gt;You are given an m x n matrix board containing letters &amp;lsquo;X&amp;rsquo; and &amp;lsquo;O&amp;rsquo;, capture regions that are surrounded:&lt;/p&gt;
+&lt;p&gt;Connect: A cell is connected to adjacent cells horizontally or vertically.
+Region: To form a region connect every &amp;lsquo;O&amp;rsquo; cell.
+Surround: The region is surrounded with &amp;lsquo;X&amp;rsquo; cells if you can connect the region with &amp;lsquo;X&amp;rsquo; cells and none of the region cells are on the edge of the board.
+To capture a surrounded region, replace all &amp;lsquo;O&amp;rsquo;s with &amp;lsquo;X&amp;rsquo;s in-place within the original board. You do not need to return anything.&lt;/p&gt;</description></item><item><title>133. Clone Graph</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0133-clone-graph/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0133-clone-graph/</guid><description>&lt;h1 id="133-clone-graph"&gt;133. Clone Graph&lt;/h1&gt;
+&lt;p&gt;Given a reference of a node in a connected undirected graph.&lt;/p&gt;
+&lt;p&gt;Return a deep copy (clone) of the graph.&lt;/p&gt;
+&lt;p&gt;Each node in the graph contains a value (int) and a list (List[Node]) of its neighbors.&lt;/p&gt;
+&lt;p&gt;class Node {
+public int val;
+public List&lt;Node&gt; neighbors;
+}&lt;/p&gt;
+&lt;p&gt;Test case format:&lt;/p&gt;
+&lt;p&gt;For simplicity, each node&amp;rsquo;s value is the same as the node&amp;rsquo;s index (1-indexed). For example, the first node with val == 1, the second node with val == 2, and so on. The graph is represented in the test case using an adjacency list.&lt;/p&gt;</description></item><item><title>200. Number of Islands</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0200-number-of-islands/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0200-number-of-islands/</guid><description>&lt;h1 id="200-number-of-islands"&gt;200. Number of Islands&lt;/h1&gt;
+&lt;p&gt;Given an m x n 2D binary grid grid which represents a map of &amp;lsquo;1&amp;rsquo;s (land) and &amp;lsquo;0&amp;rsquo;s (water), return the number of islands.&lt;/p&gt;
+&lt;p&gt;An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: grid = [&lt;/p&gt;
+&lt;p&gt;[&amp;ldquo;1&amp;rdquo;,&amp;ldquo;1&amp;rdquo;,&amp;ldquo;1&amp;rdquo;,&amp;ldquo;1&amp;rdquo;,&amp;ldquo;0&amp;rdquo;],&lt;/p&gt;
+&lt;p&gt;[&amp;ldquo;1&amp;rdquo;,&amp;ldquo;1&amp;rdquo;,&amp;ldquo;0&amp;rdquo;,&amp;ldquo;1&amp;rdquo;,&amp;ldquo;0&amp;rdquo;],&lt;/p&gt;
+&lt;p&gt;[&amp;ldquo;1&amp;rdquo;,&amp;ldquo;1&amp;rdquo;,&amp;ldquo;0&amp;rdquo;,&amp;ldquo;0&amp;rdquo;,&amp;ldquo;0&amp;rdquo;],&lt;/p&gt;
+&lt;p&gt;[&amp;ldquo;0&amp;rdquo;,&amp;ldquo;0&amp;rdquo;,&amp;ldquo;0&amp;rdquo;,&amp;ldquo;0&amp;rdquo;,&amp;ldquo;0&amp;rdquo;]&lt;/p&gt;
+&lt;p&gt;]&lt;/p&gt;
+&lt;p&gt;Output: 1&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>207. Course Schedule</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0207-course-schedule-topological-sort/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0207-course-schedule-topological-sort/</guid><description>&lt;h1 id="207-course-schedule"&gt;207. Course Schedule&lt;/h1&gt;
+&lt;p&gt;There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.&lt;/p&gt;
+&lt;p&gt;For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+Return true if you can finish all courses. Otherwise, return false.&lt;/p&gt;</description></item><item><title>207. Course Schedule</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0207-course-schedule/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0207-course-schedule/</guid><description>&lt;h1 id="207-course-schedule"&gt;207. Course Schedule&lt;/h1&gt;
+&lt;p&gt;There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.&lt;/p&gt;
+&lt;p&gt;For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+Return true if you can finish all courses. Otherwise, return false.&lt;/p&gt;</description></item><item><title>305. Number of Islands II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0305-number-of-islands-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0305-number-of-islands-ii/</guid><description>&lt;h1 id="305-number-of-islands-ii"&gt;305. Number of Islands II&lt;/h1&gt;
+&lt;p&gt;You are given an empty 2D binary grid grid of size m x n. The grid represents a map where 0&amp;rsquo;s represent water and 1&amp;rsquo;s represent land. Initially, all the cells of grid are water cells (i.e., all the cells are 0&amp;rsquo;s).&lt;/p&gt;
+&lt;p&gt;We may perform an add land operation which turns the water at position into a land. You are given an array positions where positions[i] = [ri, ci] is the position (ri, ci) at which we should operate the ith operation.&lt;/p&gt;</description></item><item><title>547. Number of Provinces</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0547-number-of-provinces/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0547-number-of-provinces/</guid><description>&lt;h1 id="547-number-of-provinces"&gt;547. Number of Provinces&lt;/h1&gt;
+&lt;p&gt;There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.&lt;/p&gt;
+&lt;p&gt;A province is a group of directly or indirectly connected cities and no other cities outside of the group.&lt;/p&gt;
+&lt;p&gt;You are given an n x n matrix isConnected where isConnected[i][j] = 1 if the ith city and the jth city are directly connected, and isConnected[i][j] = 0 otherwise.&lt;/p&gt;</description></item><item><title>695. Max Area of Island</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0695-max-area-of-island/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0695-max-area-of-island/</guid><description>&lt;h1 id="695-max-area-of-island"&gt;695. Max Area of Island&lt;/h1&gt;
+&lt;p&gt;You are given an m x n binary matrix grid. An island is a group of 1&amp;rsquo;s (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.&lt;/p&gt;
+&lt;p&gt;The area of an island is the number of cells with a value 1 in the island.&lt;/p&gt;
+&lt;p&gt;Return the maximum area of an island in grid. If there is no island, return 0.&lt;/p&gt;</description></item><item><title>909. Snakes and Ladders</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0909-snakes-and-ladders/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0909-snakes-and-ladders/</guid><description>&lt;h1 id="909-snakes-and-ladders"&gt;909. Snakes and Ladders&lt;/h1&gt;
+&lt;p&gt;You are given an n x n integer matrix board where the cells are labeled from 1 to n2 in a Boustrophedon style starting from the bottom left of the board (i.e. board[n - 1][0]) and alternating direction each row.&lt;/p&gt;
+&lt;p&gt;You start on square 1 of the board. In each move, starting from square curr, do the following:&lt;/p&gt;
+&lt;p&gt;Choose a destination square next with a label in the range [curr + 1, min(curr + 6, n2)].
+This choice simulates the result of a standard 6-sided die roll: i.e., there are always at most 6 destinations, regardless of the size of the board.
+If next has a snake or ladder, you must move to the destination of that snake or ladder. Otherwise, you move to next.
+The game ends when you reach the square n2.
+A board square on row r and column c has a snake or ladder if board[r][c] != -1. The destination of that snake or ladder is board[r][c]. Squares 1 and n2 are not the starting points of any snake or ladder.&lt;/p&gt;</description></item><item><title>994. Rotting Oranges</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0994-rotting-oranges/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0994-rotting-oranges/</guid><description>&lt;h1 id="994-rotting-oranges"&gt;994. Rotting Oranges&lt;/h1&gt;
+&lt;p&gt;You are given an m x n grid where each cell can have one of three values:&lt;/p&gt;
+&lt;p&gt;0 representing an empty cell,
+1 representing a fresh orange, or
+2 representing a rotten orange.
+Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.&lt;/p&gt;
+&lt;p&gt;Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.&lt;/p&gt;</description></item><item><title>1298. Maximum Candies You Can Get from Boxes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/1298-maximum-candies-you-can-get-from-boxes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/1298-maximum-candies-you-can-get-from-boxes/</guid><description>&lt;h1 id="1298-maximum-candies-you-can-get-from-boxes"&gt;1298. Maximum Candies You Can Get from Boxes&lt;/h1&gt;
+&lt;p&gt;You have n boxes labeled from 0 to n - 1. You are given four arrays: status, candies, keys, and containedBoxes where:&lt;/p&gt;
+&lt;p&gt;status[i] is 1 if the ith box is open and 0 if the ith box is closed,
+candies[i] is the number of candies in the ith box,
+keys[i] is a list of the labels of the boxes you can open after opening the ith box.
+containedBoxes[i] is a list of the boxes you found inside the ith box.
+You are given an integer array initialBoxes that contains the labels of the boxes you initially have. You can take all the candies in any open box and you can use the keys in it to open new boxes and you also can use the boxes you find in it.&lt;/p&gt;</description></item><item><title>2359. Find Closest Node to Given Two Nodes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/2359-find-closest-node-to-given-two-nodes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/2359-find-closest-node-to-given-two-nodes/</guid><description>&lt;h1 id="2359-find-closest-node-to-given-two-nodes"&gt;2359. Find Closest Node to Given Two Nodes&lt;/h1&gt;
+&lt;p&gt;You are given a directed graph of n nodes numbered from 0 to n - 1, where each node has at most one outgoing edge.&lt;/p&gt;
+&lt;p&gt;The graph is represented with a given 0-indexed array edges of size n, indicating that there is a directed edge from node i to node edges[i]. If there is no outgoing edge from i, then edges[i] == -1.&lt;/p&gt;</description></item><item><title>3342. Find Minimum Time to Reach Last Room II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/3342-find-minimum-time-to-reach-last-room-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/3342-find-minimum-time-to-reach-last-room-ii/</guid><description>&lt;h1 id="3342-find-minimum-time-to-reach-last-room-ii"&gt;3342. Find Minimum Time to Reach Last Room II&lt;/h1&gt;
+&lt;p&gt;There is a dungeon with n x m rooms arranged as a grid.&lt;/p&gt;
+&lt;p&gt;You are given a 2D array moveTime of size n x m, where moveTime[i][j] represents the minimum time in seconds when you can start moving to that room. You start from the room (0, 0) at time t = 0 and can move to an adjacent room. Moving between adjacent rooms takes one second for one move and two seconds for the next, alternating between the two.&lt;/p&gt;</description></item><item><title>3481. Apply Substitutions</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/3481-apply-substitutions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/3481-apply-substitutions/</guid><description>&lt;h1 id="3481-apply-substitutions"&gt;3481. Apply Substitutions&lt;/h1&gt;
+&lt;p&gt;You are given a replacements mapping and a text string that may contain placeholders formatted as %var%, where each var corresponds to a key in the replacements mapping. Each replacement value may itself contain one or more such placeholders. Each placeholder is replaced by the value associated with its corresponding replacement key.&lt;/p&gt;
+&lt;p&gt;Return the fully substituted text string which does not contain any placeholders.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: replacements = [[&amp;ldquo;A&amp;rdquo;,&amp;ldquo;abc&amp;rdquo;],[&amp;ldquo;B&amp;rdquo;,&amp;ldquo;def&amp;rdquo;]], text = &amp;ldquo;%A%_%B%&amp;rdquo;&lt;/p&gt;</description></item><item><title>BFS (Breadth-First Search)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/bfs/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/bfs/</guid><description>&lt;h1 id="bfs-breadth-first-search"&gt;BFS (Breadth-First Search)&lt;/h1&gt;
+&lt;p&gt;너비 우선 탐색. 시작 노드에서 가까운 노드부터 순서대로 탐색한다.&lt;br&gt;
+Queue를 사용하며, &lt;strong&gt;최단 경로&lt;/strong&gt; 탐색에 적합하다.&lt;/p&gt;
+&lt;h2 id="구조"&gt;구조&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;시작 노드 → 인접 노드들을 Queue에 삽입 → Queue에서 꺼내며 반복&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;img src="../../imgs/bfs_example.svg" alt="BFS 동작 원리" width="520"/&gt;
+&lt;p&gt;아래 그래프에서 노드 1부터 BFS 탐색:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+ / \
+ 2 3
+ / \ \
+4 5 6&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;단계&lt;/th&gt;
+					&lt;th&gt;처리 노드&lt;/th&gt;
+					&lt;th&gt;Queue 상태&lt;/th&gt;
+					&lt;th&gt;방문 완료&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;초기&lt;/td&gt;
+					&lt;td&gt;-&lt;/td&gt;
+					&lt;td&gt;[1]&lt;/td&gt;
+					&lt;td&gt;{1}&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;1&lt;/td&gt;
+					&lt;td&gt;1&lt;/td&gt;
+					&lt;td&gt;[2, 3]&lt;/td&gt;
+					&lt;td&gt;{1,2,3}&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;2&lt;/td&gt;
+					&lt;td&gt;2&lt;/td&gt;
+					&lt;td&gt;[3, 4, 5]&lt;/td&gt;
+					&lt;td&gt;{1,2,3,4,5}&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;3&lt;/td&gt;
+					&lt;td&gt;3&lt;/td&gt;
+					&lt;td&gt;[4, 5, 6]&lt;/td&gt;
+					&lt;td&gt;{1,2,3,4,5,6}&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;4&lt;/td&gt;
+					&lt;td&gt;4&lt;/td&gt;
+					&lt;td&gt;[5, 6]&lt;/td&gt;
+					&lt;td&gt;동일&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;5&lt;/td&gt;
+					&lt;td&gt;5&lt;/td&gt;
+					&lt;td&gt;[6]&lt;/td&gt;
+					&lt;td&gt;동일&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;6&lt;/td&gt;
+					&lt;td&gt;6&lt;/td&gt;
+					&lt;td&gt;[]&lt;/td&gt;
+					&lt;td&gt;동일&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;탐색 순서: &lt;strong&gt;1 → 2 → 3 → 4 → 5 → 6&lt;/strong&gt; (레벨 단위로 좌→우)&lt;/p&gt;</description></item><item><title>Connected Component (연결 요소)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/connected-component/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/connected-component/</guid><description>&lt;h1 id="connected-component-연결-요소"&gt;Connected Component (연결 요소)&lt;/h1&gt;
+&lt;p&gt;그래프에서 서로 연결된 노드들의 집합.&lt;br&gt;
+&lt;strong&gt;Undirected Graph&lt;/strong&gt; 에서는 단순 연결 여부, &lt;strong&gt;Directed Graph&lt;/strong&gt; 에서는 SCC(강한 연결 요소)로 구분된다.&lt;/p&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;img src="../../imgs/connected_component.svg" alt="Connected Component" width="520"/&gt;
+&lt;p&gt;5개 노드, 간선이 0-1, 1-2, 3-4인 그래프 (노드 2와 3 사이는 끊김):&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0 — 1 — 2 3 — 4
+(컴포넌트 A) (컴포넌트 B)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;DFS로 컴포넌트 탐색 과정:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;i=0: visited[0]=false → dfs(0) 시작
+ 0 방문 → 1 방문 → 2 방문 → 더 갈 곳 없음
+ count++ → count=1
+
+i=1: visited[1]=true → skip
+i=2: visited[2]=true → skip
+
+i=3: visited[3]=false → dfs(3) 시작
+ 3 방문 → 4 방문 → 더 갈 곳 없음
+ count++ → count=2
+
+i=4: visited[4]=true → skip
+
+결과: 연결 요소 수 = 2&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;방문하지 않은 노드를 발견할 때마다 새로운 컴포넌트가 시작된다.&lt;/p&gt;</description></item><item><title>Cycle Detection (사이클 탐지)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/cycle/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/cycle/</guid><description>&lt;h1 id="cycle-detection-사이클-탐지"&gt;Cycle Detection (사이클 탐지)&lt;/h1&gt;
+&lt;p&gt;그래프 내에 순환 경로가 존재하는지 탐지한다.&lt;br&gt;
+&lt;strong&gt;Directed / Undirected&lt;/strong&gt; 그래프에서 방법이 다르다.&lt;/p&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;img src="../../imgs/cycle_detection.svg" alt="Cycle Detection" width="540"/&gt;
+&lt;p&gt;&lt;strong&gt;Undirected&lt;/strong&gt;: DFS 중 이미 방문한 노드를 부모가 아닌 경로로 재방문 → 사이클&lt;br&gt;
+&lt;strong&gt;Directed&lt;/strong&gt;: DFS 중 현재 재귀 스택(GRAY)에 있는 노드를 재방문 → 사이클&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="undirected-graph"&gt;Undirected Graph&lt;/h2&gt;
+&lt;p&gt;DFS 탐색 중 이미 방문한 노드를 &lt;strong&gt;부모가 아닌 경로로&lt;/strong&gt; 다시 만나면 사이클.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;functional&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;hasCycleUndirected&lt;/span&gt;(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; graph, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; visited(n, false);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; function&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dfs &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;](&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; node, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; parent) &lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; visited[node] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; neighbor : graph[node]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;visited[neighbor]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dfs(neighbor, node)) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (neighbor &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; parent) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;visited[i]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dfs(i, &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;)) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="directed-graph"&gt;Directed Graph&lt;/h2&gt;
+&lt;p&gt;DFS 탐색 중 현재 경로(recursion stack)에 있는 노드를 다시 방문하면 사이클.&lt;/p&gt;</description></item><item><title>DAG (Directed Acyclic Graph)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dag/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dag/</guid><description>&lt;h1 id="dag-directed-acyclic-graph"&gt;DAG (Directed Acyclic Graph)&lt;/h1&gt;
+&lt;img src="../../imgs/Recover Binary Search Tree_2.jpg" alt="Recover Binary Search Tree_2" width="300"/&gt;
+&lt;p&gt;방향 비순환 그래프, 선후 관계 표현에 사용된다.&lt;/p&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;A → B → D
+↓ ↑
+C ──────┘
+
+- 방향(Directed): 간선에 방향이 있음 (A→B, A→C, B→D, C→D)
+- 비순환(Acyclic): 어떤 노드에서 출발해도 자기 자신으로 돌아오는 경로 없음
+- 선후 관계: A를 먼저 처리해야 B, C를 처리할 수 있음&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;DAG에서는 &lt;strong&gt;Topological Sort&lt;/strong&gt;로 노드를 선후 순서에 맞게 일렬 나열할 수 있고,&lt;br&gt;
+&lt;strong&gt;DP&lt;/strong&gt;로 최장/최단 경로를 O(V+E)에 구할 수 있다.&lt;/p&gt;</description></item><item><title>DFS (Depth-First Search)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dfs/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dfs/</guid><description>&lt;h1 id="dfs-depth-first-search"&gt;DFS (Depth-First Search)&lt;/h1&gt;
+&lt;p&gt;깊이 우선 탐색. 한 방향으로 끝까지 탐색한 뒤 되돌아오는 방식.&lt;br&gt;
+Stack 또는 재귀를 사용한다.&lt;/p&gt;
+&lt;h2 id="구조"&gt;구조&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;시작 노드 → 인접 노드로 재귀/스택 진입 → 더 갈 곳 없으면 backtrack&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;img src="../../imgs/dfs_example.svg" alt="DFS 동작 원리" width="520"/&gt;
+&lt;p&gt;아래 그래프에서 노드 1부터 DFS 탐색 (인접 리스트: 1→[2,3], 2→[4,5], 3→[6]):&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+ / \
+ 2 3
+ / \ \
+4 5 6&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;재귀 호출 흐름:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;dfs(1)
+ └─ dfs(2)
+ ├─ dfs(4) ← 더 갈 곳 없음, return
+ └─ dfs(5) ← 더 갈 곳 없음, return
+ └─ dfs(3)
+ └─ dfs(6) ← 더 갈 곳 없음, return&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;탐색 순서: &lt;strong&gt;1 → 2 → 4 → 5 → 3 → 6&lt;/strong&gt; (한 방향으로 끝까지 내려간 뒤 backtrack)&lt;/p&gt;</description></item><item><title>Disjoint Set (서로소 집합)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/disjoint-set/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/disjoint-set/</guid><description>&lt;h1 id="disjoint-set-서로소-집합"&gt;Disjoint Set (서로소 집합)&lt;/h1&gt;
+&lt;p&gt;서로 겹치지 않는 집합들의 모임. 원소가 정확히 하나의 집합에만 속한다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Union-Find는 Disjoint Set을 구현하는 대표적인 자료구조.&lt;br&gt;
+구현 방법은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/union-find/"&gt;Union-Find&lt;/a&gt;
+ 참고.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;초기: {0} {1} {2} {3} {4} 각 노드가 독립된 집합
+ parent = [0, 1, 2, 3, 4]
+
+unite(0, 1): parent[1] = 0 → {0,1} {2} {3} {4}
+unite(1, 2): find(1)=0, parent[2] = 0 → {0,1,2} {3} {4}
+unite(3, 4): parent[4] = 3 → {0,1,2} {3,4}
+
+connected(0, 2)? find(0)=0, find(2)=0 → true (같은 집합)
+connected(0, 3)? find(0)=0, find(3)=3 → false (다른 집합)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Union-Find 구현은 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/union-find/"&gt;Union-Find&lt;/a&gt;
+ 참고.&lt;/p&gt;</description></item><item><title>Graph 공부 순서</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/graph/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/graph/</guid><description>&lt;h1 id="graph-공부-순서"&gt;Graph 공부 순서&lt;/h1&gt;
+&lt;p&gt;그래프는 먼저 표현 방식과 탐색을 잡고, 그 다음에 방향 그래프의 성질, 최단 경로, 집합 기반 알고리즘으로 확장하는 순서가 좋다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dfs/"&gt;DFS&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/bfs/"&gt;BFS&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/connected-component/"&gt;Connected Component&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/tree/"&gt;Tree&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/cycle/"&gt;Cycle&lt;/a&gt;
+ (Directed / Undirected Graph)&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/scc/"&gt;SCC&lt;/a&gt;
+ (Strongly Connected Component)&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dag/"&gt;DAG&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/topological-sort/"&gt;Topological Sort&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/minimum-path/"&gt;Minimum path&lt;/a&gt;
+ (BFS, Dijkstra, Bellman-Ford, Floyd-Warshall)&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/disjoint-set/"&gt;Disjoint Set&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/union-find/"&gt;Union-Find&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/mst/"&gt;Minimum Spanning Tree&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="학습-흐름"&gt;학습 흐름&lt;/h2&gt;
+&lt;h3 id="1-dfs--bfs"&gt;1. DFS / BFS&lt;/h3&gt;
+&lt;p&gt;DFS와 BFS는 대부분의 그래프 문제의 기본 도구다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DFS: 깊게 들어가면서 탐색한다. 재귀, visited, recursion stack과 연결된다.&lt;/li&gt;
+&lt;li&gt;BFS: 가까운 노드부터 탐색한다. queue, level, 최단 거리, grid 확산 문제와 연결된다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;먼저 풀기 좋은 문제:&lt;/p&gt;</description></item><item><title>Minimum Path (최단 경로)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/minimum-path/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/minimum-path/</guid><description>&lt;h1 id="minimum-path-최단-경로"&gt;Minimum Path (최단 경로)&lt;/h1&gt;
+&lt;h2 id="동작-원리-예시-dijkstra"&gt;동작 원리 예시 (Dijkstra)&lt;/h2&gt;
+&lt;img src="../../imgs/dijkstra_example.svg" alt="Dijkstra 동작 원리" width="560"/&gt;
+&lt;p&gt;A에서 시작해 우선순위 큐로 현재까지의 최소 거리 노드를 꺼내고, 이웃 노드의 거리를 갱신한다. 이미 확정된 노드는 skip(d &amp;gt; dist[u]).&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="알고리즘-선택-기준"&gt;알고리즘 선택 기준&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;알고리즘&lt;/th&gt;
+					&lt;th&gt;가중치&lt;/th&gt;
+					&lt;th&gt;음수 간선&lt;/th&gt;
+					&lt;th&gt;음수 사이클&lt;/th&gt;
+					&lt;th&gt;복잡도&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;BFS&lt;/td&gt;
+					&lt;td&gt;없음(단위)&lt;/td&gt;
+					&lt;td&gt;X&lt;/td&gt;
+					&lt;td&gt;X&lt;/td&gt;
+					&lt;td&gt;O(V+E)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Dijkstra&lt;/td&gt;
+					&lt;td&gt;양수만&lt;/td&gt;
+					&lt;td&gt;X&lt;/td&gt;
+					&lt;td&gt;X&lt;/td&gt;
+					&lt;td&gt;O((V+E)logV)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Bellman-Ford&lt;/td&gt;
+					&lt;td&gt;있음&lt;/td&gt;
+					&lt;td&gt;O&lt;/td&gt;
+					&lt;td&gt;탐지 가능&lt;/td&gt;
+					&lt;td&gt;O(VE)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Floyd-Warshall&lt;/td&gt;
+					&lt;td&gt;있음&lt;/td&gt;
+					&lt;td&gt;O&lt;/td&gt;
+					&lt;td&gt;X&lt;/td&gt;
+					&lt;td&gt;O(V³)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="1-bfs-가중치-없는-그래프"&gt;1. BFS (가중치 없는 그래프)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;queue&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; bfsDist(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; graph, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; start) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dist(n, &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[start] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(start);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; u &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front(); q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; v : graph[u]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dist[v] &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[v] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; dist[u] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(v);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; dist;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="2-dijkstra-양수-가중치"&gt;2. Dijkstra (양수 가중치)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;queue&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;climits&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// graph[u] = {{v, weight}, ...}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dijkstra(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;pair&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; graph, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; start) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dist(n, INT_MAX);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; priority_queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;pair&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;pair&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;, greater&lt;span style="color:#f92672"&gt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt; pq;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[start] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; pq.push({&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, start});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;pq.empty()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; [d, u] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; pq.top(); pq.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (d &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dist[u]) &lt;span style="color:#66d9ef"&gt;continue&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; [v, w] &lt;span style="color:#f92672"&gt;:&lt;/span&gt; graph[u]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dist[u] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; w &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; dist[v]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[v] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; dist[u] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; w;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; pq.push({dist[v], v});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; dist;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="3-bellman-ford-음수-가중치-허용"&gt;3. Bellman-Ford (음수 가중치 허용)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;climits&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// edges = {{u, v, weight}, ...}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; bellmanFord(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;tuple&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; edges, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; start) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dist(n, INT_MAX);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[start] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; [u, v, w] &lt;span style="color:#f92672"&gt;:&lt;/span&gt; edges) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dist[u] &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; INT_MAX &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; dist[u] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; w &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; dist[v])
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[v] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; dist[u] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; w;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 음수 사이클 탐지
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; [u, v, w] &lt;span style="color:#f92672"&gt;:&lt;/span&gt; edges) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dist[u] &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; INT_MAX &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; dist[u] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; w &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; dist[v])
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {}; &lt;span style="color:#75715e"&gt;// 음수 사이클 존재
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; dist;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="4-floyd-warshall-모든-쌍-최단-경로"&gt;4. Floyd-Warshall (모든 쌍 최단 경로)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;climits&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; floydWarshall(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; adjMatrix) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; dist &lt;span style="color:#f92672"&gt;=&lt;/span&gt; adjMatrix;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; k &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; k &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; k&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; j &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; j &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; j&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (dist[i][k] &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; INT_MAX &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; dist[k][j] &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; INT_MAX)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dist[i][j] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; min(dist[i][j], dist[i][k] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; dist[k][j]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; dist;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="관련-알고리즘"&gt;관련 알고리즘&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/bfs/"&gt;BFS&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dag/"&gt;DAG&lt;/a&gt;
+ — DP를 이용한 DAG 최단/최장 경로&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/mst/"&gt;MST&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="related-problems"&gt;Related Problems&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0909-snakes-and-ladders/"&gt;909. Snakes and Ladders&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/2359-find-closest-node-to-given-two-nodes/"&gt;2359. Find Closest Node to Given Two Nodes&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>MST (Minimum Spanning Tree, 최소 신장 트리)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/mst/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/mst/</guid><description>&lt;h1 id="mst-minimum-spanning-tree-최소-신장-트리"&gt;MST (Minimum Spanning Tree, 최소 신장 트리)&lt;/h1&gt;
+&lt;p&gt;N개의 노드를 &lt;strong&gt;N-1개의 간선&lt;/strong&gt;으로 연결하되, 간선의 가중치 합이 최소인 트리.&lt;br&gt;
+사이클 없이 모든 노드를 연결한다.&lt;/p&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Kruskal&lt;/strong&gt; — 간선을 가중치 오름차순 정렬 후, 사이클이 생기지 않는 간선만 선택&lt;/p&gt;
+&lt;img src="../../imgs/kruskal_example.svg" alt="Kruskal 동작 원리" width="560"/&gt;
+&lt;p&gt;&lt;strong&gt;Prim&lt;/strong&gt; — 시작 노드에서 연결 가능한 최소 가중치 간선을 greedy하게 선택해 트리 확장&lt;/p&gt;
+&lt;img src="../../imgs/prim_example.svg" alt="Prim 동작 원리" width="560"/&gt;
+&lt;hr&gt;
+&lt;h2 id="알고리즘-비교"&gt;알고리즘 비교&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;알고리즘&lt;/th&gt;
+					&lt;th&gt;방식&lt;/th&gt;
+					&lt;th&gt;시간복잡도&lt;/th&gt;
+					&lt;th&gt;적합한 경우&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Kruskal&lt;/td&gt;
+					&lt;td&gt;간선 정렬 + Union-Find&lt;/td&gt;
+					&lt;td&gt;O(E log E)&lt;/td&gt;
+					&lt;td&gt;간선이 적을 때&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Prim&lt;/td&gt;
+					&lt;td&gt;우선순위 큐 + Greedy&lt;/td&gt;
+					&lt;td&gt;O((V+E) log V)&lt;/td&gt;
+					&lt;td&gt;간선이 많을 때&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="1-kruskals-algorithm"&gt;1. Kruskal&amp;rsquo;s Algorithm&lt;/h2&gt;
+&lt;p&gt;간선을 가중치 오름차순으로 정렬 후, 사이클이 생기지 않는 간선만 선택.&lt;/p&gt;</description></item><item><title>SCC (Strongly Connected Component)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/scc/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/scc/</guid><description>&lt;h1 id="scc-strongly-connected-component"&gt;SCC (Strongly Connected Component)&lt;/h1&gt;
+&lt;p&gt;SCC는 directed graph에서 서로 도달 가능한 노드들의 그룹이다.&lt;/p&gt;
+&lt;p&gt;노드 &lt;code&gt;u&lt;/code&gt;, &lt;code&gt;v&lt;/code&gt;가 같은 SCC에 있으려면 아래 조건이 모두 성립해야 한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;u&lt;/code&gt;에서 &lt;code&gt;v&lt;/code&gt;로 갈 수 있다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;v&lt;/code&gt;에서 &lt;code&gt;u&lt;/code&gt;로 갈 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;즉, 방향 그래프 안에서 cycle처럼 서로 왕복 가능한 묶음을 찾는 개념이다.&lt;/p&gt;
+&lt;h2 id="왜-필요한가"&gt;왜 필요한가&lt;/h2&gt;
+&lt;p&gt;Directed graph에서는 connected component만으로는 부족하다. 무방향 그래프에서는 연결되어 있으면 같은 그룹으로 볼 수 있지만, 방향 그래프에서는 한쪽으로만 갈 수 있는 경우가 많다.&lt;/p&gt;
+&lt;p&gt;SCC를 찾으면 방향 그래프를 더 단순한 구조로 압축할 수 있다.&lt;/p&gt;</description></item><item><title>Topological Sort (위상 정렬)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/topological-sort/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/topological-sort/</guid><description>&lt;h1 id="topological-sort-위상-정렬"&gt;Topological Sort (위상 정렬)&lt;/h1&gt;
+&lt;p&gt;DAG(방향 비순환 그래프)에서 노드를 &lt;strong&gt;선후관계&lt;/strong&gt;에 맞게 일렬로 나열.&lt;br&gt;
+사이클이 있으면 위상 정렬 불가능.&lt;/p&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;img src="../../imgs/topo_sort.svg" alt="Topological Sort" width="560"/&gt;
+&lt;p&gt;indegree가 0인 노드부터 Queue에 넣고, 처리할 때마다 이웃 노드의 indegree를 감소시킨다. indegree가 0이 된 노드를 새로 Queue에 추가하며 반복.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="알고리즘-종류"&gt;알고리즘 종류&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;방법&lt;/th&gt;
+					&lt;th&gt;기반&lt;/th&gt;
+					&lt;th&gt;특징&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Kahn&amp;rsquo;s Algorithm&lt;/td&gt;
+					&lt;td&gt;BFS + Indegree&lt;/td&gt;
+					&lt;td&gt;사이클 탐지 가능, 직관적&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;DFS 방식&lt;/td&gt;
+					&lt;td&gt;DFS + Stack&lt;/td&gt;
+					&lt;td&gt;재귀 구현 간단&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="시간복잡도"&gt;시간복잡도&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;O(V + E)&lt;/code&gt; (V: 노드 수, E: 간선 수)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="코드-템플릿-c---kahns-algorithm"&gt;코드 템플릿 (C++ - Kahn&amp;rsquo;s Algorithm)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;queue&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; topoSort(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; graph) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; indegree(n, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; u &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; u &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; u&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; v : graph[u])
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; indegree[v]&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (indegree[i] &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) q.push(i);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; order;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; u &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front(); q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; order.push_back(u);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; v : graph[u]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;--&lt;/span&gt;indegree[v] &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) q.push(v);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// order.size() &amp;lt; n 이면 사이클 존재
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; order;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="코드-템플릿-c---dfs"&gt;코드 템플릿 (C++ - DFS)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;stack&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;functional&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; topoSortDFS(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; graph) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; visited(n, false);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; stack&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; st;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; function&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; dfs &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;](&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; u) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; visited[u] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; v : graph[u])
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;visited[v]) dfs(v);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; st.push(u);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;visited[i]) dfs(i);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; order;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;st.empty()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; order.push_back(st.top()); st.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; order;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="특징"&gt;특징&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;결과가 유일하지 않을 수 있음 (여러 개의 유효한 순서 존재)&lt;/li&gt;
+&lt;li&gt;Kahn&amp;rsquo;s Algorithm에서 &lt;code&gt;order.size() &amp;lt; n&lt;/code&gt;이면 사이클 존재 → 사이클 탐지 가능&lt;/li&gt;
+&lt;li&gt;선수 과목, 작업 스케줄링, 빌드 시스템 등에 활용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="관련-알고리즘"&gt;관련 알고리즘&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dag/"&gt;DAG&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/cycle/"&gt;Cycle&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="related-problems"&gt;Related Problems&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/0207-course-schedule/"&gt;207. Course Schedule&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/tree/</guid><description>&lt;h1 id="tree"&gt;Tree&lt;/h1&gt;
+&lt;p&gt;사이클이 없는 연결 그래프 (Undirected Acyclic Connected Graph).&lt;br&gt;
+&lt;code&gt;n&lt;/code&gt;개의 노드가 있을 때 간선은 정확히 &lt;code&gt;n-1&lt;/code&gt;개.&lt;/p&gt;
+&lt;h2 id="특징"&gt;특징&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;임의의 두 노드 사이 경로가 유일&lt;/li&gt;
+&lt;li&gt;루트를 정하면 계층 구조(부모-자식 관계) 형성&lt;/li&gt;
+&lt;li&gt;이진 트리, 일반 트리, 트라이 등 다양한 형태 존재&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="그래프와의-관계"&gt;그래프와의 관계&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Tree ⊂ DAG ⊂ Graph&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;조건&lt;/th&gt;
+					&lt;th&gt;이름&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;연결 + 비순환 (무방향)&lt;/td&gt;
+					&lt;td&gt;Tree&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;방향 + 비순환&lt;/td&gt;
+					&lt;td&gt;DAG&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;방향 + 순환 가능&lt;/td&gt;
+					&lt;td&gt;일반 Graph&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="트리-순회"&gt;트리 순회&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;순회&lt;/th&gt;
+					&lt;th&gt;순서&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Preorder&lt;/td&gt;
+					&lt;td&gt;Root → Left → Right&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Inorder&lt;/td&gt;
+					&lt;td&gt;Left → Root → Right&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Postorder&lt;/td&gt;
+					&lt;td&gt;Left → Right → Root&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Level-order&lt;/td&gt;
+					&lt;td&gt;BFS&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="코드-템플릿-c---인접리스트-트리"&gt;코드 템플릿 (C++ - 인접리스트 트리)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;functional&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; buildTree(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; edges) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; graph(n);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt; e : edges) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; graph[e[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]].push_back(e[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; graph[e[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]].push_back(e[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; graph;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;dfs&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; node, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; parent, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&amp;amp;&lt;/span&gt; graph) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; child : graph[node]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (child &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; parent) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dfs(child, node, graph);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="related-algorithm"&gt;Related Algorithm&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;BFS / DFS 순회&lt;/li&gt;
+&lt;li&gt;LCA (Lowest Common Ancestor)&lt;/li&gt;
+&lt;li&gt;트리 DP&lt;/li&gt;
+&lt;li&gt;Spanning Tree (MST)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="related-problems"&gt;Related Problems&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/dag/"&gt;DAG&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/mst/"&gt;MST&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Union-Find (DSU, Disjoint Set Union)</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/union-find/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/graph/union-find/</guid><description>&lt;h1 id="union-find-dsu-disjoint-set-union"&gt;Union-Find (DSU, Disjoint Set Union)&lt;/h1&gt;
+&lt;p&gt;원소들이 어느 집합에 속하는지 효율적으로 관리하는 자료구조.&lt;br&gt;
+&lt;code&gt;find&lt;/code&gt; / &lt;code&gt;union&lt;/code&gt; 두 연산으로 구성된다.&lt;/p&gt;
+&lt;img src="../../imgs/Union_find-1.png" alt="Union_find-1" width="400"/&gt;
+&lt;img src="../../imgs/Union_find-2.png" alt="Union_find-2" width="400"/&gt;
+&lt;h2 id="동작-원리-예시"&gt;동작 원리 예시&lt;/h2&gt;
+&lt;img src="../../imgs/union_find_detail.svg" alt="Union-Find Path Compression" width="560"/&gt;
+&lt;h2 id="핵심-연산"&gt;핵심 연산&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;연산&lt;/th&gt;
+					&lt;th&gt;설명&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;find(x)&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;x가 속한 집합의 루트 반환&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;unite(x, y)&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;x와 y의 집합을 합침&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;connected(x, y)&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;같은 집합인지 확인&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="최적화"&gt;최적화&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Path Compression&lt;/strong&gt;: &lt;code&gt;find&lt;/code&gt; 시 경로상의 모든 노드를 루트에 직접 연결&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Union by Rank&lt;/strong&gt;: 작은 트리를 큰 트리 아래에 붙여 높이 최소화&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;두 최적화를 적용하면 사실상 &lt;code&gt;O(α(N))&lt;/code&gt; (inverse Ackermann, 거의 O(1))&lt;/p&gt;</description></item></channel></rss>

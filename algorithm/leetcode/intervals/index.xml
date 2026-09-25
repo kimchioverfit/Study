@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Intervals on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/intervals/</link><description>Recent content in Intervals on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/intervals/index.xml" rel="self" type="application/rss+xml"/><item><title>56. Merge Intervals</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/intervals/0056-merge-intervals/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/intervals/0056-merge-intervals/</guid><description>&lt;h1 id="56-merge-intervals"&gt;56. Merge Intervals&lt;/h1&gt;
+&lt;p&gt;Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: intervals = [[1,3],[2,6],[8,10],[15,18]]&lt;/p&gt;
+&lt;p&gt;Output: [[1,6],[8,10],[15,18]]&lt;/p&gt;
+&lt;p&gt;Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: intervals = [[1,4],[4,5]]&lt;/p&gt;
+&lt;p&gt;Output: [[1,5]]&lt;/p&gt;
+&lt;p&gt;Explanation: Intervals [1,4] and [4,5] are considered overlapping.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; maxArea(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; height) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; left &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; right &lt;span style="color:#f92672"&gt;=&lt;/span&gt; height.size()&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; water &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(left&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;right){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; minval &lt;span style="color:#f92672"&gt;=&lt;/span&gt; min(height[left],height[right]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; temp &lt;span style="color:#f92672"&gt;=&lt;/span&gt; minval &lt;span style="color:#f92672"&gt;*&lt;/span&gt; (right&lt;span style="color:#f92672"&gt;-&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; water &lt;span style="color:#f92672"&gt;=&lt;/span&gt; max(temp,water);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (height[left] &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; height[right]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; left&lt;span style="color:#f92672"&gt;++&lt;/span&gt;; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; right&lt;span style="color:#f92672"&gt;--&lt;/span&gt;; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; water;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Time Complexity : O(NlogN)&lt;/p&gt;</description></item><item><title>228. Summary Ranges</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/intervals/0228-summary-ranges/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/intervals/0228-summary-ranges/</guid><description>&lt;h1 id="228-summary-ranges"&gt;228. Summary Ranges&lt;/h1&gt;
+&lt;p&gt;You are given a sorted unique integer array nums.&lt;/p&gt;
+&lt;p&gt;A range [a,b] is the set of all integers from a to b (inclusive).&lt;/p&gt;
+&lt;p&gt;Return the smallest sorted list of ranges that cover all the numbers in the array exactly. That is, each element of nums is covered by exactly one of the ranges, and there is no integer x such that x is in one of the ranges but not in nums.&lt;/p&gt;</description></item></channel></rss>

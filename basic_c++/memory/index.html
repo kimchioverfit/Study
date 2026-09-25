@@ -1,0 +1,48 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>memory | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-section><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><section class=section-hero><div class=section-hero-copy><div class=eyebrow-row><a class=eyebrow-link href=/Study/>🗂 Archive</a>
+<span class=eyebrow-sep>/</span>
+<span class="eyebrow-link is-static">memory</span></div><h1>memory</h1></div><div class=section-stats><span class=stat-label>Entries</span>
+<span class=stat-value>3</span></div></section><section class=entry-grid><a class=entry-card href=/Study/basic_c++/memory/new_malloc/><h2>New malloc</h2><p>new 와 malloc 비교 C++의 new/delete와 C의 malloc/free는 둘 다 heap에서 동적 할당을 하지만 객체냐 순수 메모리 블록이냐라는 근본적인 차이가 있음. …</p></a><a class=entry-card href=/Study/basic_c++/memory/smart_pointer/><h2>Smart Pointer</h2><p>Smart Pointer raw pointer의 수동 delete가 만드는 사고들(누수, double free, 댕글링 )을 소유권을 타입에 새겨서 구조적으로 막는 RAII 도구. &ldquo;누가 이 메모리의 주인 …</p></a><a class=entry-card href=/Study/basic_c++/memory/structure_optimize/><h2>Structure Optimize</h2><p>구조체 최적화 C 구조체는 정렬 규칙에 따라 메모리 낭비 방지 가능
+struct A { char c; // 1 byte int i; // 4 bytes };위의 경우 A의 크기는 8바이트임. 3바이트의 패딩이 생김. …</p></a></section></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

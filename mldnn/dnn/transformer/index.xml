@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Transformer on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/</link><description>Recent content in Transformer on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/index.xml" rel="self" type="application/rss+xml"/><item><title>Token</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/token/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/token/</guid><description>&lt;h1 id="token-토큰"&gt;Token (토큰)&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: 모델은 글자를 직접 보지 않음. 문장을 잘게 자른 &lt;strong&gt;조각&lt;/strong&gt;이 토큰이고, 모델이 실제로 받는 건 그 조각에 붙은 &lt;strong&gt;정수 ID&lt;/strong&gt;임.
+어떻게 자를지는 &lt;strong&gt;tokenizer&lt;/strong&gt;가 정하는데, &lt;strong&gt;tokenizer는 회사·모델마다 다름&lt;/strong&gt;. 그래서 같은 문장도 모델이 바뀌면 토큰이 달라짐.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-토큰이란"&gt;1. 토큰이란&lt;/h2&gt;
+&lt;p&gt;문장을 모델이 다룰 수 있는 단위로 쪼갠 것임. &lt;strong&gt;단어와 같지 않음&lt;/strong&gt; — 단어보다 작을 수도 있고, 흔한 단어는 통째로 하나가 되기도 함.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;#34;나는 학교에 간다&amp;#34;
+ ↓ tokenizer
+[&amp;#34;나&amp;#34;, &amp;#34;##는&amp;#34;, &amp;#34;학교&amp;#34;, &amp;#34;##에&amp;#34;, &amp;#34;간&amp;#34;, &amp;#34;##다&amp;#34;]
+ ↓ vocabulary
+[102, 450, 630, 231, 901, 250]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;여기까지가 모델에 들어가기 전 단계임. 이후 각 ID가 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/embedding_layer/"&gt;Embedding Layer&lt;/a&gt;
+에서 벡터로 바뀜.&lt;/p&gt;</description></item><item><title>Embedding Layer</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/embedding_layer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/embedding_layer/</guid><description>&lt;h1 id="embedding-layer"&gt;Embedding Layer&lt;/h1&gt;
+&lt;h3 id="임베딩-레이어란"&gt;임베딩 레이어란?&lt;/h3&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/token/"&gt;Token&lt;/a&gt;
+을 n Dimension으로 변환하는 과정.&lt;/p&gt;
+&lt;p&gt;&lt;figure class="doc-figure"&gt;
+ &lt;img src="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/img/embedding_layer_lookup.svg" alt="Embedding Layer의 lookup 과정" loading="lazy"&gt;
+ &lt;figcaption&gt;토큰 → Token ID → 임베딩 행렬 W의 행 → d_model 차원 벡터. ID는 의미 없이 행 번호로만 쓰이고, W의 값은 학습으로 정해짐. 토큰 ID는 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Attention Is All You Need&lt;/a&gt;
+ §2.3의 vocabulary 예시와 같은 값임. 직접 작성&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id="왜-필요할까"&gt;왜 필요할까?&lt;/h3&gt;
+&lt;p&gt;컴퓨터는 문자열을 직접 이해하지 못하므로, 거리나 유사도 개념이 없어서 학습이 불가능함.&lt;/p&gt;
+&lt;p&gt;이런 상황에서, 각 Token에 대한 ID를 이용하여
+key-value 구조로 Vector값을 갖게 하는 것.&lt;/p&gt;</description></item><item><title>Dimension (d_model)</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/dimension/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/dimension/</guid><description>&lt;h1 id="dimension--토큰-하나를-몇-개의-숫자로-표현할까"&gt;Dimension — 토큰 하나를 몇 개의 숫자로 표현할까&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: 토큰 하나를 길이 $d$ 인 벡터로 표현하는데, 그 $d$ 가 dimension임.
+&lt;strong&gt;학습으로 정해지는 값이 아니라 모델 설계자가 직접 정하는 하이퍼파라미터&lt;/strong&gt;임. 학습되는 건 벡터의 &lt;em&gt;값&lt;/em&gt;이지 &lt;em&gt;길이&lt;/em&gt;가 아님.
+키우면 표현력이 늘지만 공짜가 아니고, 이미지에서는 차원을 키워도 &lt;strong&gt;패치 단계에서 이미 잃은 것은 돌아오지 않음&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-무엇을-가리키나"&gt;1. 무엇을 가리키나&lt;/h2&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/token/"&gt;토큰&lt;/a&gt;
+ 하나가 &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/embedding_layer/"&gt;임베딩&lt;/a&gt;
+을 거치면 숫자 $d$ 개짜리 벡터가 됨. 그 $d$ 임.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;#34;학교&amp;#34; → ID 630 → [0.23, 0.17, −0.08, …, 0.05]
+ └──────── d개 ────────┘&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;문서·논문마다 부르는 이름이 다른데 전부 같은 것임.&lt;/p&gt;</description></item><item><title>Self-Attention</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/self_attention/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/self_attention/</guid><description>&lt;h1 id="self-attention-scaled-dot-product-attention"&gt;Self-Attention (Scaled Dot-Product Attention)&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: 각 토큰이 &lt;strong&gt;&amp;ldquo;나머지 토큰을 각각 얼마나 참고할지&amp;rdquo;&lt;/strong&gt; 비율을 정하고, 그 비율대로 섞어서 자기 표현을 새로 만드는 연산임.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Attention Is All You Need&lt;/a&gt;
+의 심장이고, $Q/K/V$ 수식은 이 한 문장을 행렬로 옮긴 것일 뿐임.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-attention이-뭔가--수식-없이"&gt;1. Attention이 뭔가 — 수식 없이&lt;/h2&gt;
+&lt;p&gt;예문 &lt;code&gt;나는 사과를 먹었다&lt;/code&gt; 에서 &lt;strong&gt;먹었다&lt;/strong&gt; 를 처리하는 상황임.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;먹었다&lt;/code&gt; 하나만 보면 &amp;ldquo;무엇을&amp;rdquo; 먹었는지 알 수 없음. 문장 안의 다른 토큰을 봐야 함.
+그런데 전부 똑같이 볼 필요는 없음 — 참고할 정도가 다름.&lt;/p&gt;</description></item><item><title>Positional Encoding</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/positional_encoding/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/positional_encoding/</guid><description>&lt;h1 id="positional-encoding--왜-하필-sin--cos-인가"&gt;Positional Encoding — 왜 하필 sin / cos 인가&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: attention은 순서를 모름. 그래서 위치 정보를 벡터로 만들어 더해 줘야 함.
+그런데 그냥 &lt;code&gt;0, 1, 2, 3…&lt;/code&gt; 을 쓰면 값이 무한히 커지고, 길이를 정해 학습시키면 그보다 긴 문장에 못 씀.
+&lt;strong&gt;여러 주기의 sin/cos을 겹쳐 쓰면&lt;/strong&gt; 값은 항상 $[-1, 1]$ 이면서, 위치마다 다르고, &lt;strong&gt;상대 거리까지 표현&lt;/strong&gt;됨.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-왜-위치-정보가-필요한가"&gt;1. 왜 위치 정보가 필요한가&lt;/h2&gt;
+&lt;p&gt;&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/self_attention/"&gt;Self-Attention&lt;/a&gt;
+의 계산을 다시 보면, 각 토큰은 다른 토큰들과 &lt;strong&gt;내적&lt;/strong&gt;을 해서 참고 비율을 정함.&lt;/p&gt;</description></item><item><title>FFN (MLP)</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/ffn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/ffn/</guid><description>&lt;h1 id="ffn-mlp--position-wise-feed-forward-network"&gt;FFN (MLP) — Position-wise Feed-Forward Network&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Transformer 블록의 두 번째 절반. &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/self_attention/"&gt;attention&lt;/a&gt;
+이 &lt;strong&gt;토큰끼리 정보를 섞는&lt;/strong&gt; 단계라면, FFN은 &lt;strong&gt;토큰 하나하나를 따로 가공하는&lt;/strong&gt; 단계임.
+논문에 따라 FFN, MLP, MLP block이라고 부르는데 전부 같은 것임 (&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/"&gt;Attention Is All You Need&lt;/a&gt;
+는 FFN, &lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/vit/"&gt;ViT&lt;/a&gt;
+·&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/vit/eomt/"&gt;EoMT&lt;/a&gt;
+는 MLP).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-정의"&gt;1. 정의&lt;/h2&gt;
+$$
+\text{FFN}(x) = \sigma(xW_1 + b_1)\,W_2 + b_2
+$$&lt;ul&gt;
+&lt;li&gt;$W_1 \in \mathbb{R}^{D \times D_{ff}}$ : 차원을 &lt;strong&gt;키움&lt;/strong&gt; (보통 $D_{ff} = 4D$)&lt;/li&gt;
+&lt;li&gt;$\sigma$ : 활성함수. 원조 Transformer는 ReLU, ViT/BERT/GPT-2 이후는 GELU, LLaMA 계열은 SwiGLU&lt;/li&gt;
+&lt;li&gt;$W_2 \in \mathbb{R}^{D_{ff} \times D}$ : 다시 &lt;strong&gt;줄임&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;(B, N, D) ─ Linear(D→4D) ─ 활성함수 ─ Linear(4D→D) ─▶ (B, N, D)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;입출력 shape가 같아서 residual로 더할 수 있음: $x + \text{FFN}(\text{LN}(x))$&lt;/p&gt;</description></item><item><title>Cross-Attention</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/cross_attention/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/cross_attention/</guid><description>&lt;h1 id="cross-attention-encoder-decoder-attention"&gt;Cross-Attention (Encoder-Decoder Attention)&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;결론부터 아주 쉽게: &lt;strong&gt;한 시퀀스가 다른 시퀀스를 참조하는&lt;/strong&gt; attention임.
+&lt;a class="inline-link" href="https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/self_attention/"&gt;Self-Attention&lt;/a&gt;
+이 &amp;ldquo;문장이 자기 자신을 보는 것&amp;quot;이라면, Cross-Attention은 &amp;ldquo;번역문이 원문을 보는 것&amp;quot;임.
+연산은 완전히 똑같고, &lt;strong&gt;Q를 어디서 가져오고 K·V를 어디서 가져오는지만 다름&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-무엇이-다른가--딱-한-줄"&gt;1. 무엇이 다른가 — 딱 한 줄&lt;/h2&gt;
+$$
+\text{Self: } Q, K, V \leftarrow \text{같은 시퀀스}
+\qquad\qquad
+\text{Cross: } Q \leftarrow \text{A}, \quad K, V \leftarrow \text{B}
+$$&lt;p&gt;수식도, softmax도, $\sqrt{d_k}$ 도 전부 동일함.&lt;/p&gt;
+$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+$$&lt;p&gt;바뀌는 것은 &lt;strong&gt;입력의 출처&lt;/strong&gt;뿐임. 그래서 Self-Attention을 이해했다면 Cross-Attention은 새로 배울 연산이 없음.&lt;/p&gt;</description></item><item><title>Attention Is All You Need</title><link>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/dnn/transformer/attention_is_all_you_need/</guid><description>&lt;h1 id="attention-is-all-you-need-transformer"&gt;Attention is all you need (Transformer)&lt;/h1&gt;
+&lt;p&gt;📄 논문: &lt;a class="inline-link" href="https://arxiv.org/abs/1706.03762"&gt;Attention Is All You Need&lt;/a&gt;
+ — Vaswani et al., NeurIPS 2017&lt;/p&gt;
+&lt;p&gt;트랜스포머 구조가 처음 등장한 논문&lt;/p&gt;
+&lt;h3 id="목표"&gt;목표&lt;/h3&gt;
+&lt;p&gt;RNN이나 CNN 없이, 오직 어텐션 메커니즘만으로 시퀀스-투-시퀀스(seq2seq) 문제를 푸는 것.
+번역(translation), 요약(summarization), 질의응답 등 다양한 NLP 작업에 적용 가능함.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="기존-접근법의-문제점"&gt;기존 접근법의 문제점&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;방식&lt;/th&gt;
+					&lt;th&gt;문제점&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RNN / LSTM&lt;/td&gt;
+					&lt;td&gt;순차 처리라 병렬화가 안 됨. 멀리 떨어진 토큰끼리 정보를 주고받으려면 중간 단계를 전부 거쳐야 해서 긴 문장을 기억하기 어려움 (vanishing gradient)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CNN&lt;/td&gt;
+					&lt;td&gt;병렬화는 되지만 커널 크기만큼씩만 봄. 먼 토큰을 연결하려면 층을 깊게 쌓아야 함&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;논문이 이 문제를 정량화한 것이 &lt;strong&gt;maximum path length&lt;/strong&gt; 임 — 두 토큰의 정보가 서로 만나기까지 거쳐야 하는 연산 단계 수.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,176 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Attention Is All You Need | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/transformer/>Transformer</a></div><h1>Attention Is All You Need</h1></header><div class="doc-body post-body"><h1 id=attention-is-all-you-need-transformer>Attention is all you need (Transformer)</h1><p>📄 논문: <a class=inline-link href=https://arxiv.org/abs/1706.03762>Attention Is All You Need</a>
+— Vaswani et al., NeurIPS 2017</p><p>트랜스포머 구조가 처음 등장한 논문</p><h3 id=목표>목표</h3><p>RNN이나 CNN 없이, 오직 어텐션 메커니즘만으로 시퀀스-투-시퀀스(seq2seq) 문제를 푸는 것.
+번역(translation), 요약(summarization), 질의응답 등 다양한 NLP 작업에 적용 가능함.</p><hr><h3 id=기존-접근법의-문제점>기존 접근법의 문제점</h3><table><thead><tr><th>방식</th><th>문제점</th></tr></thead><tbody><tr><td>RNN / LSTM</td><td>순차 처리라 병렬화가 안 됨. 멀리 떨어진 토큰끼리 정보를 주고받으려면 중간 단계를 전부 거쳐야 해서 긴 문장을 기억하기 어려움 (vanishing gradient)</td></tr><tr><td>CNN</td><td>병렬화는 되지만 커널 크기만큼씩만 봄. 먼 토큰을 연결하려면 층을 깊게 쌓아야 함</td></tr></tbody></table><p>논문이 이 문제를 정량화한 것이 <strong>maximum path length</strong> 임 — 두 토큰의 정보가 서로 만나기까지 거쳐야 하는 연산 단계 수.</p><table><thead><tr><th>레이어 종류</th><th>레이어당 복잡도</th><th>순차 연산</th><th>maximum path length</th></tr></thead><tbody><tr><td>Self-Attention</td><td>$O(n^2 \cdot d)$</td><td>$O(1)$</td><td>$O(1)$</td></tr><tr><td>Recurrent</td><td>$O(n \cdot d^2)$</td><td>$O(n)$</td><td>$O(n)$</td></tr><tr><td>Convolutional</td><td>$O(k \cdot n \cdot d^2)$</td><td>$O(1)$</td><td>$O(\log_k n)$</td></tr></tbody></table><p>($n$ = 시퀀스 길이, $d$ = 표현 차원, $k$ = 커널 크기)</p><p>Self-Attention은 <strong>어떤 두 토큰이든 한 단계로 연결됨</strong>($O(1)$). 이게 &ldquo;긴 문맥을 잘 잡는다"의 실제 근거임.
+대신 $n^2$ 이라 시퀀스가 길어지면 비용이 제곱으로 늘어남 — 이후의 efficient attention 연구가 전부 여기서 출발함.</p><hr><h3 id=핵심-아이디어-트랜스포머-transformer>핵심 아이디어: 트랜스포머 (Transformer)</h3><p>🔥 &ldquo;시퀀스 모델링은 오직 Attention만으로도 충분함!&rdquo;</p><p>Self-Attention으로 입력의 모든 토큰 쌍 관계를 한 번에 계산함.
+순차 의존이 없으므로 <strong>한 레이어 안의 모든 토큰을 동시에 처리할 수 있음</strong> — 학습이 빠르고 문맥 파악이 뛰어남.</p><blockquote><p>&ldquo;병렬"은 <strong>학습 때, 한 레이어 내부</strong> 이야기임.
+추론 때 디코더는 토큰을 하나씩 만들어야 해서 여전히 순차적임 (§10.1).</p></blockquote><hr><h3 id=트랜스포머-구조>트랜스포머 구조</h3><p>[입력 임베딩 + 위치 임베딩] → 인코더 × N → 디코더 × N → 출력</p><ul><li><strong>인코더(Encoder)</strong>: 입력의 각 토큰을 주변 토큰 정보가 반영된 <strong>contextual representation으로 변환</strong>함</li><li><strong>디코더(Decoder)</strong>: 인코더 출력을 참조하면서 출력 토큰을 하나씩 생성함</li></ul><blockquote><p>인코더 출력은 문장 전체를 뭉친 벡터 <strong>하나가 아님</strong>. 입력 토큰 수만큼의 벡터열 $z_1, \dots, z_n$ 임.
+RNN seq2seq의 단일 context vector와 혼동하기 쉬운 지점임 — &ldquo;압축"보다 &ldquo;토큰별 재표현"에 가까움.</p></blockquote><hr><h3 id=핵심-구성-요소>핵심 구성 요소</h3><table><thead><tr><th>구성 요소</th><th>역할</th><th>상세</th></tr></thead><tbody><tr><td><strong>Self-Attention</strong></td><td>토큰끼리 정보를 섞음</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention</a></td></tr><tr><td><strong>Multi-Head Attention</strong></td><td>여러 표현 공간에서 동시에 관계를 잡음</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention §7</a></td></tr><tr><td><strong>Token</strong></td><td>문장을 모델이 받는 단위로 자름</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/token/>Token</a></td></tr><tr><td><strong>Dimension</strong></td><td>토큰 하나를 몇 차원으로 표현할지</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/dimension/>Dimension</a></td></tr><tr><td><strong>Positional Encoding</strong></td><td>순서 정보를 사인/코사인으로 주입</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/positional_encoding/>Positional Encoding</a></td></tr><tr><td><strong>Cross-Attention</strong></td><td>디코더가 인코더 출력을 참조함</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/cross_attention/>Cross-Attention</a></td></tr><tr><td><strong>Feed-Forward Network</strong></td><td>토큰 하나하나를 따로 가공</td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/ffn/>FFN</a></td></tr><tr><td><strong>Residual + LayerNorm</strong></td><td>깊게 쌓아도 학습이 되게 함</td><td>§9</td></tr></tbody></table><p>핵심 수식 하나만 꼽으면 이것임.</p>$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+$$<p>이 식이 왜 이렇게 생겼는지는 <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention 문서</a>
+에서 직관 → Q/K/V → 숫자 예제 순서로 따로 풀어 씀.</p><hr><h3 id=논문-하이퍼파라미터>논문 하이퍼파라미터</h3><table><thead><tr><th>기호</th><th>의미</th><th>base</th><th>big</th></tr></thead><tbody><tr><td>$N$</td><td>인코더·디코더 블록 수</td><td>6</td><td>6</td></tr><tr><td>$d_{model}$</td><td>토큰 표현 차원 (<a class=inline-link href=/Study/mldnn/dnn/transformer/dimension/>Dimension</a>
+)</td><td>512</td><td>1024</td></tr><tr><td>$d_{ff}$</td><td>FFN 내부 차원</td><td>2048</td><td>4096</td></tr><tr><td>$h$</td><td>attention head 수</td><td>8</td><td>16</td></tr><tr><td>$d_k = d_v$</td><td>head 하나의 차원 ($d_{model}/h$)</td><td>64</td><td>64</td></tr><tr><td>$P_{drop}$</td><td>dropout</td><td>0.1</td><td>0.3</td></tr><tr><td>파라미터 수</td><td>—</td><td>65M</td><td>213M</td></tr></tbody></table><p>$d_k = d_{model}/h$ 이므로 head를 늘려도 전체 연산량은 거의 그대로임.</p><hr><h1 id=전체-구조-상세>전체 구조 상세</h1><h2 id=1-개요>1. 개요</h2><p>여기부터는 입력 문장이 <strong>실제로 어떤 순서로 처리되는지</strong>를 단계별로 따라감.
+<strong>입력 문장 → 토큰화 → 임베딩 → Q/K/V 생성 → Self-Attention → Multi-head → Encoder/Decoder 구조</strong> 순서임.</p><hr><h1 id=2-입력-처리-tokenizer--token-id--token-문서>2. 입력 처리: Tokenizer → Token ID → <a class=inline-link href=/Study/mldnn/dnn/transformer/token/>Token 문서</a></h1><h2 id=21-문장-입력>2.1 문장 입력</h2><p>예시:</p><pre tabindex=0><code>나는 학교에 간다</code></pre><h2 id=22-토큰화tokenization>2.2 토큰화(Tokenization)</h2><p>subword 토크나이저(BPE / WordPiece / SentencePiece)로 문장을 토큰 단위로 분할함.
+토큰이 무엇인지, 왜 단어 단위로 자르지 않는지, tokenizer가 회사마다 다른 이유는 <a class=inline-link href=/Study/mldnn/dnn/transformer/token/>Token</a>
+문서에 정리함.</p><pre tabindex=0><code>[&#34;나&#34;, &#34;##는&#34;, &#34;학교&#34;, &#34;##에&#34;, &#34;간&#34;, &#34;##다&#34;]</code></pre><blockquote><p><code>##</code> 은 <strong>WordPiece</strong>(BERT) 표기로 &ldquo;앞 토큰에 이어붙는 조각"이라는 뜻임.
+SentencePiece는 대신 <code>▁</code>(공백 표시)를 써서 <code>["▁나", "는", "▁학교", "에", "▁간", "다"]</code> 처럼 나옴.
+원 Transformer 논문은 BPE 계열을 썼음. 표기법이 도구마다 다르니 섞어 쓰지 않도록 주의.</p></blockquote><h2 id=23-토큰--정수-id-매핑-vocabulary>2.3 토큰 → 정수 ID 매핑 (Vocabulary)</h2><p>토크나이저는 사전(vocabulary)을 보유하며 각 토큰을 정수 ID로 변환함.</p><table><thead><tr><th>Token</th><th>ID</th></tr></thead><tbody><tr><td>나</td><td>102</td></tr><tr><td>##는</td><td>450</td></tr><tr><td>학교</td><td>630</td></tr><tr><td>##에</td><td>231</td></tr><tr><td>간</td><td>901</td></tr><tr><td>##다</td><td>250</td></tr></tbody></table><blockquote><p><strong>ID는 의미가 없음.</strong><br>의미는 임베딩 레이어가 학습함.</p></blockquote><hr><h1 id=3-임베딩-token-id--n차원-벡터>3. 임베딩: Token ID → N차원 벡터</h1><h2 id=31-임베딩-레이어의-정체>3.1 임베딩 레이어의 정체</h2><p>임베딩 레이어는 크기가 다음과 같은 거대한 행렬:</p><pre tabindex=0><code>[vocab_size × embedding_dim] = W</code></pre><p>예:</p><pre tabindex=0><code>(50,000 × 512)</code></pre><h2 id=32-변환-방식>3.2 변환 방식</h2><p>토큰 ID = 임베딩 테이블의 row index.</p><p>예:<br>토큰 “나”(ID=102) → <code>W[102]</code> (512차원 벡터)</p><p>즉:</p><pre tabindex=0><code>Token ID → Lookup → d_model 차원의 벡터</code></pre><h2 id=33-사람이-만드는가>3.3 사람이 만드는가?</h2><ul><li><strong>Vocabulary 내용 자체는 코퍼스에서 학습됨</strong> — BPE/WordPiece가 말뭉치의 빈도를 보고 어떤 조각을 토큰으로 쓸지 자동으로 정함</li><li>사람이 정하는 것은 <strong>토크나이저 알고리즘과 vocab size</strong>(예: 32,000개) 같은 설정값임</li><li><strong>임베딩 행렬 W의 값은 학습으로 자동 생성</strong></li></ul><hr><h1 id=4-positional-encoding--상세-문서>4. Positional Encoding → <a class=inline-link href=/Study/mldnn/dnn/transformer/positional_encoding/>상세 문서</a></h1><p>attention은 내적만 하므로 <strong>토큰 순서를 전혀 모름</strong>. 입력을 뒤섞어도 결과가 같음.
+그래서 위치를 벡터로 만들어 임베딩에 <strong>더해 줌</strong>.</p><pre tabindex=0><code>입력 = Embedding + PositionalEncoding</code></pre>$$
+PE_{(pos,\ 2i)} = \sin\!\left(\frac{pos}{10000^{2i/d_{model}}}\right)
+\qquad
+PE_{(pos,\ 2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d_{model}}}\right)
+$$<p>차원마다 주기를 다르게 준 sin/cos을 겹쳐 씀. 덕분에</p><ul><li>값이 항상 $[-1, 1]$ 이라 임베딩을 덮지 않음</li><li>학습 때 본 적 없는 긴 위치도 그냥 계산됨</li><li>두 위치 벡터의 <strong>내적이 상대 거리에만 의존</strong>함</li><li>$k$ 칸 이동이 <strong>선형 변환(회전)</strong> 으로 표현됨</li></ul><p>왜 하필 sin/cos인지, 단순한 대안들이 왜 실패하는지는 <a class=inline-link href=/Study/mldnn/dnn/transformer/positional_encoding/>Positional Encoding 문서</a>
+에서 다룸.</p><hr><h1 id=5-self-attention-q-k-v-생성--self-attention-문서>5. Self-Attention: Q, K, V 생성 → <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention 문서</a></h1><p>입력 $X$ $(T \times d_{model})$ 에서 역할이 다른 세 표현을 만들어 냄.</p><pre tabindex=0><code>Q = X W_Q        &#34;무엇을 찾는가&#34;
+K = X W_K        &#34;무엇으로 불릴 수 있는가&#34;
+V = X W_V        &#34;실제로 건네줄 내용&#34;</code></pre><table><thead><tr><th>기호</th><th>shape</th><th>비고</th></tr></thead><tbody><tr><td>$X$</td><td>$(T, d_{model})$</td><td>임베딩 + Positional Encoding 결과</td></tr><tr><td>$W_Q, W_K, W_V$</td><td>$(d_{model}, d_k)$</td><td><strong>학습되는</strong> 가중치</td></tr><tr><td>$Q, K, V$</td><td>$(T, d_k)$</td><td>역할별 표현</td></tr></tbody></table><blockquote><p>$Q/K/V$ 는 토큰을 3등분한 것이 <strong>아니라</strong>, 같은 $X$ 에 다른 가중치를 곱해 만든 <strong>세 개의 다른 표현</strong>임.</p></blockquote><p>왜 하나가 아니라 셋이어야 하는지는 <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention §2</a>
+에서 다룸.</p><hr><h1 id=6-self-attention-계산-과정--self-attention-문서>6. Self-Attention 계산 과정 → <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention 문서</a></h1>$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+$$<table><thead><tr><th>단계</th><th>연산</th><th>shape</th><th>의미</th></tr></thead><tbody><tr><td>① 점수</td><td>$QK^\top$</td><td>$(T, T)$</td><td>토큰 $i$ 가 토큰 $j$ 를 보는 점수</td></tr><tr><td>② 스케일링</td><td>$\div \sqrt{d_k}$</td><td>$(T, T)$</td><td>softmax 포화 방지</td></tr><tr><td>③ 비율화</td><td>softmax (행 방향)</td><td>$(T, T)$</td><td>합이 1인 &ldquo;참고 비율&rdquo;</td></tr><tr><td>④ 가중합</td><td>$\times V$</td><td>$(T, d_k)$</td><td>그 비율로 Value를 섞음</td></tr></tbody></table><p>즉 토큰 간 &ldquo;누가 누구를 얼마나 참고할지&rdquo; 정하고, 그대로 섞는 연산임.</p><p>$\sqrt{d_k}$ 로 나누는 이유($d_k=64$ 면 점수 표준편차가 8까지 벌어져 softmax가 one-hot으로 포화됨)와
+실제 숫자를 넣어 따라가는 예제는 <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention §4~5</a>
+에 있음.</p><hr><h1 id=7-multi-head-attention--self-attention-문서>7. Multi-Head Attention → <a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention 문서</a></h1><p>$W_Q, W_K, W_V$ 세트를 $h$ 개 두고 병렬로 돌린 뒤 이어 붙임.</p><pre tabindex=0><code>head_i = Attention(X W_Q^i, X W_K^i, X W_V^i)
+MultiHead = Concat(head_1, ..., head_h) W_O</code></pre><ul><li>head마다 차원을 $d_{model}/h$ 로 줄이므로 <strong>연산량은 single-head와 거의 같음</strong></li><li>서로 다른 표현 공간에서 여러 관계를 동시에 잡을 수 있음</li><li>head별 역할을 사람이 지정하지는 <strong>않음</strong>. 학습으로 각자 다른 projection을 잡을 뿐임</li></ul><h1 id=8-position-wise-feed-forward-network-ffn--ffn-문서>8. Position-wise Feed-Forward Network (FFN) → <a class=inline-link href=/Study/mldnn/dnn/transformer/ffn/>FFN 문서</a></h1><p>각 토큰의 벡터에 대해 독립적으로 적용되는 2-layer MLP. 자세한 내용은 <a class=inline-link href=/Study/mldnn/dnn/transformer/ffn/>FFN</a>
+참고.</p><pre tabindex=0><code>FFN(x) = max(0, xW1 + b1) W2 + b2</code></pre><hr><h1 id=9-encoder-구조-n회-반복>9. Encoder 구조 (N회 반복)</h1><p>한 블록:</p><pre tabindex=0><code>(1) Multi-Head Self-Attention
+(2) Add &amp; LayerNorm
+(3) Feed-Forward Network
+(4) Add &amp; LayerNorm</code></pre><p>전체 인코더:</p><pre tabindex=0><code>Input → (EncoderBlock × N) → Output</code></pre><blockquote><p><strong>Add & LayerNorm의 순서 주의</strong> — 원 논문은 <strong>Post-LN</strong> 임.</p>$$\text{LayerNorm}\left(x + \text{Sublayer}(x)\right)$$<p>residual을 더한 <strong>뒤에</strong> 정규화함. 반면 ViT·GPT-2 이후 대부분의 구현은 <strong>Pre-LN</strong>
+($x + \text{Sublayer}(\text{LayerNorm}(x))$)을 씀 — 깊게 쌓을 때 학습이 훨씬 안정적이기 때문임.
+Post-LN은 learning rate warm-up 없이는 발산하기 쉬움. 비교는 <a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+참고.</p></blockquote><hr><h1 id=10-decoder-구조-n회-반복>10. Decoder 구조 (N회 반복)</h1><p>Decoder는 &ldquo;Encoder 결과를 받아서 출력하는 층"이 아니라, <strong>지금까지 생성한 출력 토큰을 보고 다음 토큰을 하나씩 예측하는 autoregressive 생성기</strong>임. 그래서 Encoder 블록에는 없는 두 가지가 있음 — <strong>Masked Self-Attention</strong>과 <strong>Cross-Attention</strong>.</p><p>한 블록:</p><pre tabindex=0><code>(1) Masked Multi-Head Self-Attention   ← 지금까지 생성한 출력 토큰끼리
+(2) Add &amp; LayerNorm
+(3) Encoder-Decoder (Cross) Attention  ← Q = 디코더 상태, K·V = 인코더 출력
+(4) Add &amp; LayerNorm
+(5) Feed-Forward Network
+(6) Add &amp; LayerNorm</code></pre><p>전체 디코더:</p><pre tabindex=0><code>TargetInput → (DecoderBlock × N) → Output</code></pre><p>디코더 블록 하나를 그림으로 보면 — 어디서 Q, K, V가 오는지가 핵심임:</p><pre class=mermaid>flowchart TB
+    subgraph DEC[&#34;Decoder 블록 (×N)&#34;]
+      direction TB
+      DI[&#34;출력 토큰 임베딩 + PE&lt;br/&gt;&amp;lt;BOS&amp;gt; 나는 머신 …&#34;] --&gt; MSA[&#34;① Masked Self-Attention&lt;br/&gt;Q·K·V = 출력 시퀀스&lt;br/&gt;미래 토큰은 mask (−∞)&#34;]
+      MSA --&gt; AN1[&#34;Add &amp; Norm&#34;]
+      AN1 --&gt; CA[&#34;② Cross-Attention&lt;br/&gt;Q = 디코더 상태&lt;br/&gt;K·V = 인코더 출력 H&#34;]
+      CA --&gt; AN2[&#34;Add &amp; Norm&#34;]
+      AN2 --&gt; FFN[&#34;③ FFN&#34;]
+      FFN --&gt; AN3[&#34;Add &amp; Norm&#34;]
+    end
+
+    subgraph ENC[&#34;Encoder (×N)&#34;]
+      direction TB
+      EI[&#34;입력 문장 임베딩 + PE&lt;br/&gt;I love machine learning&#34;] --&gt; ESA[&#34;Self-Attention&lt;br/&gt;Q·K·V = 입력 시퀀스&#34;]
+      ESA --&gt; EFF[&#34;Add &amp; Norm → FFN → Add &amp; Norm&#34;]
+      EFF --&gt; EO[&#34;인코더 출력 H = [h1 … hn]&#34;]
+    end
+
+    EO -. &#34;K, V&#34; .-&gt; CA
+    AN3 --&gt; OUT[&#34;Linear → Softmax&lt;br/&gt;다음 토큰 확률&#34;]</pre><ul><li>①은 인코더의 Self-Attention과 같은 연산이지만 <strong>mask</strong>가 붙음 (§10.2)</li><li>②만 Q와 K·V의 출처가 다름 — 디코더가 인코더 출력에 &ldquo;질문"하는 자리 (§10.3)</li><li>③ FFN은 인코더와 동일 (<a class=inline-link href=/Study/mldnn/dnn/transformer/ffn/>FFN 문서</a>
+)</li></ul><h2 id=101-decoder는-무엇을-입력받나--한-토큰씩-생성>10.1 Decoder는 무엇을 입력받나 — 한 토큰씩 생성</h2><p>번역 <code>I love machine learning → 나는 머신 러닝을 좋아한다</code>를 예로 들면, 디코더는 두 종류의 정보를 받음.</p><pre tabindex=0><code>① 지금까지 생성한 출력 토큰      ② 인코더가 만든 입력 문장의 representation</code></pre><pre tabindex=0><code>step 1:  &lt;BOS&gt;                  → &#34;나는&#34;
+step 2:  &lt;BOS&gt; 나는              → &#34;머신&#34;
+step 3:  &lt;BOS&gt; 나는 머신         → &#34;러닝을&#34;
+step 4:  &lt;BOS&gt; 나는 머신 러닝을   → &#34;좋아한다&#34;</code></pre>$$
+P(y_t \mid y_1, \dots, y_{t-1}, X)
+$$<p>다음 토큰 $y_t$는 <strong>입력 문장 $X$</strong> 와 <strong>이미 생성한 출력 $y_{<t}$</strong> 둘을 보고 결정됨. 학습 때는 정답 문장 전체를 한 번에 넣고(teacher forcing) 병렬로 계산하지만, 추론 때는 정말 한 토큰씩 생성함.</p><p>추론 때의 반복 구조:</p><pre class=mermaid>flowchart TB
+    X[&#34;입력 문장&lt;br/&gt;I love machine learning&#34;] --&gt; ENC[&#34;Encoder&lt;br/&gt;(한 번만 실행)&#34;]
+    ENC --&gt; H[&#34;인코더 출력 H&#34;]
+
+    S[&#34;&amp;lt;BOS&amp;gt; + 지금까지 생성한 토큰&#34;] --&gt; DEC[&#34;Decoder ×N&#34;]
+    H -. &#34;K, V (매 step 재사용)&#34; .-&gt; DEC
+    DEC --&gt; P[&#34;Softmax → 다음 토큰 y_t&#34;]
+    P -- &#34;y_t를 뒤에 붙여서 다시 입력&#34; --&gt; S
+    P -- &#34;&amp;lt;EOS&amp;gt;가 나오면&#34; --&gt; END[&#34;종료&lt;br/&gt;나는 머신 러닝을 좋아한다&#34;]</pre><p>인코더는 <strong>한 번만</strong> 돌고, 디코더는 토큰 하나 만들 때마다 다시 실행됨. 그래서 생성 길이가 길수록 디코더 쪽 비용이 선형으로 늘고, 이 반복을 줄이려고 KV cache 같은 기법을 씀.</p><h2 id=102-masked-self-attention--미래를-못-보게-함>10.2 Masked Self-Attention — 미래를 못 보게 함</h2><p>학습 때 정답 문장 전체를 넣으므로, <code>머신</code>을 예측하는 자리에서 뒤에 오는 <code>러닝을</code>, <code>좋아한다</code>를 미리 보면 안 됨. 그래서 attention score 행렬에 mask를 씌움.</p><pre tabindex=0><code>                (보는 쪽)
+              나는  머신  러닝을  좋아한다
+나는           O     X     X       X
+머신           O     O     X       X
+러닝을         O     O     O       X
+좋아한다       O     O     O       O</code></pre><p>X 자리에 $-\infty$를 더하면 softmax 이후 확률이 0이 됨 (<strong>causal mask</strong>, look-ahead mask).</p>$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}} + M\right)V,
+\qquad M_{ij} = \begin{cases} 0 & j \le i \\ -\infty & j > i \end{cases}
+$$<h2 id=103-cross-attention--원문을-참조함--상세-문서>10.3 Cross-Attention — 원문을 참조함 → <a class=inline-link href=/Study/mldnn/dnn/transformer/cross_attention/>상세 문서</a></h2><p>디코더가 <code>나는 머신</code>까지 만들었다면, 다음 단어를 정하려면 원문도 봐야 함. 이때 Q, K, V의 <strong>출처가 갈라짐</strong>.</p>$$
+Q = \text{디코더 상태 (지금까지 생성한 것)}, \qquad K, V = \text{인코더 출력 (입력 문장)}
+$$<pre tabindex=0><code>디코더 상태 &#34;나는 머신&#34;
+        │ Query
+        ↓
+   Cross-Attention   ←  Key / Value: 인코더 출력 &#34;I love machine learning&#34;
+        ↓
+   &#34;원문의 어디를 봐야 다음 단어가 정해지지?&#34;</code></pre><p>예를 들어 attention이 <code>I 0.05 / love 0.10 / machine 0.20 / learning 0.65</code>처럼 <code>learning</code>에 몰리면 다음 토큰 <code>러닝을</code>이 나옴. Self-Attention은 Q·K·V가 전부 같은 시퀀스에서 나오지만, Cross-Attention은 <strong>Q만 디코더, K·V는 인코더</strong>라는 점이 유일한 차이임.</p><blockquote><p>그래서 $QK^\top$ 이 정사각형이 아니라 $(T_{dec}, T_{enc})$ 직사각형이 되고, causal mask도 쓰지 않음.
+<a class=inline-link href=/Study/mldnn/dnn/transformer/cross_attention/>Self-Attention과의 비교표</a>
+와 수치 예제는 <a class=inline-link href=/Study/mldnn/dnn/transformer/cross_attention/>Cross-Attention 문서</a>
+참고.</p></blockquote><h2 id=104-인코더-블록과-디코더-블록-비교>10.4 인코더 블록과 디코더 블록 비교</h2><table><thead><tr><th></th><th>Encoder 블록</th><th>Decoder 블록</th></tr></thead><tbody><tr><td>Attention 개수</td><td>1 (Self)</td><td>2 (Masked Self + Cross)</td></tr><tr><td>Self-Attention mask</td><td>없음 (전부 봄)</td><td>causal (과거만 봄)</td></tr><tr><td>Q / K / V 출처</td><td>전부 입력 시퀀스</td><td>Self: 출력 시퀀스 / Cross: Q=디코더, K·V=인코더</td></tr><tr><td>역할</td><td>입력을 이해해 context 표현 생성</td><td>context를 참조하며 출력 토큰 생성</td></tr></tbody></table><blockquote><p>⚠️ &ldquo;디코더"라는 이름은 모델마다 뜻이 다름. 위는 NLP Transformer의 autoregressive 디코더이고, <a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a>
+의 디코더는 mask 없이 N개를 병렬로 뽑는 물체 추출기, U-Net의 디코더는 해상도 복원기임. <a class=inline-link href=/Study/mldnn/basics/components/decoder/>Decoder 개념 문서</a>
+의 &ldquo;세 가지 디코더&rdquo; 참고. <a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+는 분류만 하므로 디코더 자체가 없음.</p></blockquote><hr><h1 id=11-출력-단계-decoder--softmax>11. 출력 단계 (Decoder → Softmax)</h1><p>디코더의 출력에 선형 변환 + Softmax 적용하여 다음 토큰 확률 예측.</p><pre tabindex=0><code>P(token | previousTokens) = softmax(W_out · h)</code></pre><hr><h1 id=12-전체-프로세스-요약-한-줄>12. 전체 프로세스 요약 (한 줄)</h1><blockquote><p><strong>문장 → 토큰화 → Token ID → 임베딩 → Q/K/V → Self-Attention → Multi-head → <a class=inline-link href=/Study/mldnn/dnn/transformer/ffn/>FFN</a>
+→ (반복) → Decoder → Softmax → 다음 단어 예측</strong></p></blockquote><hr><h1 id=13-전체-구조-그림텍스트-버전>13. 전체 구조 그림(텍스트 버전)</h1><pre tabindex=0><code>Input Sentence
+    ↓
+Tokenizer
+    ↓
+Token IDs
+    ↓
+Embedding + Positional Encoding
+    ↓
+[Encoder Block × N]
+    ↓
+Encoder Output
+    ↓
+[Decoder Block × N]
+    ↓
+Softmax
+    ↓
+Token Prediction</code></pre><p>같은 흐름을 인코더·디코더 연결까지 포함해 그리면:</p><pre class=mermaid>flowchart LR
+    subgraph IN[&#34;입력 처리 (§2~4)&#34;]
+      direction TB
+      A[&#34;문장&#34;] --&gt; B[&#34;Tokenizer → Token ID&#34;] --&gt; C[&#34;Embedding + Positional Encoding&#34;]
+    end
+    subgraph E[&#34;Encoder ×N (§9)&#34;]
+      direction TB
+      E1[&#34;Self-Attention&#34;] --&gt; E2[&#34;FFN&#34;]
+    end
+    subgraph D[&#34;Decoder ×N (§10)&#34;]
+      direction TB
+      D1[&#34;Masked Self-Attention&#34;] --&gt; D2[&#34;Cross-Attention&#34;] --&gt; D3[&#34;FFN&#34;]
+    end
+    C --&gt; E
+    E -. &#34;인코더 출력 → K, V&#34; .-&gt; D2
+    T[&#34;출력 토큰 (shifted right)&lt;br/&gt;Embedding + PE&#34;] --&gt; D
+    D --&gt; O[&#34;Linear → Softmax (§11)&lt;br/&gt;다음 토큰 예측&#34;]</pre><blockquote><p>분류만 하는 <a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+는 이 그림에서 <strong>Decoder 박스를 통째로 뺀 것</strong>이고, <a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a>
+은 Decoder의 입력을 &ldquo;출력 토큰&rdquo; 대신 <strong>학습된 object query N개</strong>로 바꾸고 mask를 없앤 것임.</p></blockquote></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,102 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Positional Encoding | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/transformer/>Transformer</a></div><h1>Positional Encoding</h1></header><div class="doc-body post-body"><h1 id=positional-encoding--왜-하필-sin--cos-인가>Positional Encoding — 왜 하필 sin / cos 인가</h1><blockquote><p>결론부터 아주 쉽게: attention은 순서를 모름. 그래서 위치 정보를 벡터로 만들어 더해 줘야 함.
+그런데 그냥 <code>0, 1, 2, 3…</code> 을 쓰면 값이 무한히 커지고, 길이를 정해 학습시키면 그보다 긴 문장에 못 씀.
+<strong>여러 주기의 sin/cos을 겹쳐 쓰면</strong> 값은 항상 $[-1, 1]$ 이면서, 위치마다 다르고, <strong>상대 거리까지 표현</strong>됨.</p></blockquote><hr><h2 id=1-왜-위치-정보가-필요한가>1. 왜 위치 정보가 필요한가</h2><p><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention</a>
+의 계산을 다시 보면, 각 토큰은 다른 토큰들과 <strong>내적</strong>을 해서 참고 비율을 정함.</p><p>이 연산에는 <strong>순서가 들어갈 자리가 없음</strong>. 입력 토큰을 뒤섞어도 (permutation) 각 토큰이 받는 결과는 그대로임.</p><pre tabindex=0><code>&#34;나는 사과를 먹었다&#34;   →  attention  →  결과 A
+&#34;먹었다 나는 사과를&#34;   →  attention  →  결과 A  (순서만 따라 이동할 뿐 값은 동일)</code></pre><p>RNN은 앞에서부터 차례로 읽으니 순서가 구조에 내장돼 있었지만, Transformer는 전부 동시에 보기 때문에 <strong>순서를 따로 알려줘야 함</strong>. 그래서 입력에 위치 벡터를 더함.</p>$$
+\text{입력} = \text{Embedding} + \text{PositionalEncoding}
+$$<blockquote><p>곱하지 않고 <strong>더함</strong>. 같은 $d_{model}$ 차원이라 그냥 더해지고, 이후 $W_Q, W_K$ 가 &ldquo;의미 성분"과 &ldquo;위치 성분"을 알아서 분리해 쓰도록 학습됨.</p></blockquote><hr><h2 id=2-단순한-방법들이-왜-실패하나>2. 단순한 방법들이 왜 실패하나</h2><table><thead><tr><th>방법</th><th>문제</th></tr></thead><tbody><tr><td>위치를 그대로 <code>0, 1, 2, …</code></td><td>문장이 길면 값이 무한정 커짐. 임베딩 값($\approx[-1,1]$)을 덮어버려 의미가 사라짐</td></tr><tr><td><code>pos / T</code> 로 정규화</td><td>범위는 잡히지만 <strong>같은 위치가 문장 길이마다 다른 값</strong>이 됨. 10토큰의 3번째와 100토큰의 3번째가 달라짐</td></tr><tr><td>위치마다 학습되는 벡터</td><td>잘 동작하지만, <strong>학습 때 본 최대 길이까지만</strong> 가능. 더 긴 입력엔 값이 없음</td></tr><tr><td>이진수 비트 패턴</td><td>아이디어는 맞음 (자리마다 주기가 다름). 다만 값이 이산적이라 미분이 안 됨</td></tr></tbody></table><p>마지막 줄이 힌트임. 이진수를 보면 <strong>자리마다 뒤집히는 주기가 다름</strong>.</p><pre tabindex=0><code>0 → 000
+1 → 001     맨 오른쪽 자리: 1마다 반전  (주기 2)
+2 → 010     가운데 자리   : 2마다 반전  (주기 4)
+3 → 011     맨 왼쪽 자리  : 4마다 반전  (주기 8)
+4 → 100</code></pre><p><strong>이걸 연속 함수로 바꾼 것이 sin/cos</strong>임. 차원마다 다른 주기를 주면, 그 조합으로 위치를 식별할 수 있음.</p><hr><h2 id=3-논문의-정의>3. 논문의 정의</h2>$$
+PE_{(pos,\ 2i)} = \sin\!\left(\frac{pos}{10000^{2i/d_{model}}}\right)
+\qquad
+PE_{(pos,\ 2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d_{model}}}\right)
+$$<ul><li>$pos$ : 토큰의 위치 (0, 1, 2, …)</li><li>$i$ : 차원 인덱스. <strong>짝수 차원엔 sin, 홀수 차원엔 cos</strong>을 넣고 쌍으로 묶음</li><li>$10000^{2i/d}$ : 차원이 뒤로 갈수록 <strong>주기가 길어지게</strong> 만드는 값</li></ul><p>파장으로 보면 $2\pi$ 부터 $2\pi \cdot 10000$ 까지 <strong>기하급수적으로 늘어남</strong>.</p><pre tabindex=0><code>차원 0,1    ▁▂▃▅▆▇█▇▆▅▃▂▁▂▃▅▆▇█▇▆▅▃▂▁   빠르게 진동 (짧은 주기)
+차원 2,3    ▁▁▂▃▄▅▆▇█▇▆▅▄▃▂▁▁▂▃▄▅▆▇█
+차원 4,5    ▁▁▁▂▂▃▄▅▆▇███▇▆▅▄▃▂▂▁▁▁▁
+  …
+차원 d-2,d-1 ▁▁▁▁▁▁▂▂▂▃▃▃▄▄▄▅▅▅▆▆▆▇▇▇   거의 변하지 않음 (긴 주기)</code></pre><p>앞쪽 차원은 <strong>바로 옆 토큰</strong>을 구분하고, 뒤쪽 차원은 <strong>문장의 앞/뒤 대역</strong>을 구분함. 시계의 초침·분침·시침과 같은 구조임.</p><hr><h2 id=4-sincos이-주는-성질-네-가지>4. sin/cos이 주는 성질 네 가지</h2><p>$d_{model}=128$ 로 실제 계산해서 확인한 값임.</p><h3 id=41-값이-항상>4.1 값이 항상 $[-1, 1]$</h3><p>위치가 5000이든 50000이든 범위가 그대로임. 임베딩 값과 크기가 비슷해서 <strong>더해도 의미를 덮지 않음</strong>.</p><p>덤으로, 모든 위치 벡터의 <strong>노름이 동일</strong>함 ($\sqrt{d/2}$, $d=128$ 이면 정확히 8.0).
+$\sin^2 + \cos^2 = 1$ 인 쌍이 $d/2$ 개 있기 때문임. 즉 &ldquo;어느 위치냐"에 따라 더해지는 크기가 달라지지 않음.</p><h3 id=42-학습-때-안-본-길이에도-그대로-씀>4.2 학습 때 안 본 길이에도 그대로 씀</h3><p>함수일 뿐이라 $pos = 5000$ 을 넣으면 그냥 계산됨. 학습을 512토큰으로 했어도 <strong>정의상 더 긴 입력에 값을 만들 수 있음</strong> — 학습되는 위치 임베딩에는 없는 장점임.</p><blockquote><p>다만 &ldquo;값이 나온다"와 &ldquo;성능이 유지된다"는 다름. 실제로는 학습 길이를 크게 넘어가면 품질이 떨어지고, 그래서 이후 RoPE·ALiBi 같은 방식이 나옴.</p></blockquote><h3 id=43-내적이-상대-거리에만-의존함>4.3 내적이 <strong>상대 거리</strong>에만 의존함</h3><p>이게 핵심임. 두 위치 벡터의 내적 $PE_{pos} \cdot PE_{pos+k}$ 는 <strong>$pos$ 와 무관하고 $k$ 에만 의존</strong>함.</p><p>$d=128$, $k=5$ 로 계산하면:</p><table><thead><tr><th>$pos$</th><th>0</th><th>5</th><th>10</th><th>20</th><th>40</th></tr></thead><tbody><tr><td>$PE_{pos} \cdot PE_{pos+5}$</td><td>47.185</td><td>47.185</td><td>47.185</td><td>47.185</td><td>47.185</td></tr></tbody></table><p>전부 같은 값임. 덧셈정리 때문임.</p>$$
+\sin a \sin b + \cos a \cos b = \cos(a - b)
+$$<p>쌍으로 묶인 (sin, cos) 차원들의 내적을 더하면 $\sum_i \cos\big(k \cdot \omega_i\big)$ 가 되어 <strong>$pos$ 가 사라지고 $k$ 만 남음</strong>.</p><p>attention은 Q와 K의 <strong>내적</strong>으로 점수를 내므로, 이 성질 덕에 모델이 &ldquo;몇 번째인가"가 아니라 <strong>&ldquo;몇 칸 떨어졌는가&rdquo;</strong> 를 보고 학습할 수 있음.</p><p>그리고 거리가 멀수록 내적이 작아짐 — 가까운 토큰이 자연스럽게 더 비슷하게 취급됨.</p><table><thead><tr><th>$k$</th><th>0</th><th>1</th><th>2</th><th>4</th><th>8</th><th>16</th><th>32</th></tr></thead><tbody><tr><td>내적</td><td>64.0</td><td>62.1</td><td>57.4</td><td>48.6</td><td>45.7</td><td>39.7</td><td>35.7</td></tr></tbody></table><h3 id=44--칸-이동이-선형-변환으로-표현됨>4.4 $k$ 칸 이동이 <strong>선형 변환</strong>으로 표현됨</h3><p>논문이 sin/cos을 고른 이유로 직접 든 성질임 — 어떤 고정된 offset $k$ 에 대해, $PE_{pos+k}$ 는 $PE_{pos}$ 의 <strong>선형 함수</strong>임.</p>$$
+PE_{pos+k} = PE_{pos} \cdot R_k
+$$<p>2차원 쌍마다 보면 그냥 <strong>회전 행렬</strong>임.</p>$$
+\begin{bmatrix} \sin(\omega(pos+k)) \\ \cos(\omega(pos+k)) \end{bmatrix} =
+\begin{bmatrix} \cos \omega k & \sin \omega k \\ -\sin \omega k & \cos \omega k \end{bmatrix}
+\begin{bmatrix} \sin(\omega\, pos) \\ \cos(\omega\, pos) \end{bmatrix}
+$$<p>$k=7$ 로 실제 $R$ 을 풀어 맞춰 보면 최대 오차가 $8.2 \times 10^{-6}$ — 수치 오차 수준으로 정확히 성립함.</p><p>$W_Q, W_K$ 가 선형 변환이므로, 모델이 &ldquo;$k$ 칸 뒤를 본다"는 규칙을 <strong>가중치 하나로 학습할 수 있다</strong>는 뜻임.</p><blockquote><p>이 &ldquo;회전으로 위치를 표현한다"는 발상을 더 밀어붙인 것이 <strong>RoPE</strong>(Rotary Position Embedding)임.
+위치 벡터를 <em>더하는</em> 대신 Q·K를 직접 <em>회전시킴</em>. LLaMA 계열이 전부 이걸 씀.</p></blockquote><hr><h2 id=5-코드>5. 코드</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> math
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>sinusoidal_pe</span>(max_len, d_model):
+</span></span><span style=display:flex><span>    pe <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>zeros(max_len, d_model)
+</span></span><span style=display:flex><span>    pos <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>arange(max_len)<span style=color:#f92672>.</span>unsqueeze(<span style=color:#ae81ff>1</span>)<span style=color:#f92672>.</span>float()          <span style=color:#75715e># (max_len, 1)</span>
+</span></span><span style=display:flex><span>    i <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>arange(<span style=color:#ae81ff>0</span>, d_model, <span style=color:#ae81ff>2</span>)<span style=color:#f92672>.</span>float()                   <span style=color:#75715e># 짝수 차원 인덱스</span>
+</span></span><span style=display:flex><span>    div <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>exp(<span style=color:#f92672>-</span>math<span style=color:#f92672>.</span>log(<span style=color:#ae81ff>10000.0</span>) <span style=color:#f92672>*</span> i <span style=color:#f92672>/</span> d_model)         <span style=color:#75715e># 1 / 10000^(2i/d)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    pe[:, <span style=color:#ae81ff>0</span>::<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>sin(pos <span style=color:#f92672>*</span> div)                        <span style=color:#75715e># 짝수 차원 → sin</span>
+</span></span><span style=display:flex><span>    pe[:, <span style=color:#ae81ff>1</span>::<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>cos(pos <span style=color:#f92672>*</span> div)                        <span style=color:#75715e># 홀수 차원 → cos</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> pe                                                 <span style=color:#75715e># (max_len, d_model)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>pe <span style=color:#f92672>=</span> sinusoidal_pe(<span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>128</span>)
+</span></span><span style=display:flex><span>print(pe<span style=color:#f92672>.</span>shape)                       <span style=color:#75715e># torch.Size([64, 128])</span>
+</span></span><span style=display:flex><span>print(pe<span style=color:#f92672>.</span>min()<span style=color:#f92672>.</span>item(), pe<span style=color:#f92672>.</span>max()<span style=color:#f92672>.</span>item())   <span style=color:#75715e># -1.0 1.0</span>
+</span></span><span style=display:flex><span>print(pe<span style=color:#f92672>.</span>norm(dim<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>item())           <span style=color:#75715e># 8.0  = sqrt(128/2), 모든 위치 동일</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 내적이 상대 거리에만 의존</span>
+</span></span><span style=display:flex><span>print((pe[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>@</span> pe[<span style=color:#ae81ff>5</span>])<span style=color:#f92672>.</span>item(), (pe[<span style=color:#ae81ff>20</span>] <span style=color:#f92672>@</span> pe[<span style=color:#ae81ff>25</span>])<span style=color:#f92672>.</span>item())   <span style=color:#75715e># 47.185 47.185</span></span></span></code></pre></div><p><code>div</code> 를 <code>exp(-log(10000) * i / d)</code> 로 쓰는 이유는 $10000^{2i/d}$ 를 직접 계산하면 <strong>오버플로</strong>가 나기 때문임. 로그 공간에서 계산해 되돌리는 표준 트릭임.</p><hr><h2 id=6-이후-어떻게-바뀌었나>6. 이후 어떻게 바뀌었나</h2><table><thead><tr><th>방식</th><th>쓰는 곳</th><th>특징</th></tr></thead><tbody><tr><td><strong>고정 sin/cos</strong></td><td>원 Transformer, <a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a></td><td>학습 파라미터 없음, 길이 외삽 가능</td></tr><tr><td><strong>학습되는 위치 임베딩</strong></td><td><a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+, BERT, GPT-2</td><td>단순하고 성능 좋음. 최대 길이 고정</td></tr><tr><td><strong>상대 위치 인코딩</strong></td><td>Swin, T5</td><td>절대 위치 대신 거리 $i-j$ 를 attention score에 직접 더함</td></tr><tr><td><strong>RoPE</strong></td><td>LLaMA, Qwen</td><td>Q·K를 회전시킴. §4.4의 성질을 극단화</td></tr><tr><td><strong>ALiBi</strong></td><td>BLOOM</td><td>거리에 비례한 페널티를 score에 더함. 외삽에 강함</td></tr></tbody></table><p><a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+가 <strong>학습되는 1D 위치 임베딩</strong>을 쓴다는 점이 눈에 띔 — 이미지는 2D인데도 1D로 충분했고, 논문이 2D 버전과 비교했지만 큰 차이가 없었음.</p><hr><h2 id=참고>참고</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+§4 — 전체 구조에서의 위치</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention</a>
+— 순서를 모르는 이유가 여기 있음</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/token/>Token</a>
+— 순서를 매길 대상인 토큰이 만들어지는 단계</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/embedding_layer/>Embedding Layer</a>
+— 여기에 더해지는 쪽</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+— 학습되는 위치 임베딩으로 바꾼 사례</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

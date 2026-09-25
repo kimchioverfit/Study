@@ -1,0 +1,87 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Overview | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class="nav-link is-active" href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/>ML&amp;DNN</a></div><h1>Overview</h1></header><div class="doc-body post-body"><h1 id=computer-vision--deep-learning-study-overview>Computer Vision & Deep Learning Study Overview</h1><h2 id=1-low-level-segmentation--region-proposal>1. Low-level Segmentation / Region Proposal</h2><ul><li>Efficient Graph-Based Segmentation</li><li>Selective Search</li></ul><hr><h2 id=2-backbone-evolution>2. Backbone Evolution</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/backbone/alexnet/>AlexNet</a></li><li>VGG</li><li>ResNet</li><li>EfficientNet</li></ul><hr><h2 id=3-object-detection>3. Object Detection</h2><h3 id=31-classical--two-stage>3.1 Classical / Two-stage</h3><ul><li>OverFeat</li><li>R-CNN</li><li>Fast R-CNN</li><li>Faster R-CNN</li><li>FPN</li><li>Mask R-CNN</li></ul><h3 id=32-one-stage>3.2 One-stage</h3><ul><li>SSD</li><li>YOLO</li></ul><h3 id=33-improvement>3.3 Improvement</h3><ul><li>RetinaNet (Focal Loss)</li></ul><h3 id=34-anchor-free>3.4 Anchor-free</h3><ul><li>FCOS</li></ul><h3 id=35-transformer-based>3.5 Transformer-based</h3><ul><li>DETR</li></ul><hr><h2 id=4-segmentation>4. Segmentation</h2><ul><li>U-Net</li><li>DeepLab</li><li>Mask R-CNN</li></ul><hr><h2 id=5-modern-vision--foundation-models>5. Modern Vision / Foundation Models</h2><ul><li>ViT</li><li>Swin Transformer</li><li>SAM</li></ul><hr><h2 id=6-overall-flow>6. Overall Flow</h2><pre class=mermaid>flowchart TD
+    A[Low-level segmentation / region proposal] --&gt; A1[Efficient Graph-Based Segmentation]
+    A --&gt; A2[Selective Search]
+
+    A2 --&gt; B[Backbone CNN evolution]
+    B --&gt; B1[AlexNet]
+    B1 --&gt; B2[VGG]
+    B2 --&gt; B3[ResNet]
+    B3 --&gt; B4[EfficientNet]
+
+    B4 --&gt; C[Object Detection]
+
+    C --&gt; C1[&#34;OverFeat\nsliding window&#34;]
+    C --&gt; C2[R-CNN family]
+    C2 --&gt; D1[R-CNN]
+    D1 --&gt; D2[Fast R-CNN]
+    D2 --&gt; D3[Faster R-CNN]
+    D3 --&gt; D4[FPN]
+    D4 --&gt; D5[Mask R-CNN]
+
+    C --&gt; C3[One-stage detectors]
+    C3 --&gt; E1[SSD]
+    C3 --&gt; E2[YOLO]
+    C3 --&gt; E3[&#34;RetinaNet\nFocal Loss&#34;]
+
+    C --&gt; C4[Anchor-free]
+    C4 --&gt; F1[FCOS]
+
+    C --&gt; C5[Transformer detection]
+    C5 --&gt; G1[DETR]
+
+    B4 --&gt; H[Segmentation]
+    H --&gt; H1[U-Net]
+    H --&gt; H2[DeepLab]
+    H --&gt; H3[Mask R-CNN]
+
+    G1 --&gt; I[Modern Vision]
+    I --&gt; I1[ViT]
+    I1 --&gt; I2[Swin Transformer]
+    I --&gt; I3[SAM]</pre><hr><h2 id=7-recommended-study-order>7. Recommended Study Order</h2><blockquote><p>아래는 모델 계보만 훑는 간단 목록임.
+<strong>Basics부터 모델 최적화까지 문서 링크가 전부 붙은 전체 로드맵은 <a class=inline-link href=/Study/mldnn/dnn_study_order/>DNN Study Order</a>
+참고.</strong></p></blockquote><ol><li>Efficient Graph-Based Segmentation</li><li>Selective Search</li><li><a class=inline-link href=/Study/mldnn/dnn/backbone/alexnet/>AlexNet</a></li><li>VGG</li><li>ResNet</li><li>EfficientNet</li><li>OverFeat</li><li>R-CNN</li><li>Fast R-CNN</li><li>Faster R-CNN</li><li>FPN</li><li>Mask R-CNN</li><li>SSD / YOLO</li><li>RetinaNet</li><li>FCOS</li><li>DETR</li><li>U-Net / DeepLab</li><li>ViT / Swin Transformer</li><li>SAM (optional)</li></ol><hr><h2 id=8-key-axes-to-understand>8. Key Axes to Understand</h2><ul><li>Region proposal vs sliding window</li><li>Two-stage vs One-stage detection</li><li>Anchor-based vs Anchor-free</li><li>CNN vs Transformer</li><li>Semantic vs Instance segmentation</li><li>Multi-scale feature (FPN)</li><li>Class imbalance (Focal Loss)</li></ul><hr></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

@@ -1,0 +1,120 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Self-Attention | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/transformer/>Transformer</a></div><h1>Self-Attention</h1></header><div class="doc-body post-body"><h1 id=self-attention-scaled-dot-product-attention>Self-Attention (Scaled Dot-Product Attention)</h1><blockquote><p>결론부터 아주 쉽게: 각 토큰이 <strong>&ldquo;나머지 토큰을 각각 얼마나 참고할지&rdquo;</strong> 비율을 정하고, 그 비율대로 섞어서 자기 표현을 새로 만드는 연산임.
+<a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+의 심장이고, $Q/K/V$ 수식은 이 한 문장을 행렬로 옮긴 것일 뿐임.</p></blockquote><hr><h2 id=1-attention이-뭔가--수식-없이>1. Attention이 뭔가 — 수식 없이</h2><p>예문 <code>나는 사과를 먹었다</code> 에서 <strong>먹었다</strong> 를 처리하는 상황임.</p><p><code>먹었다</code> 하나만 보면 &ldquo;무엇을&rdquo; 먹었는지 알 수 없음. 문장 안의 다른 토큰을 봐야 함.
+그런데 전부 똑같이 볼 필요는 없음 — 참고할 정도가 다름.</p><table><thead><tr><th>어떤 토큰을</th><th>얼마나 참고할지</th></tr></thead><tbody><tr><td>나는</td><td>0.2</td></tr><tr><td>사과를</td><td>0.6</td></tr><tr><td>먹었다</td><td>0.2</td></tr></tbody></table><p>이 비율이 정해지면 <code>먹었다</code> 의 새로운 표현은 그냥 <strong>가중합</strong>임.</p><pre tabindex=0><code>새로운 &#34;먹었다&#34; 표현
+  = 0.2 × &#34;나는&#34;의 정보
+  + 0.6 × &#34;사과를&#34;의 정보
+  + 0.2 × &#34;먹었다&#34;의 정보</code></pre><p>Attention은 여기서 끝임. 남은 이야기는 전부 <strong>&ldquo;그 비율을 어떻게 정하나&rdquo;</strong> 하나뿐임.</p><blockquote><p>이 과정을 모든 토큰이 동시에, 서로에 대해 수행함. 그래서 <strong>Self</strong>-Attention임.
+문장 안에서 자기들끼리 참고하는 구조라 RNN처럼 앞에서부터 차례로 갈 필요가 없고, 그래서 병렬화가 됨.</p></blockquote><hr><h2 id=2-비율은-어떻게-정하나--왜-q와-k가-따로-필요한가>2. 비율은 어떻게 정하나 — 왜 Q와 K가 따로 필요한가</h2><p>가장 자연스러운 의문은 이것임.</p><blockquote><p>임베딩 벡터끼리 그냥 내적하면 되는 것 아님?</p></blockquote><p>안 되는 이유가 세 가지 있음.</p><p><strong>① 자기 자신이 항상 1등이 됨</strong>
+$x_i \cdot x_i = \lVert x_i \rVert^2$ 이라서, 자기 자신과의 점수가 거의 항상 제일 큼. 그러면 다른 토큰을 참고하라고 만든 장치가 자기 자신만 보게 됨.</p><p><strong>② 관계가 비대칭인데 내적은 대칭임</strong>
+<code>먹었다</code> 는 <code>사과를</code> 을 강하게 참고해야 하지만, <code>사과를</code> 이 <code>먹었다</code> 를 똑같은 세기로 참고해야 할 이유는 없음.
+그런데 $x_i \cdot x_j = x_j \cdot x_i$ 라서 벡터 하나로는 <strong>대칭 점수밖에 못 만듦</strong>.</p><p><strong>③ &ldquo;무엇을 찾는가"와 &ldquo;무엇을 가졌는가"가 다름</strong>
+<code>먹었다</code> 가 찾는 것은 <em>목적어</em>고, <code>사과를</code> 이 내세우는 것은 <em>나는 명사·목적어임</em> 이라는 성질임. 둘은 다른 정보인데 임베딩 하나에 뭉쳐 있음.</p><p>그래서 <strong>같은 입력에서 역할이 다른 세 벡터를 따로 만들어 냄</strong>. 검색 엔진에 비유하면 이해가 빠름.</p><table><thead><tr><th>이름</th><th>역할</th><th>비유</th></tr></thead><tbody><tr><td><strong>Q</strong>uery</td><td>이 토큰이 <em>무엇을 찾고 있는지</em></td><td>검색창에 친 검색어</td></tr><tr><td><strong>K</strong>ey</td><td>이 토큰이 <em>무엇으로 불릴 수 있는지</em></td><td>문서에 붙은 색인·태그</td></tr><tr><td><strong>V</strong>alue</td><td>이 토큰이 <em>실제로 건네줄 내용</em></td><td>검색 결과로 받아오는 본문</td></tr></tbody></table><p>점수는 <strong>Q와 K를 비교</strong>해서 만들고, 실제로 섞는 것은 <strong>V</strong>임.
+Q·K로 점수를 내면 ②의 비대칭 문제가 풀림 — $q_i \cdot k_j \ne q_j \cdot k_i$ 이기 때문임.</p><blockquote><p>$Q/K/V$ 는 토큰을 3등분하는 것이 <strong>아님</strong>. 같은 $X$ 에 서로 다른 가중치를 곱해 만든 <strong>세 개의 다른 표현</strong>임.</p></blockquote><hr><h2 id=3-q--k--v-만들기>3. Q / K / V 만들기</h2><p>입력 $X$ 는 토큰 $T$ 개, 각 토큰이 $d_{model}$ 차원인 행렬임 (<a class=inline-link href=/Study/mldnn/dnn/transformer/embedding_layer/>임베딩</a>
++ Positional Encoding을 거친 결과).</p>$$
+Q = XW_Q, \qquad K = XW_K, \qquad V = XW_V
+$$<table><thead><tr><th>기호</th><th>shape</th><th>설명</th></tr></thead><tbody><tr><td>$X$</td><td>$(T, d_{model})$</td><td>입력 토큰 표현</td></tr><tr><td>$W_Q, W_K, W_V$</td><td>$(d_{model}, d_k)$</td><td><strong>학습되는</strong> 가중치. 사람이 정하지 않음</td></tr><tr><td>$Q, K, V$</td><td>$(T, d_k)$</td><td>세 가지 역할별 표현</td></tr><tr><td>$QK^\top$</td><td>$(T, T)$</td><td>토큰 쌍마다의 점수</td></tr></tbody></table><p>$W$ 세 개가 학습 대상이라는 점이 중요함. &ldquo;무엇을 질문으로 삼고 무엇을 색인으로 삼을지"를 사람이 정해주는 게 아니라, 모델이 데이터를 보고 알아서 잡음.</p><hr><h2 id=4-숫자로-따라가기>4. 숫자로 따라가기</h2><p>$d_k = 2$ 로 두고 아주 작게 만들어 봄. 토큰 순서는 <code>나는</code>, <code>사과를</code>, <code>먹었다</code> 임.</p><pre tabindex=0><code>Q =            K =            V =
+[1  0]  나는    [1  0]  나는    [1  0]  나는
+[0  1]  사과를  [1  1]  사과를  [0  2]  사과를
+[1  1]  먹었다  [0  1]  먹었다  [1  1]  먹었다</code></pre><p><strong>① 점수 계산</strong> — $QK^\top$ 의 $(i, j)$ 칸은 &ldquo;토큰 $i$ 가 토큰 $j$ 를 보는 점수"임.</p><table><thead><tr><th></th><th>나는</th><th>사과를</th><th>먹었다</th></tr></thead><tbody><tr><td><strong>나는</strong></td><td>1</td><td>1</td><td>0</td></tr><tr><td><strong>사과를</strong></td><td>0</td><td>1</td><td>1</td></tr><tr><td><strong>먹었다</strong></td><td>1</td><td><strong>2</strong></td><td>1</td></tr></tbody></table><p><code>먹었다</code> 행을 보면 <code>사과를</code> 에 2점으로 제일 높은 점수를 줬음.</p><p><strong>② Softmax</strong> — 점수를 합이 1인 비율로 바꿈.</p><pre tabindex=0><code>먹었다의 점수  [1, 2, 1]
+      ↓ softmax
+              [0.212, 0.576, 0.212]</code></pre><p><strong>③ V에 가중합</strong> — 그 비율로 Value를 섞음.</p>$$
+0.212 \times [1, 0] + 0.576 \times [0, 2] + 0.212 \times [1, 1] = [0.424,\ 1.364]
+$$<p>이게 <code>먹었다</code> 의 새로운 표현임. 원래 $V$ 행이었던 $[1, 1]$ 에서 <code>사과를</code> 쪽($[0,2]$)으로 끌려간 것이 보임 — <strong>문맥이 반영됐다는 뜻임</strong>.</p><blockquote><p>위 예제는 $\sqrt{d_k}$ 를 생략했음. 실제로는 여기에 §5의 스케일링이 들어감.</p></blockquote><blockquote><p>여기서 나온 <code>0.212 / 0.576 / 0.212</code> 가 <strong>attention weight</strong> 임. 학습되는 가중치가 아니라 입력마다 새로 계산되는 <strong>비율</strong>이고, 임베딩과 어떻게 다른지는 <a class=inline-link href=/Study/mldnn/dnn/transformer/embedding_layer/>Embedding Layer</a>
+에 표로 정리해 둠.</p></blockquote><hr><h2 id=5-왜--로-나누나>5. 왜 $\sqrt{d_k}$ 로 나누나</h2><p>논문의 수식은 그냥 $QK^\top$ 이 아니라 $\frac{QK^\top}{\sqrt{d_k}}$ 임. 이유는 <strong>softmax가 포화되는 것을 막기 위함</strong>임.</p><p>$q$ 와 $k$ 의 각 성분이 평균 0, 분산 1로 독립이라고 하면, 내적은 그런 곱 $d_k$ 개의 합이므로</p>$$
+\mathrm{Var}(q \cdot k) = d_k \quad \Longrightarrow \quad \text{표준편차} = \sqrt{d_k}
+$$<p>논문 설정인 $d_k = 64$ 면 표준편차가 <strong>8</strong>이 됨. 점수가 $\pm 8$ 범위로 흩어진다는 뜻임.
+softmax는 입력 차이가 이만큼 벌어지면 거의 one-hot이 되어 버림 — 한 토큰만 1이고 나머지는 0. 그러면</p><ul><li>여러 토큰을 섞는다는 의도가 사라지고</li><li>포화 구간이라 <strong>기울기가 거의 0이 되어 학습이 안 됨</strong></li></ul><p>$\sqrt{d_k}$ 로 나누면 분산이 다시 1로 돌아와서 점수가 적당한 범위에 머무름.</p><p>§4의 예제로 차이를 보면 ($d_k=2$ 라 효과가 작지만 방향은 같음):</p><table><thead><tr><th></th><th>나는</th><th>사과를</th><th>먹었다</th></tr></thead><tbody><tr><td>스케일링 없음</td><td>0.212</td><td>0.576</td><td>0.212</td></tr><tr><td>$\div \sqrt{2}$ 적용</td><td>0.248</td><td>0.503</td><td>0.248</td></tr></tbody></table><p>나눠주면 분포가 <strong>덜 뾰족해짐</strong>. $d_k$ 가 64, 128로 커질수록 이 차이가 결정적으로 벌어짐.</p><hr><h2 id=6-전체-수식>6. 전체 수식</h2><p>지금까지를 한 줄로 합치면 논문의 식이 됨.</p>$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+$$<pre tabindex=0><code>X ─┬─ ×W_Q ─▶ Q ─┐
+   ├─ ×W_K ─▶ K ─┴─▶ QKᵀ ─▶ ÷√d_k ─▶ softmax ─┐
+   └─ ×W_V ─▶ V ───────────────────────────────┴─▶ ×V ─▶ 출력
+   (§3)          (§4-①)   (§5)      (§4-②)         (§4-③)</code></pre><p><a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>디코더</a>
+에서는 여기에 mask $M$ 이 하나 더 붙어 미래 토큰을 가림.</p><hr><h2 id=7-multi-head-attention>7. Multi-Head Attention</h2><p>위 연산을 <strong>한 번만</strong> 하면 토큰 쌍마다 관계를 하나씩밖에 못 잡음.
+그래서 $W_Q, W_K, W_V$ 세트를 $h$ 개 두고 <strong>병렬로 돌린 뒤 이어 붙임</strong>.</p>$$
+\text{head}_i = \text{Attention}(XW_Q^i,\ XW_K^i,\ XW_V^i), \qquad
+\text{MultiHead} = \text{Concat}(\text{head}_1, \dots, \text{head}_h)\,W_O
+$$<pre tabindex=0><code>     ┌─ head 1 ─┐
+X ───┼─ head 2 ─┼── Concat ── ×W_O ──▶ 출력
+     ├─  ...    ┤
+     └─ head h ─┘</code></pre><p>논문은 $h = 8$, $d_k = d_v = d_{model}/h = 64$ 로 잡음. <strong>head마다 차원을 $1/h$ 로 줄이기 때문에 연산량은 single-head와 비슷함</strong> — 공짜로 여러 관점을 얻는 구조임.</p><blockquote><p>흔한 오해: &ldquo;head 1은 문법, head 2는 의미를 담당한다"처럼 역할이 깔끔히 나뉘지는 <strong>않음</strong>.
+사람이 역할을 지정하지 않고, 학습 과정에서 각 head가 서로 다른 projection을 잡을 뿐임. 실제로 해석해 보면 역할이 겹치거나 아예 기여가 없는 head도 있음.</p></blockquote><hr><h2 id=8-코드>8. 코드</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn <span style=color:#66d9ef>as</span> nn
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn.functional <span style=color:#66d9ef>as</span> F
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MultiHeadSelfAttention</span>(nn<span style=color:#f92672>.</span>Module):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self, d_model<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>, num_heads<span style=color:#f92672>=</span><span style=color:#ae81ff>8</span>):
+</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>assert</span> d_model <span style=color:#f92672>%</span> num_heads <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>h <span style=color:#f92672>=</span> num_heads
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>d_k <span style=color:#f92672>=</span> d_model <span style=color:#f92672>//</span> num_heads        <span style=color:#75715e># 512 / 8 = 64</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>qkv <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(d_model, d_model <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span>)   <span style=color:#75715e># W_Q, W_K, W_V를 한 번에</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>proj <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(d_model, d_model)      <span style=color:#75715e># W_O</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x, mask<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>):           <span style=color:#75715e># x: (B, T, d_model)</span>
+</span></span><span style=display:flex><span>        B, T, D <span style=color:#f92672>=</span> x<span style=color:#f92672>.</span>shape
+</span></span><span style=display:flex><span>        q, k, v <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>qkv(x)<span style=color:#f92672>.</span>chunk(<span style=color:#ae81ff>3</span>, dim<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>)               <span style=color:#75715e># 각 (B, T, D)</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># (B, T, D) -&gt; (B, h, T, d_k) : head를 배치 축으로 올려 병렬 처리</span>
+</span></span><span style=display:flex><span>        q, k, v <span style=color:#f92672>=</span> (t<span style=color:#f92672>.</span>view(B, T, self<span style=color:#f92672>.</span>h, self<span style=color:#f92672>.</span>d_k)<span style=color:#f92672>.</span>transpose(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>) <span style=color:#66d9ef>for</span> t <span style=color:#f92672>in</span> (q, k, v))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        scores <span style=color:#f92672>=</span> (q <span style=color:#f92672>@</span> k<span style=color:#f92672>.</span>transpose(<span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)) <span style=color:#f92672>/</span> self<span style=color:#f92672>.</span>d_k <span style=color:#f92672>**</span> <span style=color:#ae81ff>0.5</span>  <span style=color:#75715e># (B, h, T, T)</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> mask <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>            scores <span style=color:#f92672>=</span> scores<span style=color:#f92672>.</span>masked_fill(mask <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>, float(<span style=color:#e6db74>&#39;-inf&#39;</span>))
+</span></span><span style=display:flex><span>        out <span style=color:#f92672>=</span> F<span style=color:#f92672>.</span>softmax(scores, dim<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>) <span style=color:#f92672>@</span> v                   <span style=color:#75715e># (B, h, T, d_k)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        out <span style=color:#f92672>=</span> out<span style=color:#f92672>.</span>transpose(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>)<span style=color:#f92672>.</span>reshape(B, T, D)            <span style=color:#75715e># Concat</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>proj(out)                                 <span style=color:#75715e># (B, T, d_model)</span></span></span></code></pre></div><p>실제 학습 코드에서는 위 식을 직접 쓰기보다 <code>F.scaled_dot_product_attention</code> 을 씀. 수식은 같지만 FlashAttention 계열 커널로 내려가서 메모리를 훨씬 적게 씀.</p><hr><h2 id=참고>참고</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+— 원 논문 정리. 인코더·디코더 전체 구조는 여기</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/cross_attention/>Cross-Attention</a>
+— Q만 다른 시퀀스에서 오는 경우. 비교표 있음</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/positional_encoding/>Positional Encoding</a>
+— attention이 순서를 모르는 문제를 푸는 쪽</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/token/>Token</a>
+— 문장이 토큰으로 잘리는 맨 앞 단계</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/dimension/>Dimension</a>
+— $d_{model}$ 과 $d_k$ 를 정하는 기준</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/embedding_layer/>Embedding Layer</a>
+— $X$ 가 만들어지기까지</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/ffn/>FFN</a>
+— attention이 섞은 결과를 토큰별로 가공하는 다음 단계</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/vit/>ViT</a>
+— 같은 self-attention을 이미지 패치에 적용</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>

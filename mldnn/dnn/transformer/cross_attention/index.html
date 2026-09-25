@@ -1,0 +1,127 @@
+<!doctype html><html lang=ko-kr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Cross-Attention | Study Notes</title><meta name=description content="Technical notes and study log."><script>(function(){var t,e=null;try{e=localStorage.getItem("study-theme")}catch{}t=e||"dark",document.documentElement.setAttribute("data-theme",t)})()</script><link rel=stylesheet href=/Study/css/site.css><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0,processEnvironments:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=page-single><div class=site-shell><div class="site-glow site-glow-1"></div><div class="site-glow site-glow-2"></div><header class=site-header><div class=header-panel><div class=brand-block><a class=brand href=/Study/>📚 Study Notes</a><p class=brand-note>Math, ML, systems, and implementation notes.</p></div><div class=header-actions><nav class=nav><a class=nav-link href=/Study/basic_c/>Basic C</a>
+<a class=nav-link href=/Study/basic_c++/>Basic C++</a>
+<a class=nav-link href=/Study/medium_c++/>Medium C++</a>
+<a class=nav-link href=/Study/python/>Python</a>
+<a class=nav-link href=/Study/basic_cs/>Basic CS</a>
+<a class=nav-link href=/Study/algorithm/>Algorithm</a>
+<a class=nav-link href=/Study/design_pattern/>Design Pattern</a>
+<a class=nav-link href=/Study/network/>Network</a>
+<a class=nav-link href=/Study/os/>OS</a>
+<a class=nav-link href=/Study/linux/>Linux</a>
+<a class=nav-link href=/Study/math/>Math</a>
+<a class=nav-link href=/Study/mldnn/>ML&amp;DNN</a>
+<a class=nav-link href=/Study/cuda/>CUDA</a>
+<a class=nav-link href=/Study/opensource/>OpenSource</a>
+<a class=nav-link href=/Study/papers/>Papers</a>
+<a class=nav-link href=/Study/tools/>Tools</a></nav><div class=search-box data-index-url=/Study/index.json><span class=search-box-icon aria-hidden=true>🔎</span>
+<input class=search-box-field id=search-field type=search autocomplete=off autocapitalize=off spellcheck=false placeholder=검색 aria-label="문서 검색" aria-controls=search-panel aria-expanded=false>
+<button class=search-box-clear id=search-clear type=button aria-label="검색어 지우기" hidden>✕</button><div class=search-panel id=search-panel hidden><p class=search-status id=search-status role=status></p><ul class=search-results id=search-results></ul></div></div><script>(function(){var e,t,n,s,o,a,c,d,u,h,p,l=document.querySelector(".search-box");if(!l)return;e=document.getElementById("search-field"),o=document.getElementById("search-clear"),h=document.getElementById("search-panel"),d=document.getElementById("search-status"),a=document.getElementById("search-results"),p=l.getAttribute("data-index-url"),t=null,c=1,s=null,n=-1,u=null;function g(){return t?Promise.resolve(t):s||(s=fetch(p).then(function(e){if(!e.ok)throw new Error("HTTP "+e.status);return e.json()}).then(function(e){t=e.map(function(e){return{t:e.t,u:e.u,s:e.s,b:e.b,tl:e.t.toLowerCase(),bl:e.b.toLowerCase()}});for(var s=0,n=0;n<t.length;n++)s+=t[n].bl.length;return c=s/Math.max(1,t.length),t}).catch(function(e){throw s=null,r("문서 목록을 불러오지 못했음 ("+e.message+")",""),e}),s)}function m(e){return e.replace(/[&<>"']/g,function(e){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e]})}function f(e,t){var n=m(e);return t.forEach(function(e){var t=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");n=n.replace(new RegExp("("+t+")","gi"),"<mark>$1</mark>")}),n}function j(e,t){for(var n,s,o,a,r,u,l=0,i=1/0,d=0;d<t.length;d++){if(s=t[d],a=e.tl.indexOf(s),n=e.bl.indexOf(s),a<0&&n<0)return null;if(a>=0&&(l+=a===0?120:60),n>=0){for(o=0,r=n;r>=0&&o<50;)o++,r=e.bl.indexOf(s,r+s.length);u=.25+.75*(e.bl.length/c),l+=22*(o*2.6)/(o+1.6*u),n<i&&(i=n)}}return{score:l,at:i===1/0?0:i}}function y(e,t,n){var s=Math.max(0,n-55),o=e.b.slice(s,s+180);return s>0&&(o="…"+o),s+180<e.b.length&&(o+="…"),f(o,t)}function r(t,n){d.textContent=t,d.hidden=!t,a.innerHTML=n,h.hidden=!1,e.setAttribute("aria-expanded","true")}function i(){h.hidden=!0,e.setAttribute("aria-expanded","false"),n=-1}function _(e){var s,o,c,l,a=e.toLowerCase().split(/\s+/).filter(Boolean);if(n=-1,!a.length||!t){i();return}for(s=[],o=0;o<t.length;o++)c=j(t[o],a),c&&s.push({doc:t[o],score:c.score,at:c.at});if(s.sort(function(e,t){return t.score-e.score}),!s.length){r("“"+e+"” 에 해당하는 문서가 없음","");return}l=s.slice(0,20),r(s.length+"개 문서"+(s.length>l.length?" · 상위 "+l.length+"개":""),l.map(function(e){return'<li><a class="search-hit" href="'+e.doc.u+'"><span class="search-hit-where">'+m(e.doc.s||"Home")+'</span><span class="search-hit-title">'+f(e.doc.t,a)+'</span><span class="search-hit-snippet">'+y(e.doc,a,e.at)+"</span></a></li>"}).join(""))}function v(e){var t=a.querySelectorAll(".search-hit");if(!t.length)return;n>=0&&t[n]&&t[n].classList.remove("is-cursor"),n=(n+e+t.length)%t.length,t[n].classList.add("is-cursor"),t[n].scrollIntoView({block:"nearest"})}function b(){var t=e.value.trim();if(o.hidden=!t,!t){i();return}g().then(function(){_(t)}).catch(function(){})}e.addEventListener("input",function(){clearTimeout(u),u=setTimeout(b,110)}),e.addEventListener("focus",function(){g().catch(function(){}),e.value.trim()&&b()}),e.addEventListener("keydown",function(t){if(t.key==="ArrowDown")t.preventDefault(),v(1);else if(t.key==="ArrowUp")t.preventDefault(),v(-1);else if(t.key==="Escape")e.value="",o.hidden=!0,i(),e.blur();else if(t.key==="Enter"){var s=a.querySelectorAll(".search-hit"),r=n>=0?s[n]:s[0];r&&(t.preventDefault(),window.location.href=r.getAttribute("href"))}}),o.addEventListener("click",function(){e.value="",o.hidden=!0,i(),e.focus()}),document.addEventListener("click",function(e){l.contains(e.target)||i()}),document.addEventListener("keydown",function(t){if(t.key==="/"||(t.ctrlKey||t.metaKey)&&t.key.toLowerCase()==="k"){var n=document.activeElement;if(n&&(n.tagName==="INPUT"||n.tagName==="TEXTAREA"||n.isContentEditable))return;t.preventDefault(),e.focus(),e.select()}})})()</script><button class=theme-toggle type=button data-theme-toggle aria-pressed=true>
+<span class=theme-toggle-track><span class=theme-toggle-thumb></span>
+</span><span class=theme-toggle-icons aria-hidden=true><span>☀️</span>
+<span>🌙</span>
+</span><span class=theme-toggle-label>Dark</span></button></div></div></header><main class=content><article class=doc-shell><header class=doc-header><div class=eyebrow-row><a class=eyebrow-link href=/Study/>Home</a>
+<span class=eyebrow-sep>/</span>
+<a class=eyebrow-link href=/Study/mldnn/dnn/transformer/>Transformer</a></div><h1>Cross-Attention</h1></header><div class="doc-body post-body"><h1 id=cross-attention-encoder-decoder-attention>Cross-Attention (Encoder-Decoder Attention)</h1><blockquote><p>결론부터 아주 쉽게: <strong>한 시퀀스가 다른 시퀀스를 참조하는</strong> attention임.
+<a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention</a>
+이 &ldquo;문장이 자기 자신을 보는 것"이라면, Cross-Attention은 &ldquo;번역문이 원문을 보는 것"임.
+연산은 완전히 똑같고, <strong>Q를 어디서 가져오고 K·V를 어디서 가져오는지만 다름</strong>.</p></blockquote><hr><h2 id=1-무엇이-다른가--딱-한-줄>1. 무엇이 다른가 — 딱 한 줄</h2>$$
+\text{Self: } Q, K, V \leftarrow \text{같은 시퀀스}
+\qquad\qquad
+\text{Cross: } Q \leftarrow \text{A}, \quad K, V \leftarrow \text{B}
+$$<p>수식도, softmax도, $\sqrt{d_k}$ 도 전부 동일함.</p>$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+$$<p>바뀌는 것은 <strong>입력의 출처</strong>뿐임. 그래서 Self-Attention을 이해했다면 Cross-Attention은 새로 배울 연산이 없음.</p><pre tabindex=0><code>[Self-Attention]                    [Cross-Attention]
+
+  문장                                 번역문(디코더)     원문(인코더)
+   │                                      │                  │
+   ├─ Q                                   └─ Q          K, V ─┘
+   ├─ K                                          \      /
+   └─ V                                           Attention
+       \                                              │
+        Attention                              &#34;원문의 어디를 볼까?&#34;</code></pre><hr><h2 id=2-왜-필요한가>2. 왜 필요한가</h2><p>번역 <code>I love machine learning</code> → <code>나는 머신 러닝을 좋아한다</code> 를 생각해 봄.</p><p>디코더가 <code>나는 머신</code> 까지 만들었을 때, 다음 단어를 정하려면 두 가지를 봐야 함.</p><table><thead><tr><th>무엇을 보나</th><th>담당</th></tr></thead><tbody><tr><td>지금까지 <strong>내가 만든 출력</strong></td><td><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Masked Self-Attention</a></td></tr><tr><td><strong>원문</strong>에서 아직 안 옮긴 부분</td><td><strong>Cross-Attention</strong></td></tr></tbody></table><p>Cross-Attention이 없으면 디코더는 원문을 전혀 못 봄. 그러면 번역기가 아니라 그냥 <strong>language model</strong>이 됨 — 그럴듯한 한국어 문장을 만들지만 입력과 아무 상관이 없어짐.</p><blockquote><p>실제로 GPT 같은 decoder-only 모델에는 Cross-Attention이 없음.
+원문을 참조할 일이 없고, 조건은 프롬프트로 같은 시퀀스 안에 넣기 때문임.</p></blockquote><hr><h2 id=3-self-attention과의-비교>3. Self-Attention과의 비교</h2><table><thead><tr><th></th><th>Self-Attention</th><th>Cross-Attention</th></tr></thead><tbody><tr><td><strong>Q 출처</strong></td><td>자기 시퀀스</td><td>디코더 (참조하는 쪽)</td></tr><tr><td><strong>K, V 출처</strong></td><td>자기 시퀀스</td><td>인코더 (참조당하는 쪽)</td></tr><tr><td><strong>$QK^\top$ shape</strong></td><td>$(T, T)$ — <strong>정사각형</strong></td><td>$(T_{dec}, T_{enc})$ — <strong>직사각형</strong></td></tr><tr><td><strong>causal mask</strong></td><td>디코더에서는 씀 (미래 가림)</td><td><strong>안 씀</strong> (원문은 다 봐도 됨)</td></tr><tr><td><strong>K·V 재계산</strong></td><td>매 스텝 새로</td><td><strong>한 번만</strong> 계산해 계속 재사용</td></tr><tr><td><strong>질문 형태</strong></td><td>&ldquo;이 문장 안에서 서로 어떤 관계지?&rdquo;</td><td>&ldquo;원문의 어디를 봐야 다음 단어가 나오지?&rdquo;</td></tr><tr><td><strong>없으면</strong></td><td>문맥을 못 잡음</td><td>입력과 무관한 문장을 생성함</td></tr><tr><td><strong>쓰이는 곳</strong></td><td>인코더, 디코더 ①번</td><td>디코더 ②번, <a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a>
+, <a class=inline-link href=/Study/mldnn/dnn/vit/eomt/>EoMT</a></td></tr></tbody></table><p>핵심은 위에서 <strong>굵게 표시한 세 줄</strong>임. 나머지는 전부 같음.</p><h3 id=31-score-행렬이-정사각형이-아님>3.1 score 행렬이 정사각형이 아님</h3><p>Self-Attention에서 $QK^\top$ 은 항상 $(T, T)$ 정사각 행렬이었음. 같은 시퀀스끼리 비교하니 당연함.</p><p>Cross-Attention은 <strong>길이가 다른 두 시퀀스</strong>를 비교하므로 직사각형이 됨.</p><pre tabindex=0><code>원문 4토큰, 생성한 번역 3토큰인 경우
+
+          I  love machine learning     ← T_enc = 4 (K, V)
+ &lt;BOS&gt;  [                        ]
+ 나는    [        QKᵀ  (3 × 4)    ]    ← T_dec = 3 (Q)
+ 머신    [                        ]</code></pre><p>행은 &ldquo;지금 만들고 있는 토큰&rdquo;, 열은 &ldquo;원문의 각 토큰"임.
+<strong>행 방향으로 softmax</strong>를 하므로, 각 디코더 토큰마다 원문 전체에 대한 참고 비율이 나옴.</p><h3 id=32-kv는-한-번만-계산함>3.2 K·V는 한 번만 계산함</h3><p>인코더는 입력 문장에 대해 <strong>딱 한 번</strong> 실행됨. 그 출력 $H$ 로 만든 $K = HW_K$, $V = HW_V$ 도 당연히 고정임.</p><ul><li>디코딩 스텝이 100번이어도 K·V는 처음 것 그대로 씀</li><li>디코더 레이어마다 $W_K, W_V$ 는 다르지만, 입력 $H$ 는 전부 같음</li></ul><p>그래서 추론 최적화에서 <strong>인코더 K·V는 캐싱 1순위</strong>임. 디코더 self-attention의 KV cache와는 성격이 다름 — 이쪽은 스텝마다 늘어나지만, cross-attention K·V는 <strong>처음부터 끝까지 변하지 않음</strong>.</p><hr><h2 id=4-숫자로-따라가기>4. 숫자로 따라가기</h2><p>원문 4토큰 <code>I love machine learning</code>, 디코더가 <code>&lt;BOS> 나는 머신</code> 까지 만든 상황임.
+$d_k = 4$, 보기 쉽게 $d_v = 2$ 로 둠 (논문은 $d_k = d_v = 64$).</p><pre tabindex=0><code>K (인코더 출력에서)          V (인코더 출력에서)        Q (디코더 상태에서)
+[1 0 0 0]  I                [1  0]  I                 [1 0 0 0]  &lt;BOS&gt;
+[0 1 0 0]  love             [0  1]  love              [0 1 0 0]  나는
+[0 0 1 0]  machine          [2  0]  machine           [0 0 3 1]  머신
+[0 0 0 1]  learning         [0  2]  learning</code></pre><p><strong>① 점수</strong> — $QK^\top$ 은 $(3, 4)$ 직사각형임.</p><table><thead><tr><th></th><th>I</th><th>love</th><th>machine</th><th>learning</th></tr></thead><tbody><tr><td><strong>&lt;BOS></strong></td><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td><strong>나는</strong></td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td><strong>머신</strong></td><td>0</td><td>0</td><td><strong>3</strong></td><td>1</td></tr></tbody></table><p><strong>② Softmax</strong> ($\div\sqrt{4}$ 적용, 행 방향)</p><table><thead><tr><th></th><th>I</th><th>love</th><th>machine</th><th>learning</th></tr></thead><tbody><tr><td><strong>&lt;BOS></strong></td><td>0.355</td><td>0.215</td><td>0.215</td><td>0.215</td></tr><tr><td><strong>나는</strong></td><td>0.215</td><td>0.355</td><td>0.215</td><td>0.215</td></tr><tr><td><strong>머신</strong></td><td>0.123</td><td>0.123</td><td><strong>0.551</strong></td><td>0.203</td></tr></tbody></table><p><code>머신</code> 이 원문의 <code>machine</code> 을 55%로 가장 많이 보고 있음 — 정렬(alignment)이 잡힌 것임.</p><p><strong>③ 가중합</strong></p>$$
+0.123 \times [1, 0] + 0.123 \times [0, 1] + 0.551 \times [2, 0] + 0.203 \times [0, 2] = [1.225,\ 0.529]
+$$<p>출력 shape는 $(T_{dec}, d_v) = (3, 2)$ 임. <strong>입력 Q와 토큰 수가 같음</strong> — 원문 길이가 아니라 <strong>생성 중인 쪽 길이를 따라감</strong>. Cross-Attention이 &ldquo;원문 정보를 디코더 쪽으로 끌어오는&rdquo; 연산이기 때문임.</p><hr><h2 id=5-디코더-블록에서의-위치>5. 디코더 블록에서의 위치</h2><pre tabindex=0><code>출력 토큰 임베딩 + PE
+        ↓
+① Masked Self-Attention     Q·K·V = 출력 시퀀스   (미래 가림)
+        ↓  Add &amp; Norm
+② Cross-Attention           Q = 디코더, K·V = 인코더 출력 H
+        ↓  Add &amp; Norm
+③ FFN
+        ↓  Add &amp; Norm</code></pre><p>①과 ③은 인코더 블록에도 있음. <strong>②만 디코더에 있는 것</strong>이고, 그래서 &ldquo;인코더 블록 + Cross-Attention = 디코더 블록"으로 외우면 편함.</p><p>자세한 흐름은 <a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need §10</a>
+참고.</p><hr><h2 id=6-번역-말고-어디에-쓰이나>6. 번역 말고 어디에 쓰이나</h2><p>Cross-Attention은 &ldquo;A가 B를 참조한다"는 <strong>일반 구조</strong>라서 번역 밖에서도 계속 나옴.</p><table><thead><tr><th>모델</th><th>Q (참조하는 쪽)</th><th>K·V (참조당하는 쪽)</th></tr></thead><tbody><tr><td>Transformer 번역기</td><td>디코더 출력 토큰</td><td>인코더가 만든 원문 표현</td></tr><tr><td><a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a></td><td>object query 100개</td><td>인코더가 만든 이미지 feature</td></tr><tr><td><a class=inline-link href=/Study/mldnn/dnn/vit/eomt/>EoMT</a></td><td>object query K개</td><td>이미지 패치 토큰</td></tr><tr><td>Stable Diffusion</td><td>이미지 latent</td><td>텍스트 프롬프트 임베딩</td></tr></tbody></table><p><a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a>
+이 좋은 예임 — &ldquo;쿼리 100개가 이미지를 보고 각자 물체 하나를 집어 온다"는 게 정확히 Cross-Attention임. Q가 단어가 아니라 <strong>학습되는 벡터</strong>라는 점만 다름.</p><blockquote><p><a class=inline-link href=/Study/mldnn/dnn/vit/eomt/>EoMT</a>
+는 이 구조를 아예 없애고, 쿼리를 패치 토큰 열에 concat해서 <strong>self-attention 하나로 처리</strong>함.
+query→patch 구역이 cross-attention 역할을 대신하는 셈임.</p></blockquote><hr><h2 id=7-코드>7. 코드</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn <span style=color:#66d9ef>as</span> nn
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch.nn.functional <span style=color:#66d9ef>as</span> F
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MultiHeadCrossAttention</span>(nn<span style=color:#f92672>.</span>Module):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;Self-Attention과 다른 점은 forward가 x 하나가 아니라 (x, memory) 둘을 받는 것뿐임.&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self, d_model<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>, num_heads<span style=color:#f92672>=</span><span style=color:#ae81ff>8</span>):
+</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>h <span style=color:#f92672>=</span> num_heads
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>d_k <span style=color:#f92672>=</span> d_model <span style=color:#f92672>//</span> num_heads
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>q_proj <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(d_model, d_model)      <span style=color:#75715e># 디코더 쪽에서</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>kv_proj <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(d_model, d_model <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span>)  <span style=color:#75715e># 인코더 출력에서</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>proj <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(d_model, d_model)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x, memory, pad_mask<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># x      : (B, T_dec, D)  디코더 상태</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># memory : (B, T_enc, D)  인코더 출력 — 매 스텝 동일</span>
+</span></span><span style=display:flex><span>        B, Td, D <span style=color:#f92672>=</span> x<span style=color:#f92672>.</span>shape
+</span></span><span style=display:flex><span>        Te <span style=color:#f92672>=</span> memory<span style=color:#f92672>.</span>shape[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        q <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>q_proj(x)<span style=color:#f92672>.</span>view(B, Td, self<span style=color:#f92672>.</span>h, self<span style=color:#f92672>.</span>d_k)<span style=color:#f92672>.</span>transpose(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>)
+</span></span><span style=display:flex><span>        k, v <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>kv_proj(memory)<span style=color:#f92672>.</span>chunk(<span style=color:#ae81ff>2</span>, dim<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>        k <span style=color:#f92672>=</span> k<span style=color:#f92672>.</span>view(B, Te, self<span style=color:#f92672>.</span>h, self<span style=color:#f92672>.</span>d_k)<span style=color:#f92672>.</span>transpose(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>)
+</span></span><span style=display:flex><span>        v <span style=color:#f92672>=</span> v<span style=color:#f92672>.</span>view(B, Te, self<span style=color:#f92672>.</span>h, self<span style=color:#f92672>.</span>d_k)<span style=color:#f92672>.</span>transpose(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        scores <span style=color:#f92672>=</span> (q <span style=color:#f92672>@</span> k<span style=color:#f92672>.</span>transpose(<span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)) <span style=color:#f92672>/</span> self<span style=color:#f92672>.</span>d_k <span style=color:#f92672>**</span> <span style=color:#ae81ff>0.5</span>   <span style=color:#75715e># (B, h, T_dec, T_enc) — 직사각형</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> pad_mask <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#66d9ef>None</span>:                                <span style=color:#75715e># causal mask가 아니라 padding mask임</span>
+</span></span><span style=display:flex><span>            scores <span style=color:#f92672>=</span> scores<span style=color:#f92672>.</span>masked_fill(pad_mask <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>, float(<span style=color:#e6db74>&#39;-inf&#39;</span>))
+</span></span><span style=display:flex><span>        out <span style=color:#f92672>=</span> F<span style=color:#f92672>.</span>softmax(scores, dim<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>) <span style=color:#f92672>@</span> v                     <span style=color:#75715e># (B, h, T_dec, d_k)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>proj(out<span style=color:#f92672>.</span>transpose(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>)<span style=color:#f92672>.</span>reshape(B, Td, D)) <span style=color:#75715e># (B, T_dec, D)</span></span></span></code></pre></div><p>Self-Attention 구현과 비교하면 <strong><code>qkv</code> 를 하나로 묶지 못하고 Q와 K·V를 따로 뽑는다</strong>는 것만 차이임.
+<code>memory</code> 가 스텝마다 안 바뀌므로, 실제 추론 코드는 <code>kv_proj(memory)</code> 결과를 밖에서 한 번만 계산해 넘김.</p><hr><h2 id=참고>참고</h2><ul><li><a class=inline-link href=/Study/mldnn/dnn/transformer/self_attention/>Self-Attention</a>
+— 연산 자체의 상세 (직관, Q/K/V, $\sqrt{d_k}$, Multi-Head)</li><li><a class=inline-link href=/Study/mldnn/dnn/transformer/attention_is_all_you_need/>Attention Is All You Need</a>
+§10 — 디코더 전체 구조와 Masked Self-Attention</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/detr/>DETR</a>
+— object query가 이미지 feature에 cross-attention</li><li><a class=inline-link href=/Study/mldnn/dnn/vit/eomt/>EoMT</a>
+— cross-attention을 self-attention으로 흡수한 사례</li><li><a class=inline-link href=/Study/mldnn/basics/components/decoder/>Decoder 개념 문서</a>
+— &ldquo;디코더"라는 이름의 세 가지 뜻</li></ul></div></article></main><footer class=site-footer><p>Built with Hugo. Content from the Study repository.</p></footer></div><script>(function(){var s,e=document.documentElement,t=document.querySelector("[data-theme-toggle]");if(!t)return;function n(n){e.setAttribute("data-theme",n),t.setAttribute("aria-pressed",n==="dark"?"true":"false"),t.querySelector(".theme-toggle-label").textContent=n==="dark"?"Dark":"Light"}s=e.getAttribute("data-theme")||"dark",n(s),t.addEventListener("click",function(){var t=e.getAttribute("data-theme")==="dark"?"light":"dark";e.setAttribute("data-theme",t);try{localStorage.setItem("study-theme",t)}catch{}n(t)})})()</script><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    const mermaidTheme = function () {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark';
+    };
+    const mermaidBlocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
+    if (mermaidBlocks.length) {
+      mermaidBlocks.forEach(function (b) { b.dataset.src = b.textContent; });
+      const renderMermaid = async function () {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme() });
+        mermaidBlocks.forEach(function (b) {
+          b.removeAttribute('data-processed');
+          b.textContent = b.dataset.src;
+        });
+        await mermaid.run({ nodes: mermaidBlocks });
+      };
+      renderMermaid();
+      const mermaidToggle = document.querySelector('[data-theme-toggle]');
+      if (mermaidToggle) {
+        mermaidToggle.addEventListener('click', function () { setTimeout(renderMermaid, 0); });
+      }
+    }
+  </script></body></html>
