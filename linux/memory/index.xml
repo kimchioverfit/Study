@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Memory on Study Notes</title><link>https://kimchioverfit.github.io/Study/linux/memory/</link><description>Recent content in Memory on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/linux/memory/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://kimchioverfit.github.io/Study/linux/memory/memory/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/linux/memory/memory/</guid><description>&lt;h1 id="linux-memory"&gt;Linux Memory&lt;/h1&gt;
+&lt;h2 id="-임베디드-리눅스-메모리-모델-핵심-요약"&gt;✅ 임베디드 리눅스 메모리 모델 핵심 요약&lt;/h2&gt;
+&lt;h3 id="1-리눅스-메모리의-큰-구성"&gt;1. 리눅스 메모리의 큰 구성&lt;/h3&gt;
+&lt;p&gt;User space (사용자 공간)
+유저 애플리케이션이 실행되는 공간. 일반적으로 0x00000000 ~ 0xBFFFFFFF (32bit 기준).&lt;/p&gt;
+&lt;p&gt;Kernel space (커널 공간)
+커널이 사용하는 공간. 메모리 보호를 위해 user space와 분리되어 있음. (ex: 0xC0000000 ~ 0xFFFFFFFF)&lt;/p&gt;
+&lt;h3 id="2-임베디드-시스템에서의-주요-메모리-구역"&gt;2. 임베디드 시스템에서의 주요 메모리 구역&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;메모리 영역&lt;/th&gt;
+					&lt;th&gt;설명&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;.text&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;실행 코드&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;.data&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;초기화된 전역/정적 변수&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;.bss&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;초기화되지 않은 전역/정적 변수&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;heap&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;동적 메모리 (malloc 등)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;stack&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;함수 호출, 지역 변수&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;mmap 영역&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;공유 라이브러리, 파일 매핑 등&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;→ top, free, /proc/[pid]/maps, /proc/meminfo로 확인 가능&lt;/p&gt;</description></item></channel></rss>

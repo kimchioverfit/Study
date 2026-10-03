@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" width="1040" height="470" role="img" aria-label="Embedding Layer: 토큰을 Token ID로 바꾸고, 그 ID를 행 번호로 삼아 임베딩 행렬에서 벡터 한 줄을 꺼내는 과정">
+  <defs>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0f7a86"/>
+    </marker>
+  </defs>
+  <style>
+    .sans { font-family: "Segoe UI", system-ui, -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+    .mono { font-family: "Cascadia Mono", Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace; }
+    .h1   { font-size: 20px; font-weight: 700; fill: #1b2027; }
+    .sub  { font-size: 13px; fill: #5b6673; }
+    .col  { font-size: 12px; font-weight: 700; fill: #0f7a86; letter-spacing: .08em; }
+    .lbl  { font-size: 16px; fill: #1b2027; }
+    .num  { font-size: 14px; fill: #1b2027; }
+    .vec  { font-size: 13px; fill: #1b2027; }
+    .note { font-size: 13px; fill: #5b6673; }
+    .dots { font-size: 15px; fill: #9aa5b1; }
+    .tag  { font-size: 12px; fill: #0f7a86; }
+  </style>
+
+  <rect x="0.5" y="0.5" width="1039" height="469" rx="16" fill="#f6f8fa" stroke="#dce2e9"/>
+
+  <text class="sans h1"  x="36" y="42">Embedding Layer</text>
+  <text class="sans sub" x="36" y="64">토큰을 정수 ID로 바꾼 뒤, 그 ID를 행 번호 삼아 임베딩 행렬에서 벡터 한 줄을 꺼내옴</text>
+
+  <text class="sans col" x="36"  y="98">토큰</text>
+  <text class="sans col" x="156" y="98">TOKEN ID</text>
+  <text class="sans col" x="304" y="98">EMBEDDING MATRIX W</text>
+  <text class="sans sub" x="304" y="116">vocab_size × d_model = 50,000 × 512</text>
+  <text class="sans col" x="784" y="98">출력 벡터</text>
+  <text class="sans sub" x="784" y="116">토큰마다 512차원</text>
+
+  <!-- 토큰 -->
+  <rect x="36" y="152" width="92" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="sans lbl" x="82" y="176" text-anchor="middle">나</text>
+  <rect x="36" y="227" width="92" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="sans lbl" x="82" y="251" text-anchor="middle">학교</text>
+  <rect x="36" y="302" width="92" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="sans lbl" x="82" y="326" text-anchor="middle">간</text>
+
+  <line x1="132" y1="170" x2="150" y2="170" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+  <line x1="132" y1="245" x2="150" y2="245" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+  <line x1="132" y1="320" x2="150" y2="320" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+
+  <!-- Token ID -->
+  <rect x="156" y="152" width="84" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="mono num" x="198" y="176" text-anchor="middle">102</text>
+  <rect x="156" y="227" width="84" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="mono num" x="198" y="251" text-anchor="middle">630</text>
+  <rect x="156" y="302" width="84" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="mono num" x="198" y="326" text-anchor="middle">901</text>
+
+  <text class="sans tag" x="273" y="144" text-anchor="middle">행 번호로 찾기</text>
+  <line x1="246" y1="170" x2="296" y2="170" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+  <line x1="246" y1="245" x2="296" y2="245" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+  <line x1="246" y1="320" x2="296" y2="320" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+
+  <!-- Embedding Matrix -->
+  <rect x="304" y="124" width="418" height="276" rx="12" fill="#ffffff" stroke="#d3dae2"/>
+
+  <text class="mono dots" x="332" y="147">⋮</text>
+
+  <rect x="314" y="152" width="398" height="36" rx="7" fill="#e2f2f3" stroke="#9ed4d8"/>
+  <text class="mono num" x="332" y="176">102</text>
+  <text class="mono vec" x="384" y="176">[  0.23   0.17  −0.08   0.44  …   0.05 ]</text>
+
+  <text class="mono dots" x="332" y="214">⋮</text>
+
+  <rect x="314" y="227" width="398" height="36" rx="7" fill="#e2f2f3" stroke="#9ed4d8"/>
+  <text class="mono num" x="332" y="251">630</text>
+  <text class="mono vec" x="384" y="251">[ −0.11   0.62   0.09  −0.27  …   0.31 ]</text>
+
+  <text class="mono dots" x="332" y="289">⋮</text>
+
+  <rect x="314" y="302" width="398" height="36" rx="7" fill="#e2f2f3" stroke="#9ed4d8"/>
+  <text class="mono num" x="332" y="326">901</text>
+  <text class="mono vec" x="384" y="326">[  0.48  −0.35   0.12   0.07  …  −0.19 ]</text>
+
+  <text class="mono dots" x="332" y="366">⋮</text>
+  <text class="sans note" x="360" y="388">행 50,000개 · 각 행이 512차원</text>
+
+  <text class="sans tag" x="753" y="144" text-anchor="middle">행 1줄 꺼냄</text>
+  <line x1="726" y1="170" x2="776" y2="170" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+  <line x1="726" y1="245" x2="776" y2="245" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+  <line x1="726" y1="320" x2="776" y2="320" stroke="#0f7a86" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
+
+  <!-- 출력 벡터 -->
+  <rect x="784" y="152" width="220" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="mono vec" x="894" y="176" text-anchor="middle">[ 0.23, 0.17, …, 0.05 ]</text>
+  <rect x="784" y="227" width="220" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="mono vec" x="894" y="251" text-anchor="middle">[ −0.11, 0.62, …, 0.31 ]</text>
+  <rect x="784" y="302" width="220" height="36" rx="9" fill="#ffffff" stroke="#d3dae2"/>
+  <text class="mono vec" x="894" y="326" text-anchor="middle">[ 0.48, −0.35, …, −0.19 ]</text>
+
+  <text class="sans note" x="36" y="430">ID는 의미가 없음 — 크기를 비교해도 뜻이 없고, 임베딩 행렬의 <tspan font-weight="700" fill="#1b2027">행 번호</tspan>일 뿐임</text>
+  <text class="sans note" x="36" y="452">W의 값은 사람이 만들지 않음 — <tspan font-weight="700" fill="#1b2027">학습으로 정해짐</tspan>. 그래서 비슷한 뜻의 토큰이 가까운 벡터를 갖게 됨</text>
+</svg>

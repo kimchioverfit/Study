@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Stack on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/</link><description>Recent content in Stack on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/index.xml" rel="self" type="application/rss+xml"/><item><title>20. Valid Parentheses</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0020-valid-parentheses/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0020-valid-parentheses/</guid><description>&lt;h1 id="20-valid-parentheses"&gt;20. Valid Parentheses&lt;/h1&gt;
+&lt;p&gt;Given a string s containing just the characters &amp;lsquo;(&amp;rsquo;, &amp;lsquo;)&amp;rsquo;, &amp;lsquo;{&amp;rsquo;, &amp;lsquo;}&amp;rsquo;, &amp;lsquo;[&amp;rsquo; and &amp;lsquo;]&amp;rsquo;, determine if the input string is valid.&lt;/p&gt;
+&lt;p&gt;An input string is valid if:&lt;/p&gt;
+&lt;p&gt;Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+Every close bracket has a corresponding open bracket of the same type.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;()&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;</description></item><item><title>32. Longest Valid Parentheses</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0032-longest-valid-parentheses/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0032-longest-valid-parentheses/</guid><description>&lt;h1 id="32-longest-valid-parentheses"&gt;32. Longest Valid Parentheses&lt;/h1&gt;
+&lt;p&gt;Given a string containing just the characters &amp;lsquo;(&amp;rsquo; and &amp;lsquo;)&amp;rsquo;, return the length of the longest valid (well-formed) parentheses
+substring
+.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: s = &amp;#34;(()&amp;#34;
+Output: 2
+Explanation: The longest valid parentheses substring is &amp;#34;()&amp;#34;.&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: s = &amp;#34;)()())&amp;#34;
+Output: 4
+Explanation: The longest valid parentheses substring is &amp;#34;()()&amp;#34;.&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 3:
+Input: s = &amp;#34;&amp;#34;
+Output: 0&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="solution-failed"&gt;Solution (Failed)&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; longestValidParentheses(string s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; cnt &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; stack&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;char&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; mystack;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;s.size(); i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;( s[i] &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;(&amp;#39;&lt;/span&gt; ) mystack.push(s[i]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(mystack.size()&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mystack.top()&lt;span style="color:#f92672"&gt;==&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;(&amp;#39;&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; mystack.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cnt&lt;span style="color:#f92672"&gt;+=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;continue&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; cnt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;문제를 잘못 이해하고 parenthesis 짝의 갯수를 구하는 문제로 풀어버림.&lt;/p&gt;</description></item><item><title>150. Evaluate Reverse Polish Notation</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0150-evaluate-reverse-polish-notation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0150-evaluate-reverse-polish-notation/</guid><description>&lt;h1 id="150-evaluate-reverse-polish-notation"&gt;150. Evaluate Reverse Polish Notation&lt;/h1&gt;
+&lt;p&gt;You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation.&lt;/p&gt;
+&lt;p&gt;Evaluate the expression.&lt;/p&gt;
+&lt;p&gt;Return an integer that represents the value of the expression.&lt;/p&gt;
+&lt;p&gt;Note that:&lt;/p&gt;
+&lt;p&gt;The valid operators are &amp;lsquo;+&amp;rsquo;, &amp;lsquo;-&amp;rsquo;, &amp;lsquo;*&amp;rsquo;, and &amp;lsquo;/&amp;rsquo;.&lt;/p&gt;
+&lt;p&gt;Each operand may be an integer or another expression.&lt;/p&gt;
+&lt;p&gt;The division between two integers always truncates toward zero.&lt;/p&gt;
+&lt;p&gt;There will not be any division by zero.&lt;/p&gt;</description></item><item><title>155. Min Stack</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0155-min-stack/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0155-min-stack/</guid><description>&lt;h1 id="155-min-stack"&gt;155. Min Stack&lt;/h1&gt;
+&lt;p&gt;Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.&lt;/p&gt;
+&lt;p&gt;Implement the MinStack class:&lt;/p&gt;
+&lt;p&gt;MinStack() initializes the stack object.&lt;/p&gt;
+&lt;p&gt;void push(int val) pushes the element val onto the stack.&lt;/p&gt;
+&lt;p&gt;void pop() removes the element on the top of the stack.&lt;/p&gt;
+&lt;p&gt;int top() gets the top element of the stack.&lt;/p&gt;
+&lt;p&gt;int getMin() retrieves the minimum element in the stack.&lt;/p&gt;
+&lt;p&gt;You must implement a solution with O(1) time complexity for each function.&lt;/p&gt;</description></item><item><title>224. Basic Calculator</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0224-basic-calculator/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0224-basic-calculator/</guid><description>&lt;h1 id="224-basic-calculator"&gt;224. Basic Calculator&lt;/h1&gt;
+&lt;p&gt;Given a string s representing a valid expression, implement a basic calculator to evaluate it, and return the result of the evaluation.&lt;/p&gt;
+&lt;p&gt;Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;1 + 1&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;quot; 2-1 + 2 &amp;quot;&lt;/p&gt;
+&lt;p&gt;Output: 3&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;(1+(4+5+2)-3)+(6+8)&amp;rdquo;&lt;/p&gt;</description></item><item><title>739. Daily Temperatures</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0739-daily-temperatures/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/stack/0739-daily-temperatures/</guid><description>&lt;h1 id="739-daily-temperatures"&gt;739. Daily Temperatures&lt;/h1&gt;
+&lt;p&gt;Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.&lt;/p&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;p&gt;Input: temperatures = [73,74,75,71,69,72,76,73]
+Output: [1,1,4,2,1,1,0,0]
+Example 2:&lt;/p&gt;
+&lt;p&gt;Input: temperatures = [30,40,50,60]
+Output: [1,1,1,0]
+Example 3:&lt;/p&gt;</description></item></channel></rss>

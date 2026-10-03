@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Two Pointers on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/</link><description>Recent content in Two Pointers on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/index.xml" rel="self" type="application/rss+xml"/><item><title>3. Longest Substring Without Repeating Characters</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0003-longest-substring-without-repeating-characters/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0003-longest-substring-without-repeating-characters/</guid><description>&lt;h1 id="3-longest-substring-without-repeating-characters"&gt;3. Longest Substring Without Repeating Characters&lt;/h1&gt;
+&lt;p&gt;Given a string s, find the length of the longest
+substring
+without repeating characters.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;abcabcbb&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: 3&lt;/p&gt;
+&lt;p&gt;Explanation: The answer is &amp;ldquo;abc&amp;rdquo;, with the length of 3.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;bbbbb&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: 1&lt;/p&gt;
+&lt;p&gt;Explanation: The answer is &amp;ldquo;b&amp;rdquo;, with the length of 1.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;pwwkew&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: 3&lt;/p&gt;
+&lt;p&gt;Explanation: The answer is &amp;ldquo;wke&amp;rdquo;, with the length of 3.&lt;/p&gt;</description></item><item><title>11. Container With Most Water</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0011-container-with-most-water/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0011-container-with-most-water/</guid><description>&lt;h1 id="11-container-with-most-water"&gt;11. Container With Most Water&lt;/h1&gt;
+&lt;p&gt;You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).&lt;/p&gt;
+&lt;p&gt;Find two lines that together with the x-axis form a container, such that the container contains the most water.&lt;/p&gt;
+&lt;p&gt;Return the maximum amount of water a container can store.&lt;/p&gt;
+&lt;p&gt;Notice that you may not slant the container.&lt;/p&gt;</description></item><item><title>15. 3Sum</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0015-3sum/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0015-3sum/</guid><description>&lt;h1 id="15-3sum"&gt;15. 3Sum&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.&lt;/p&gt;
+&lt;p&gt;Notice that the solution set must not contain duplicate triplets.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [-1,0,1,2,-1,-4]&lt;/p&gt;
+&lt;p&gt;Output: [[-1,-1,2],[-1,0,1]]&lt;/p&gt;
+&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;p&gt;nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.&lt;/p&gt;
+&lt;p&gt;nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.&lt;/p&gt;</description></item><item><title>16. 3Sum Closest</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0016-3sum-closest/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0016-3sum-closest/</guid><description>&lt;h1 id="16-3sum-closest"&gt;16. 3Sum Closest&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums of length n and an integer target, find three integers at distinct indices in nums such that the sum is closest to target.&lt;/p&gt;
+&lt;p&gt;Return the sum of the three integers.&lt;/p&gt;
+&lt;p&gt;You may assume that each input would have exactly one solution.&lt;/p&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;p&gt;Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+Example 2:&lt;/p&gt;</description></item><item><title>18. 4Sum</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0018-4sum/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0018-4sum/</guid><description>&lt;h1 id="18-4sum"&gt;18. 4Sum&lt;/h1&gt;
+&lt;p&gt;Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:&lt;/p&gt;
+&lt;p&gt;0 &amp;lt;= a, b, c, d &amp;lt; n
+a, b, c, and d are distinct.
+nums[a] + nums[b] + nums[c] + nums[d] == target
+You may return the answer in any order.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: nums = [2,2,2,2,2], target = 8
+Output: [[2,2,2,2]]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Leetcode에서 본 문제 중 가장 쓰레기같은 문제.&lt;/p&gt;</description></item><item><title>30. Substring with Concatenation of All Words</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0030-substring-with-concatenation-of-all-words/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0030-substring-with-concatenation-of-all-words/</guid><description>&lt;h1 id="30-substring-with-concatenation-of-all-words"&gt;30. Substring with Concatenation of All Words&lt;/h1&gt;
+&lt;p&gt;You are given a string s and an array of strings words. All the strings of words are of the same length.&lt;/p&gt;
+&lt;p&gt;A concatenated string is a string that exactly contains all the strings of any permutation of words concatenated.&lt;/p&gt;
+&lt;p&gt;For example, if words = [&amp;ldquo;ab&amp;rdquo;,&amp;ldquo;cd&amp;rdquo;,&amp;ldquo;ef&amp;rdquo;], then &amp;ldquo;abcdef&amp;rdquo;, &amp;ldquo;abefcd&amp;rdquo;, &amp;ldquo;cdabef&amp;rdquo;, &amp;ldquo;cdefab&amp;rdquo;, &amp;ldquo;efabcd&amp;rdquo;, and &amp;ldquo;efcdab&amp;rdquo; are all concatenated strings. &amp;ldquo;acdbef&amp;rdquo; is not a concatenated string because it is not the concatenation of any permutation of words.
+Return an array of the starting indices of all the concatenated substrings in s. You can return the answer in any order.&lt;/p&gt;</description></item><item><title>125. Valid Palindrome</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0125-valid-palindrome/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0125-valid-palindrome/</guid><description>&lt;h1 id="125-valid-palindrome"&gt;125. Valid Palindrome&lt;/h1&gt;
+&lt;p&gt;A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.&lt;/p&gt;
+&lt;p&gt;Given a string s, return true if it is a palindrome, or false otherwise.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;A man, a plan, a canal: Panama&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;
+&lt;p&gt;Explanation: &amp;ldquo;amanaplanacanalpanama&amp;rdquo; is a palindrome.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>167. Two Sum II - Input Array Is Sorted</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0167-two-sum-ii-input-array-is-sorted/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0167-two-sum-ii-input-array-is-sorted/</guid><description>&lt;h1 id="167-two-sum-ii---input-array-is-sorted"&gt;167. Two Sum II - Input Array Is Sorted&lt;/h1&gt;
+&lt;p&gt;Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 &amp;lt;= index1 &amp;lt; index2 &amp;lt;= numbers.length.&lt;/p&gt;
+&lt;p&gt;Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.&lt;/p&gt;</description></item><item><title>209. Minimum Size Subarray Sum</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0209-minimum-size-subarray-sum/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0209-minimum-size-subarray-sum/</guid><description>&lt;h1 id="209-minimum-size-subarray-sum"&gt;209. Minimum Size Subarray Sum&lt;/h1&gt;
+&lt;p&gt;Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: target = 7, nums = [2,3,1,2,4,3]&lt;/p&gt;
+&lt;p&gt;Output: 2&lt;/p&gt;
+&lt;p&gt;Explanation: The subarray [4,3] has the minimal length under the problem constraint.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: target = 4, nums = [1,4,4]&lt;/p&gt;</description></item><item><title>392. Is Subsequence</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0392-is-subsequence/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0392-is-subsequence/</guid><description>&lt;h1 id="392-is-subsequence"&gt;392. Is Subsequence&lt;/h1&gt;
+&lt;p&gt;Given two strings s and t, return true if s is a subsequence of t, or false otherwise.&lt;/p&gt;
+&lt;p&gt;A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., &amp;ldquo;ace&amp;rdquo; is a subsequence of &amp;ldquo;abcde&amp;rdquo; while &amp;ldquo;aec&amp;rdquo; is not).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;abc&amp;rdquo;, t = &amp;ldquo;ahbgdc&amp;rdquo;&lt;/p&gt;</description></item><item><title>977. Squares of a Sorted Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0977-squares-of-a-sorted-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/0977-squares-of-a-sorted-array/</guid><description>&lt;h1 id="977-squares-of-a-sorted-array"&gt;977. Squares of a Sorted Array&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;p&gt;Input: nums = [-4,-1,0,3,10]&lt;/p&gt;
+&lt;p&gt;Output: [0,1,9,16,100]&lt;/p&gt;
+&lt;p&gt;Explanation: After squaring, the array becomes [16,1,0,9,100].&lt;/p&gt;
+&lt;p&gt;After sorting, it becomes [0,1,9,16,100].&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example 2:&lt;/p&gt;
+&lt;p&gt;Input: nums = [-7,-3,2,3,11]&lt;/p&gt;
+&lt;p&gt;Output: [4,9,9,49,121]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;쉬운 문제인데, 최적 효율을 찾아서&amp;hellip;&lt;/p&gt;
+&lt;h3 id="solution1"&gt;Solution1&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; sortedSquares(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;nums.size(); i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nums[i] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; nums[i] &lt;span style="color:#f92672"&gt;*&lt;/span&gt; nums[i];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sort(nums.begin(),nums.end());
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; nums;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;제일 처음에 풀었던 방식 (공간 효율)&lt;/p&gt;</description></item><item><title>2540. Minimum Common Value</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/2540-minimum-common-value/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/two_pointers/2540-minimum-common-value/</guid><description>&lt;h1 id="2540-minimum-common-value"&gt;2540. Minimum Common Value&lt;/h1&gt;
+&lt;p&gt;Given two integer arrays nums1 and nums2, sorted in non-decreasing order, return the minimum integer common to both arrays. If there is no common integer amongst nums1 and nums2, return -1.&lt;/p&gt;
+&lt;p&gt;Note that an integer is said to be common to nums1 and nums2 if both arrays have at least one occurrence of that integer.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: nums1 = [1,2,3], nums2 = [2,4]
+Output: 2
+Explanation: The smallest element common to both arrays is 2, so we return 2.&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: nums1 = [1,2,3,6], nums2 = [2,3,4,5]
+Output: 2
+Explanation: There are two common elements in the array 2 and 3 out of which 2 is the smallest, so 2 is returned.&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="solution-hash-table"&gt;Solution (Hash table)&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; getCommon(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums1, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums2) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; unordered_map&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; map;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; num : nums1) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; map[num] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; found &lt;span style="color:#f92672"&gt;=&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; minCommon &lt;span style="color:#f92672"&gt;=&lt;/span&gt; INT_MAX;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; num : nums2) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (map.find(num) &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; map.end()) { 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; minCommon &lt;span style="color:#f92672"&gt;=&lt;/span&gt; min(minCommon, num);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; found &lt;span style="color:#f92672"&gt;=&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; found &lt;span style="color:#f92672"&gt;?&lt;/span&gt; minCommon : &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;쉬운 문제인데 적은 이유 : Hash table을 이용한 접근과 Two pointer를 이용한 접근의 차이 확인&lt;/p&gt;</description></item></channel></rss>

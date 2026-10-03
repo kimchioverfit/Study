@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Model Optimization on Study Notes</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/model_optimization/</link><description>Recent content in Model Optimization on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/mldnn/basics/model_optimization/index.xml" rel="self" type="application/rss+xml"/><item><title>Model Optimization 개요</title><link>https://kimchioverfit.github.io/Study/mldnn/basics/model_optimization/optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/mldnn/basics/model_optimization/optimization/</guid><description>&lt;h1 id="model-optimization-모델-경량화"&gt;Model Optimization (모델 경량화)&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;학습이 끝난 모델을 &lt;strong&gt;실제로 돌릴 수 있게&lt;/strong&gt; 만드는 단계. 정확도를 최대한 지키면서 크기·연산량·지연시간을 줄임.
+큰 갈래가 셋 있음 — &lt;strong&gt;Pruning&lt;/strong&gt;(덜어내기), &lt;strong&gt;Quantization&lt;/strong&gt;(정밀도 낮추기), &lt;strong&gt;Knowledge Distillation&lt;/strong&gt;(작은 모델에게 가르치기).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="1-왜-필요한가"&gt;1. 왜 필요한가&lt;/h2&gt;
+&lt;p&gt;학습할 때는 GPU 여러 장에 시간도 충분하지만, 배포 환경은 보통 그렇지 않음.&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;제약&lt;/th&gt;
+					&lt;th&gt;문제&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;메모리&lt;/td&gt;
+					&lt;td&gt;모바일·임베디드는 모델을 통째로 올릴 공간이 없음&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;지연시간&lt;/td&gt;
+					&lt;td&gt;실시간 처리면 프레임당 예산이 수십 ms뿐임&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;전력&lt;/td&gt;
+					&lt;td&gt;배터리 기기는 연산량이 곧 사용 시간임&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;비용&lt;/td&gt;
+					&lt;td&gt;서버라도 처리량이 곧 요금임&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;그래서 &amp;ldquo;정확도 몇 %를 내주고 무엇을 얼마나 얻을지&amp;rdquo; 교환하는 작업이 필요함.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Binary Tree on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/</link><description>Recent content in Binary Tree on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/index.xml" rel="self" type="application/rss+xml"/><item><title>94. Binary Tree Inorder Traversal</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0094-binary-tree-inorder-traversal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0094-binary-tree-inorder-traversal/</guid><description>&lt;h1 id="94-binary-tree-inorder-traversal"&gt;94. Binary Tree Inorder Traversal&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the inorder traversal of its nodes&amp;rsquo; values.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: root = [1,null,2,3]
+Output: [1,3,2]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;img src="../../imgs/Binary_Tree_Inorder_Traversal_1.png" alt="Binary_Tree_Inorder_Traversal_1" width="300"/&gt;
+&lt;br&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: root = [1,2,3,4,5,null,8,null,null,6,7,9]
+Output: [4,2,6,5,7,1,3,9,8]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;img src="../../imgs/Binary_Tree_Inorder_Traversal_2.png" alt="Binary_Tree_Inorder_Traversal_2" width="300"/&gt;
+&lt;br&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 3:
+Input: root = []
+Output: []&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 4:
+Input: root = [1]
+Output: [1]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;&lt;code&gt;중위 순회 문제&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;풀었었던 문제인데 틀려버렸다&amp;hellip;.&lt;/p&gt;
+&lt;h3 id="답안"&gt;답안&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * Definition for a binary tree node.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * struct TreeNode {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * int val;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode *left;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode *right;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode() : val(0), left(nullptr), right(nullptr) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * };
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; inorderTraversalHelper(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root, vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; result) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (root &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nullptr&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inorderTraversalHelper(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left, result); &lt;span style="color:#75715e"&gt;//좌측 순회부터
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; result.push_back(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val); &lt;span style="color:#75715e"&gt;//중간에 집어넣어야 좌측-&amp;gt;root-&amp;gt;우측 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inorderTraversalHelper(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right, result);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;//중위순회를 위한 로직.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; inorderTraversal(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inorderTraversalHelper(root, result);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="틀린-원인"&gt;틀린 원인&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;갑자기 class 객체 생성 방법이 안떠오름&lt;/li&gt;
+&lt;li&gt;파라미터 확인을 제대로 못했음.&lt;/li&gt;
+&lt;li&gt;문제 이해를 제대로 못함&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>98. Validate Binary Search Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0098-validate-binary-search-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0098-validate-binary-search-tree/</guid><description>&lt;h1 id="98-validate-binary-search-tree"&gt;98. Validate Binary Search Tree&lt;/h1&gt;
+&lt;p&gt;Binary Search Tree&lt;/p&gt;
+&lt;p&gt;Given the root of a binary tree, determine if it is a valid binary search tree (BST).&lt;/p&gt;
+&lt;p&gt;A valid BST is defined as follows:&lt;/p&gt;
+&lt;p&gt;The left
+subtree
+of a node contains only nodes with keys less than the node&amp;rsquo;s key.
+The right subtree of a node contains only nodes with keys greater than the node&amp;rsquo;s key.
+Both the left and right subtrees must also be binary search trees.&lt;/p&gt;</description></item><item><title>99. Recover Binary Search Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0099-recover-binary-search-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0099-recover-binary-search-tree/</guid><description>&lt;h1 id="99-recover-binary-search-tree"&gt;99. Recover Binary Search Tree&lt;/h1&gt;
+&lt;p&gt;Binary Search Tree&lt;/p&gt;
+&lt;p&gt;You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.&lt;/p&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;img src="../../imgs/Recover Binary Search Tree_1.jpg" alt="Validate Binary Search Tree_1" width="300"/&gt;
+&lt;br&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Input: root = [1,3,null,null,2]
+Output: [3,1,null,null,2]
+Explanation: 3 cannot be a left child of 1 because 3 &amp;gt; 1. Swapping 1 and 3 makes the BST valid.&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Example 2:&lt;/p&gt;</description></item><item><title>100. Same Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0100-same-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0100-same-tree/</guid><description>&lt;h1 id="100-same-tree"&gt;100. Same Tree&lt;/h1&gt;
+&lt;p&gt;Given the roots of two binary trees p and q, write a function to check if they are the same or not.&lt;/p&gt;
+&lt;p&gt;Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/100-1.jpg" alt="100-1" width="500"/&gt;
+&lt;p&gt;Input: p = [1,2,3], q = [1,2,3]&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/100-2.jpg" alt="100-2" width="300"/&gt;
+&lt;p&gt;Input: p = [1,2], q = [1,null,2]&lt;/p&gt;
+&lt;p&gt;Output: false&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/100-3.jpg" alt="100-3" width="300"/&gt;
+&lt;p&gt;Input: p = [1,2,1], q = [1,1,2]&lt;/p&gt;</description></item><item><title>101. Symmetric Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0101-symmetric-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0101-symmetric-tree/</guid><description>&lt;h1 id="101-symmetric-tree"&gt;101. Symmetric Tree&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/101-1.jpg" alt="101-1." width="300"/&gt;
+&lt;p&gt;Input: root = [1,2,2,3,4,4,3]&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/101-2.jpg" alt="101-2." width="300"/&gt;
+&lt;p&gt;Input: root = [1,2,2,null,3,null,3]&lt;/p&gt;
+&lt;p&gt;Output: false&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solutiondfs"&gt;Solution(DFS)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isSymmetric(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;dfs&lt;/span&gt;(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left,root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;dfs&lt;/span&gt;(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt;p, TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; q){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;p&lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;!&lt;/span&gt;q) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; true;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;p&lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt;q) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(p&lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;!&lt;/span&gt;q) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (q&lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt;q){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(p&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; q&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; dfs(p&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left,q&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; dfs(p&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right, q&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>102. Binary Tree Level Order Traversal</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0102-binary-tree-level-order-traversal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0102-binary-tree-level-order-traversal/</guid><description>&lt;h1 id="102-binary-tree-level-order-traversal"&gt;102. Binary Tree Level Order Traversal&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the level order traversal of its nodes&amp;rsquo; values. (i.e., from left to right, level by level).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/102-1.jpg" alt="102-1" width="300"/&gt;
+&lt;p&gt;Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[9,20],[15,7]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1]&lt;/p&gt;
+&lt;p&gt;Output: [[1]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = []&lt;/p&gt;
+&lt;p&gt;Output: []&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution-bfs"&gt;Solution (BFS)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; levelOrder(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;TreeNode&lt;span style="color:#f92672"&gt;*&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(root);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; temp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; size &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;size; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode &lt;span style="color:#f92672"&gt;*&lt;/span&gt; node &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; temp.push_back(node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left) q.push(node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) q.push(node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; result.push_back(temp);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;BFS이용한 풀이.&lt;/p&gt;</description></item><item><title>103. Binary Tree Zigzag Level Order Traversal</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0103-binary-tree-zigzag-level-order-traversal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0103-binary-tree-zigzag-level-order-traversal/</guid><description>&lt;h1 id="103-binary-tree-zigzag-level-order-traversal"&gt;103. Binary Tree Zigzag Level Order Traversal&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the zigzag level order traversal of its nodes&amp;rsquo; values. (i.e., from left to right, then right to left for the next level and alternate between).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/103-1.jpg" alt="103" width="300"/&gt;
+&lt;p&gt;Input: root = [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;p&gt;Output: [[3],[20,9],[15,7]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1]&lt;/p&gt;
+&lt;p&gt;Output: [[1]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = []&lt;/p&gt;
+&lt;p&gt;Output: []&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; zigzagLevelOrder(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; results;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; temp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;TreeNode&lt;span style="color:#f92672"&gt;*&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(root);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; flag &lt;span style="color:#f92672"&gt;=&lt;/span&gt; true; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; size &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; size; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; cur &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; temp.push_back(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left) q.push(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) q.push(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;flag) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; reverse(temp.begin(), temp.end());
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; results.push_back(temp);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; temp.clear();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; flag &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#f92672"&gt;!&lt;/span&gt;flag;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; results;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;문제를 제대로 생각하지 않고&lt;/p&gt;</description></item><item><title>104. Maximum Depth of Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0104-maximum-depth-of-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0104-maximum-depth-of-binary-tree/</guid><description>&lt;h1 id="104-maximum-depth-of-binary-tree"&gt;104. Maximum Depth of Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return its maximum depth.&lt;/p&gt;
+&lt;p&gt;A binary tree&amp;rsquo;s maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/104-1.jpg" alt="104-1" width="300"/&gt;
+&lt;p&gt;Input: root = [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;p&gt;Output: 3&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1,null,2]&lt;/p&gt;
+&lt;p&gt;Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solutionbfs"&gt;Solution(BFS)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * Definition for a binary tree node.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * struct TreeNode {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * int val;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode *left;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode *right;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode() : val(0), left(nullptr), right(nullptr) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * };
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; maxDepth(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;TreeNode&lt;span style="color:#f92672"&gt;*&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; level &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(root);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; size &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; level&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;size; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; dummy &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(dummy&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left) q.push(dummy&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(dummy&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) q.push(dummy&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; level;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;풀다가 놓친 부분이 많음&lt;/p&gt;</description></item><item><title>105. Construct Binary Tree from Preorder and Inorder Traversal</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0105-construct-binary-tree-from-preorder-and-inorder-traversal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0105-construct-binary-tree-from-preorder-and-inorder-traversal/</guid><description>&lt;h1 id="105-construct-binary-tree-from-preorder-and-inorder-traversal"&gt;105. Construct Binary Tree from Preorder and Inorder Traversal&lt;/h1&gt;
+&lt;p&gt;Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/105-1.jpg" alt="105" width="300"/&gt;
+&lt;p&gt;Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]&lt;/p&gt;
+&lt;p&gt;Output: [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: preorder = [-1], inorder = [-1]&lt;/p&gt;
+&lt;p&gt;Output: [-1]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;위 문제는 우선 Inorder와 Preorder에 대한 이해가 필요하다.&lt;/p&gt;</description></item><item><title>106. Construct Binary Tree from Inorder and Postorder Traversal</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0106-construct-binary-tree-from-inorder-and-postorder-traversal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0106-construct-binary-tree-from-inorder-and-postorder-traversal/</guid><description>&lt;h1 id="106-construct-binary-tree-from-inorder-and-postorder-traversal"&gt;106. Construct Binary Tree from Inorder and Postorder Traversal&lt;/h1&gt;
+&lt;p&gt;Given two integer arrays inorder and postorder where inorder is the inorder traversal of a binary tree and postorder is the postorder traversal of the same tree, construct and return the binary tree.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/106-1.jpg" alt="106" width="300"/&gt;
+&lt;p&gt;Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]&lt;/p&gt;
+&lt;p&gt;Output: [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: inorder = [-1], postorder = [-1]&lt;/p&gt;
+&lt;p&gt;Output: [-1]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;105번과 거의 비슷한 문제, 답안 생략하고 풀지 않음&lt;/p&gt;</description></item><item><title>107. Binary Tree Level Order Traversal II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0107-binary-tree-level-order-traversal-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0107-binary-tree-level-order-traversal-ii/</guid><description>&lt;h1 id="107-binary-tree-level-order-traversal-ii"&gt;107. Binary Tree Level Order Traversal II&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the bottom-up level order traversal of its nodes&amp;rsquo; values. (i.e., from left to right, level by level from leaf to root).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/107-1.jpg" alt="107-1" width="300"/&gt;
+&lt;p&gt;Input: root = [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;p&gt;Output: [[15,7],[9,20],[3]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1]&lt;/p&gt;
+&lt;p&gt;Output: [[1]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = []&lt;/p&gt;
+&lt;p&gt;Output: []&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; levelOrderBottom(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;TreeNode&lt;span style="color:#f92672"&gt;*&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; temp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt; results;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(root);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; size &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;size; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; cur &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; temp.push_back(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left) q.push(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) q.push(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; results.push_back(temp);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; temp.clear();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; reverse(results.begin(),results.end());
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; results;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>111. Minimum Depth of Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0111-minimum-depth-of-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0111-minimum-depth-of-binary-tree/</guid><description>&lt;h1 id="111-minimum-depth-of-binary-tree"&gt;111. Minimum Depth of Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given a binary tree, find its minimum depth.&lt;/p&gt;
+&lt;p&gt;The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.&lt;/p&gt;
+&lt;p&gt;Note: A leaf is a node with no children.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/111-1.jpg" alt="111-1" width="300"/&gt;
+&lt;p&gt;Input: root = [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;p&gt;Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [2,null,3,null,4,null,5,null,6]&lt;/p&gt;
+&lt;p&gt;Output: 5&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; minDepth(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; queue&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;TreeNode&lt;span style="color:#f92672"&gt;*&amp;gt;&lt;/span&gt; q;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.push(root);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; cnt &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;q.empty()){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cnt&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; size &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;size; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; cur &lt;span style="color:#f92672"&gt;=&lt;/span&gt; q.front();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; q.pop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style="color:#f92672"&gt;!&lt;/span&gt;cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; cnt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left) q.push(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right) q.push(cur&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; cnt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>112. Path Sum</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0112-path-sum/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0112-path-sum/</guid><description>&lt;h1 id="112-path-sum"&gt;112. Path Sum&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.&lt;/p&gt;
+&lt;p&gt;A leaf is a node with no children.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/112-1.jpg" alt="112-1" width="300"/&gt;
+&lt;p&gt;Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;
+&lt;p&gt;Explanation: The root-to-leaf path with the target sum is shown.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/112-2.jpg" alt="112-2" width="200"/&gt;
+&lt;p&gt;Input: root = [1,2,3], targetSum = 5&lt;/p&gt;</description></item><item><title>Basic</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0112-path-sum-recursive-target/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0112-path-sum-recursive-target/</guid><description>&lt;h1 id="112-path-sum"&gt;112. Path Sum&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.&lt;/p&gt;
+&lt;p&gt;A leaf is a node with no children.&lt;/p&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;p&gt;Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+Output: true
+Explanation: The root-to-leaf path with the target sum is shown.
+Example 2:&lt;/p&gt;
+&lt;p&gt;Input: root = [1,2,3], targetSum = 5
+Output: false
+Explanation: There are two root-to-leaf paths in the tree:
+(1 &amp;ndash;&amp;gt; 2): The sum is 3.
+(1 &amp;ndash;&amp;gt; 3): The sum is 4.
+There is no root-to-leaf path with sum = 5.
+Example 3:&lt;/p&gt;</description></item><item><title>117. Populating Next Right Pointers in Each Node II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0117-populating-next-right-pointers-in-each-node-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0117-populating-next-right-pointers-in-each-node-ii/</guid><description>&lt;h1 id="117-populating-next-right-pointers-in-each-node-ii"&gt;117. Populating Next Right Pointers in Each Node II&lt;/h1&gt;
+&lt;p&gt;Given a binary tree&lt;/p&gt;
+&lt;p&gt;struct Node {
+int val;
+Node *left;
+Node *right;
+Node *next;
+}
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.&lt;/p&gt;
+&lt;p&gt;Initially, all next pointers are set to NULL.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/117-1.png" alt="117-1" width="300"/&gt;
+&lt;p&gt;Input: root = [1,2,3,4,5,null,7]&lt;/p&gt;
+&lt;p&gt;Output: [1,#,2,3,#,4,5,7,#]&lt;/p&gt;
+&lt;p&gt;Explanation: Given the above binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with &amp;lsquo;#&amp;rsquo; signifying the end of each level.&lt;/p&gt;</description></item><item><title>124. Binary Tree Maximum Path Sum</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0124-binary-tree-maximum-path-sum/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0124-binary-tree-maximum-path-sum/</guid><description>&lt;h1 id="124-binary-tree-maximum-path-sum"&gt;124. Binary Tree Maximum Path Sum&lt;/h1&gt;
+&lt;p&gt;A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.&lt;/p&gt;
+&lt;p&gt;The path sum of a path is the sum of the node&amp;rsquo;s values in the path.&lt;/p&gt;</description></item><item><title>129. Sum Root to Leaf Numbers</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0129-sum-root-to-leaf-numbers/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0129-sum-root-to-leaf-numbers/</guid><description>&lt;h1 id="129-sum-root-to-leaf-numbers"&gt;129. Sum Root to Leaf Numbers&lt;/h1&gt;
+&lt;p&gt;You are given the root of a binary tree containing digits from 0 to 9 only.&lt;/p&gt;
+&lt;p&gt;Each root-to-leaf path in the tree represents a number.&lt;/p&gt;
+&lt;p&gt;For example, the root-to-leaf path 1 -&amp;gt; 2 -&amp;gt; 3 represents the number 123.
+Return the total sum of all root-to-leaf numbers. Test cases are generated so that the answer will fit in a 32-bit integer.&lt;/p&gt;
+&lt;p&gt;A leaf node is a node with no children.&lt;/p&gt;</description></item><item><title>145. Binary Tree Postorder Traversal</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0145-binary-tree-postorder-traversal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0145-binary-tree-postorder-traversal/</guid><description>&lt;h1 id="145-binary-tree-postorder-traversal"&gt;145. Binary Tree Postorder Traversal&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the postorder traversal of its nodes&amp;rsquo; values.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1,null,2,3]&lt;/p&gt;
+&lt;p&gt;Output: [3,2,1]&lt;/p&gt;
+&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1,2,3,4,5,null,8,null,null,6,7,9]&lt;/p&gt;
+&lt;p&gt;Output: [4,6,7,5,2,9,8,3,1]&lt;/p&gt;
+&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = []&lt;/p&gt;
+&lt;p&gt;Output: []&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 4&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = [1]&lt;/p&gt;
+&lt;p&gt;Output: [1]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution-dfs"&gt;Solution (DFS)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; postorderTraversal(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DFS(root);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;DFS&lt;/span&gt;(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DFS(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DFS(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; result.push_back(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>226. Invert Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0226-invert-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0226-invert-binary-tree/</guid><description>&lt;h1 id="invert-binary-tree"&gt;Invert Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, invert the tree, and return its root.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/invert1-tree.jpg" alt="invert1-tree" width="500"/&gt;
+&lt;p&gt;Input: root = [4,2,7,1,3,6,9]&lt;/p&gt;
+&lt;p&gt;Output: [4,7,2,9,6,3,1]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/invert2-tree.jpg" alt="invert2-tree" width="500"/&gt;
+&lt;p&gt;Input: root = [2,1,3]&lt;/p&gt;
+&lt;p&gt;Output: [2,3,1]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: root = []&lt;/p&gt;
+&lt;p&gt;Output: []&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;TreeNode&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; val;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode &lt;span style="color:#f92672"&gt;*&lt;/span&gt;left;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode &lt;span style="color:#f92672"&gt;*&lt;/span&gt;right;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode() &lt;span style="color:#f92672"&gt;:&lt;/span&gt; val(&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;), left(&lt;span style="color:#66d9ef"&gt;nullptr&lt;/span&gt;), right(&lt;span style="color:#66d9ef"&gt;nullptr&lt;/span&gt;) {}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; x) &lt;span style="color:#f92672"&gt;:&lt;/span&gt; val(x), left(&lt;span style="color:#66d9ef"&gt;nullptr&lt;/span&gt;), right(&lt;span style="color:#66d9ef"&gt;nullptr&lt;/span&gt;) {}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; x, TreeNode &lt;span style="color:#f92672"&gt;*&lt;/span&gt;left, TreeNode &lt;span style="color:#f92672"&gt;*&lt;/span&gt;right) &lt;span style="color:#f92672"&gt;:&lt;/span&gt; val(x), left(left), right(right) {}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; invertTree(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(root &lt;span style="color:#f92672"&gt;==&lt;/span&gt; NULL) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; NULL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; node &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; TreeNode();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val &lt;span style="color:#f92672"&gt;=&lt;/span&gt; root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right &lt;span style="color:#f92672"&gt;=&lt;/span&gt; invertTree(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; node&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left &lt;span style="color:#f92672"&gt;=&lt;/span&gt; invertTree(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; node;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그렇게 어렵지 않으니 잘 생각해보자&lt;/p&gt;</description></item><item><title>230. Kth Smallest Element in a BST</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0230-kth-smallest-element-in-a-bst/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0230-kth-smallest-element-in-a-bst/</guid><description>&lt;h1 id="230-kth-smallest-element-in-a-bst"&gt;230. Kth Smallest Element in a BST&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/230-1.jpg" alt="230-1" width="300"/&gt;
+&lt;p&gt;Input: root = [3,1,4,null,2], k = 1&lt;/p&gt;
+&lt;p&gt;Output: 1&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/230-2.jpg" alt="230-2" width="300"/&gt;
+&lt;p&gt;Input: root = [5,3,6,2,4,null,null,1], k = 3&lt;/p&gt;
+&lt;p&gt;Output: 3&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * Definition for a binary tree node.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * struct TreeNode {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * int val;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode *left;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode *right;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode() : val(0), left(nullptr), right(nullptr) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; * };
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; cnt &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; result &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;kthSmallest&lt;/span&gt;(TreeNode&lt;span style="color:#f92672"&gt;*&lt;/span&gt; root, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; k) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dfs(root,k);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; result;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;dfs&lt;/span&gt;(TreeNode &lt;span style="color:#f92672"&gt;*&lt;/span&gt; root,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; k){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#f92672"&gt;!&lt;/span&gt;root) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dfs(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;left,k);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cnt&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(cnt &lt;span style="color:#f92672"&gt;==&lt;/span&gt; k) result &lt;span style="color:#f92672"&gt;=&lt;/span&gt; root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;val;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dfs(root&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;right,k);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이미 완성된 형태의 BST이므로,&lt;/p&gt;</description></item><item><title>236. Lowest Common Ancestor of a Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0236-lowest-common-ancestor-of-a-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0236-lowest-common-ancestor-of-a-binary-tree/</guid><description>&lt;h1 id="236-lowest-common-ancestor-of-a-binary-tree"&gt;236. Lowest Common Ancestor of a Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.&lt;/p&gt;
+&lt;p&gt;According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”&lt;/p&gt;</description></item><item><title>543. Diameter of Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0543-diameter-of-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0543-diameter-of-binary-tree/</guid><description>&lt;h1 id="543-diameter-of-binary-tree"&gt;543. Diameter of Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the length of the diameter of the tree.&lt;/p&gt;
+&lt;p&gt;The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.&lt;/p&gt;
+&lt;p&gt;The length of a path between two nodes is represented by the number of edges between them.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;</description></item><item><title>637. Average of Levels in Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0637-average-of-levels-in-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0637-average-of-levels-in-binary-tree/</guid><description>&lt;h1 id="637-average-of-levels-in-binary-tree"&gt;637. Average of Levels in Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, return the average value of the nodes on each level in the form of an array. Answers within 10-5 of the actual answer will be accepted.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/avg1-tree.jpg" alt="avg1" width="300"/&gt;
+&lt;p&gt;Input: root = [3,9,20,null,null,15,7]&lt;/p&gt;
+&lt;p&gt;Output: [3.00000,14.50000,11.00000]&lt;/p&gt;
+&lt;p&gt;Explanation: The average value of nodes on level 0 is 3, on level 1 is 14.5, &amp;gt; and on level 2 is 11.&lt;/p&gt;</description></item><item><title>987. Vertical Order Traversal of a Binary Tree</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0987-vertical-order-traversal-of-a-binary-tree/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/0987-vertical-order-traversal-of-a-binary-tree/</guid><description>&lt;h1 id="987-vertical-order-traversal-of-a-binary-tree"&gt;987. Vertical Order Traversal of a Binary Tree&lt;/h1&gt;
+&lt;p&gt;Given the root of a binary tree, calculate the vertical order traversal of the binary tree.&lt;/p&gt;
+&lt;p&gt;For each node at position (row, col), its left and right children will be at positions (row + 1, col - 1) and (row + 1, col + 1) respectively. The root of the tree is at (0, 0).&lt;/p&gt;
+&lt;p&gt;The vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index starting from the leftmost column and ending on the rightmost column. There may be multiple nodes in the same row and same column. In such a case, sort these nodes by their values.&lt;/p&gt;</description></item><item><title>1469. Find All The Lonely Nodes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/1469-find-all-the-lonely-nodes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/binary_tree/1469-find-all-the-lonely-nodes/</guid><description>&lt;h1 id="1469-find-all-the-lonely-nodes"&gt;1469. Find All The Lonely Nodes&lt;/h1&gt;
+&lt;p&gt;In a binary tree, a lonely node is a node that is the only child of its parent node. The root of the tree is not lonely because it does not have a parent node.&lt;/p&gt;
+&lt;p&gt;Given the root of a binary tree, return an array containing the values of all lonely nodes in the tree. Return the list in any order.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;img src="../../imgs/1469. Find All The Lonely Nodes1.png" alt="Find All The &gt; Lonely Nodes1" width="300"/&gt;
+&lt;p&gt;Input: root = [1,2,3,null,4]
+Output: [4]
+Explanation: Light blue node is the only lonely node.
+Node 1 is the root and is not lonely.
+Nodes 2 and 3 have the same parent and are not lonely.&lt;/p&gt;</description></item></channel></rss>
