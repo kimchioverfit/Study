@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Job Interview on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/job_interview/</link><description>Recent content in Job Interview on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/job_interview/index.xml" rel="self" type="application/rss+xml"/><item><title>Google</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/job_interview/google/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/job_interview/google/</guid><description>&lt;p&gt;pixel-camera-coding-interview-prep/
+└── problems/
+├── array_sliding_window/
+│ ├── &lt;code&gt;003_longest_substring_without_repeating_characters.cpp&lt;/code&gt;
+│ ├── 053_maximum_subarray.cpp
+│ ├── 076_minimum_window_substring.cpp
+│ ├── 1695_maximum_erasure_value.cpp
+│ └── 238_product_of_array_except_self.cpp
+│
+├── hashmap_set/
+│ ├── 049_group_anagrams.cpp
+│ ├── 128_longest_consecutive_sequence.cpp
+│ ├── &lt;code&gt;146_lru_cache.cpp&lt;/code&gt;
+│ ├── 347_top_k_frequent_elements.cpp
+│ └── 460_lfu_cache.cpp
+│
+├── tree_heap/
+│ ├── 023_merge_k_sorted_lists.cpp
+│ ├── 102_binary_tree_level_order_traversal.cpp
+│ ├── &lt;code&gt;215_kth_largest_element.cpp&lt;/code&gt;
+│ ├── 236_lowest_common_ancestor.cpp
+│ └── 297_serialize_and_deserialize_binary_tree.cpp
+│
+├── graph/
+│ ├── 127_word_ladder.cpp
+│ ├── 133_clone_graph.cpp
+│ ├── 200_number_of_islands.cpp
+│ ├── 207_course_schedule.cpp
+│ └── &lt;code&gt;323_number_of_connected_components.cpp&lt;/code&gt;
+│
+├── &lt;code&gt;bit_manipulation/&lt;/code&gt;
+│ ├── 136_single_number.cpp
+│ ├── 137_single_number_ii.cpp
+│ ├── 190_reverse_bits.cpp
+│ ├── 191_number_of_1_bits.cpp
+│ └── 338_counting_bits.cpp
+│
+└── backtracking/
+├── &lt;code&gt;039_combination_sum.cpp&lt;/code&gt;
+├── &lt;code&gt;046_permutations.cpp&lt;/code&gt;
+├── &lt;code&gt;078_subsets.cpp&lt;/code&gt;
+├── 079_word_search.cpp
+└── 090_subsets_ii.cpp&lt;/p&gt;</description></item><item><title>Interview method</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/job_interview/how-to-prepare-interview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/job_interview/how-to-prepare-interview/</guid><description>&lt;h1 id="interview-method"&gt;Interview method&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;분석 능력
+&lt;ul&gt;
+&lt;li&gt;문제 풀이에 도움을 받았는지&lt;/li&gt;
+&lt;li&gt;최적화&lt;/li&gt;
+&lt;li&gt;푸는데 걸린 시간&lt;/li&gt;
+&lt;li&gt;디자인 및 설계&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;코딩 능력
+&lt;ul&gt;
+&lt;li&gt;알고리즘&lt;/li&gt;
+&lt;li&gt;가능한 에러에 대한 생각&lt;/li&gt;
+&lt;li&gt;코드 스타일&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CS&lt;/li&gt;
+&lt;li&gt;Experience&lt;/li&gt;
+&lt;li&gt;Culture fit&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>

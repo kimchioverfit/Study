@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Array on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/</link><description>Recent content in Array on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/array/index.xml" rel="self" type="application/rss+xml"/><item><title>1. Two Sum</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0001-two-sum/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0001-two-sum/</guid><description>&lt;h1 id="1-two-sum"&gt;1. Two Sum&lt;/h1&gt;
+&lt;p&gt;Given an array of integers nums and an integer target,&lt;/p&gt;
+&lt;p&gt;return indices of the two numbers such that they add up to target.&lt;/p&gt;
+&lt;p&gt;You may assume that each input would have exactly one solution,&lt;/p&gt;
+&lt;p&gt;and you may not use the same element twice.&lt;/p&gt;
+&lt;p&gt;You can return the answer in any order.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [2,7,11,15], target = 9&lt;/p&gt;
+&lt;p&gt;Output: [0,1]&lt;/p&gt;
+&lt;p&gt;Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].&lt;/p&gt;</description></item><item><title>14. Longest Common Prefix</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0014-longest-common-prefix/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0014-longest-common-prefix/</guid><description>&lt;h1 id="14-longest-common-prefix"&gt;14. Longest Common Prefix&lt;/h1&gt;
+&lt;p&gt;Write a function to find the longest common prefix string amongst an array of strings.&lt;/p&gt;
+&lt;p&gt;If there is no common prefix, return an empty string &amp;ldquo;&amp;rdquo;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: strs = [&amp;ldquo;flower&amp;rdquo;,&amp;ldquo;flow&amp;rdquo;,&amp;ldquo;flight&amp;rdquo;]&lt;/p&gt;
+&lt;p&gt;Output: &amp;ldquo;fl&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;
+Input: strs = [&amp;ldquo;dog&amp;rdquo;,&amp;ldquo;racecar&amp;rdquo;,&amp;ldquo;car&amp;rdquo;]&lt;/p&gt;
+&lt;p&gt;Output: &amp;quot;&amp;quot;&lt;/p&gt;
+&lt;p&gt;Explanation: There is no common prefix among the input strings.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;진짜 쉬운 문제인데 문자열에 익숙하지 않아서 틀림.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="solution-link"&gt;&lt;a class="inline-link is-source" href="#src-14-longest-common-prefixcc"&gt;Solution Link&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;sort가 가장 핵심인데, sort를 하면 어차피 사전순 정렬이 된다.&lt;/p&gt;</description></item><item><title>26. Remove Duplicates from Sorted Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0026-remove-duplicates-from-sorted-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0026-remove-duplicates-from-sorted-array/</guid><description>&lt;h1 id="26-remove-duplicates-from-sorted-array"&gt;26. Remove Duplicates from Sorted Array&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.&lt;/p&gt;
+&lt;p&gt;Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:&lt;/p&gt;
+&lt;p&gt;Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially. The remaining elements of nums are not important as well as the size of nums.
+Return k.
+Custom Judge:&lt;/p&gt;</description></item><item><title>27. Remove Element</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0027-remove-element/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0027-remove-element/</guid><description>&lt;h1 id="27-remove-element"&gt;27. Remove Element&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums and an integer val, remove all occurrences of val in nums in-place. The order of the elements may be changed. Then return the number of elements in nums which are not equal to val.&lt;/p&gt;
+&lt;p&gt;Consider the number of elements in nums which are not equal to val be k, to get accepted, you need to do the following things:&lt;/p&gt;
+&lt;p&gt;Change the array nums such that the first k elements of nums contain the elements which are not equal to val. The remaining elements of nums are not important as well as the size of nums.
+Return k.
+Custom Judge:&lt;/p&gt;</description></item><item><title>28. Find the Index of the First Occurrence in a String</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0028-find-the-index-of-the-first-occurrence-in-a-string/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0028-find-the-index-of-the-first-occurrence-in-a-string/</guid><description>&lt;h1 id="28-find-the-index-of-the-first-occurrence-in-a-string"&gt;28. Find the Index of the First Occurrence in a String&lt;/h1&gt;
+&lt;p&gt;Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: haystack = &amp;ldquo;sadbutsad&amp;rdquo;, needle = &amp;ldquo;sad&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: 0&lt;/p&gt;
+&lt;p&gt;Explanation: &amp;ldquo;sad&amp;rdquo; occurs at index 0 and 6.&lt;/p&gt;
+&lt;p&gt;The first occurrence is at index 0, so we return 0.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: haystack = &amp;ldquo;leetcode&amp;rdquo;, needle = &amp;ldquo;leeto&amp;rdquo;&lt;/p&gt;</description></item><item><title>33. Search in Rotated Sorted Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0033-search-in-rotated-sorted-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0033-search-in-rotated-sorted-array/</guid><description>&lt;h1 id="33-search-in-rotated-sorted-array"&gt;33. Search in Rotated Sorted Array&lt;/h1&gt;
+&lt;p&gt;There is an integer array nums sorted in ascending order (with distinct values).&lt;/p&gt;
+&lt;p&gt;Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 &amp;lt;= k &amp;lt; nums.length) such that the resulting array is [nums[k], nums[k+1], &amp;hellip;, nums[n-1], nums[0], nums[1], &amp;hellip;, nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].&lt;/p&gt;
+&lt;p&gt;Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.&lt;/p&gt;</description></item><item><title>42. Trapping Rain Water</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0042-trapping-rain-water/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0042-trapping-rain-water/</guid><description>&lt;h1 id="42-trapping-rain-water"&gt;42. Trapping Rain Water&lt;/h1&gt;
+&lt;p&gt;Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.&lt;/p&gt;
+&lt;img src="../../imgs/rainwatertrap.png" alt="heap_1" width="500"/&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]&lt;/p&gt;
+&lt;p&gt;Output: 6&lt;/p&gt;
+&lt;p&gt;Explanation: The above elevation map (black section) is represented by array &amp;gt; [0,1,0,2,1,0,1,3,2,1,2,1].&lt;/p&gt;
+&lt;p&gt;In this case, 6 units of rain water (blue section) are being trapped.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: height = [4,2,0,3,2,5]&lt;/p&gt;
+&lt;p&gt;Output: 9&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution-two-pointer"&gt;Solution (Two pointer)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; trap(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; height) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n &lt;span style="color:#f92672"&gt;=&lt;/span&gt; height.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; left &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, right &lt;span style="color:#f92672"&gt;=&lt;/span&gt; n &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; leftMax &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, rightMax &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; left_trappedWater &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; right_trappedWater &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (left &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; right) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (height[left] &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; height[right]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; leftMax &lt;span style="color:#f92672"&gt;=&lt;/span&gt; max(leftMax, height[left]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; left_trappedWater &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; (leftMax &lt;span style="color:#f92672"&gt;-&lt;/span&gt; height[left]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; left&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; rightMax &lt;span style="color:#f92672"&gt;=&lt;/span&gt; max(rightMax, height[right]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; right_trappedWater &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; (rightMax &lt;span style="color:#f92672"&gt;-&lt;/span&gt; height[right]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; right&lt;span style="color:#f92672"&gt;--&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; left_trappedWater &lt;span style="color:#f92672"&gt;+&lt;/span&gt; right_trappedWater;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Two pointer를 이용한 풀이,&lt;/p&gt;</description></item><item><title>55. Jump Game</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0055-jump-game/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0055-jump-game/</guid><description>&lt;h1 id="55-jump-game"&gt;55. Jump Game&lt;/h1&gt;
+&lt;p&gt;You are given an integer array nums. You are initially positioned at the array&amp;rsquo;s first index, and each element in the array represents your maximum jump length at that position.&lt;/p&gt;
+&lt;p&gt;Return true if you can reach the last index, or false otherwise.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [2,3,1,1,4]&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;
+&lt;p&gt;Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>75. Sort Colors</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0075-sort-colors/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0075-sort-colors/</guid><description>&lt;h1 id="75-sort-colors"&gt;75. Sort Colors&lt;/h1&gt;
+&lt;p&gt;Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.&lt;/p&gt;
+&lt;p&gt;We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.&lt;/p&gt;
+&lt;p&gt;You must solve this problem without using the library&amp;rsquo;s sort function.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [2,0,2,1,1,0]&lt;/p&gt;</description></item><item><title>80. Remove Duplicates from Sorted Array II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0080-remove-duplicates-from-sorted-array-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0080-remove-duplicates-from-sorted-array-ii/</guid><description>&lt;h1 id="80-remove-duplicates-from-sorted-array-ii"&gt;80. Remove Duplicates from Sorted Array II&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.&lt;/p&gt;
+&lt;p&gt;Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.&lt;/p&gt;</description></item><item><title>88. Merge Sorted Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0088-merge-sorted-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0088-merge-sorted-array/</guid><description>&lt;h1 id="88-merge-sorted-array"&gt;88. Merge Sorted Array&lt;/h1&gt;
+&lt;p&gt;You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively.&lt;/p&gt;
+&lt;p&gt;Merge nums1 and nums2 into a single array sorted in non-decreasing order.&lt;/p&gt;
+&lt;p&gt;The final sorted array should not be returned by the function, but instead be stored inside the array nums1. To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.&lt;/p&gt;</description></item><item><title>121. Best Time to Buy and Sell Stock</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0121-best-time-to-buy-and-sell-stock/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0121-best-time-to-buy-and-sell-stock/</guid><description>&lt;h1 id="121-best-time-to-buy-and-sell-stock"&gt;121. Best Time to Buy and Sell Stock&lt;/h1&gt;
+&lt;p&gt;You are given an array prices where prices[i] is the price of a given stock on the ith day.&lt;/p&gt;
+&lt;p&gt;You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.&lt;/p&gt;
+&lt;p&gt;Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.&lt;/p&gt;</description></item><item><title>122. Best Time to Buy and Sell Stock II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0122-best-time-to-buy-and-sell-stock-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0122-best-time-to-buy-and-sell-stock-ii/</guid><description>&lt;h1 id="122-best-time-to-buy-and-sell-stock-ii"&gt;122. Best Time to Buy and Sell Stock II&lt;/h1&gt;
+&lt;p&gt;You are given an integer array prices where prices[i] is the price of a given stock on the ith day.&lt;/p&gt;
+&lt;p&gt;On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. However, you can buy it then immediately sell it on the same day.&lt;/p&gt;
+&lt;p&gt;Find and return the maximum profit you can achieve.&lt;/p&gt;</description></item><item><title>135. Candy</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0135-candy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0135-candy/</guid><description>&lt;h1 id="135-candy"&gt;135. Candy&lt;/h1&gt;
+&lt;p&gt;There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.&lt;/p&gt;
+&lt;p&gt;You are giving candies to these children subjected to the following requirements:&lt;/p&gt;
+&lt;p&gt;Each child must have at least one candy.
+Children with a higher rating get more candies than their neighbors.
+Return the minimum number of candies you need to have to distribute the candies to the children.&lt;/p&gt;</description></item><item><title>162. Find Peak Element</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0162-find-peak-element/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0162-find-peak-element/</guid><description>&lt;h1 id="162-find-peak-element"&gt;162. Find Peak Element&lt;/h1&gt;
+&lt;p&gt;A peak element is an element that is strictly greater than its neighbors.&lt;/p&gt;
+&lt;p&gt;Given a 0-indexed integer array nums, find a peak element, and return its index. If the array contains multiple peaks, return the index to any of the peaks.&lt;/p&gt;
+&lt;p&gt;You may imagine that nums[-1] = nums[n] = -∞. In other words, an element is always considered to be strictly greater than a neighbor that is outside the array.&lt;/p&gt;</description></item><item><title>169. Majority Element</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0169-majority-element/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0169-majority-element/</guid><description>&lt;h1 id="169-majority-element"&gt;169. Majority Element&lt;/h1&gt;
+&lt;p&gt;Given an array nums of size n, return the majority element.&lt;/p&gt;
+&lt;p&gt;The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [3,2,3]&lt;/p&gt;
+&lt;p&gt;Output: 3&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [2,2,1,1,1,2,2]&lt;/p&gt;
+&lt;p&gt;Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; majorityElement(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; unordered_map&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; um;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; pair&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; current &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;,&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;}; &lt;span style="color:#75715e"&gt;// 사용법 숙지 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; num:nums){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; um[num]&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; element:um){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(element.second &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; current.second) current &lt;span style="color:#f92672"&gt;=&lt;/span&gt; element; &lt;span style="color:#75715e"&gt;//사용법 숙지 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; current.first;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;pair랑 map의 원소 꺼내올때 쓰는 법 순간 잊고 있었음&lt;/p&gt;</description></item><item><title>189. Rotate Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0189-rotate-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0189-rotate-array/</guid><description>&lt;h1 id="189-rotate-array"&gt;189. Rotate Array&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums, rotate the array to the right by k steps, where k is non-negative.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,2,3,4,5,6,7], k = 3&lt;/p&gt;
+&lt;p&gt;Output: [5,6,7,1,2,3,4]&lt;/p&gt;
+&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;p&gt;rotate 1 steps to the right: [7,1,2,3,4,5,6]&lt;/p&gt;
+&lt;p&gt;rotate 2 steps to the right: [6,7,1,2,3,4,5]&lt;/p&gt;
+&lt;p&gt;rotate 3 steps to the right: [5,6,7,1,2,3,4]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [-1,-100,3,99], k = 2&lt;/p&gt;
+&lt;p&gt;Output: [3,99,-1,-100]&lt;/p&gt;
+&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;p&gt;rotate 1 steps to the right: [99,-1,-100,3]&lt;/p&gt;</description></item><item><title>204. Count Primes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0204-count-primes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0204-count-primes/</guid><description>&lt;h1 id="204-count-primes"&gt;204. Count Primes&lt;/h1&gt;
+&lt;p&gt;Given an integer n, return the number of prime numbers that are strictly less than n.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: n = 10&lt;/p&gt;
+&lt;p&gt;Output: 4&lt;/p&gt;
+&lt;p&gt;Explanation: There are 4 prime numbers less than 10, they are 2, 3, 5, 7.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: n = 0&lt;/p&gt;
+&lt;p&gt;Output: 0&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: n = 1&lt;/p&gt;
+&lt;p&gt;Output: 0&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; countPrimes(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (n &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; isPrime(n, true);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; isPrime[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; isPrime[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;*&lt;/span&gt; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; &lt;span style="color:#f92672"&gt;++&lt;/span&gt;i) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isPrime[i]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; j &lt;span style="color:#f92672"&gt;=&lt;/span&gt; i &lt;span style="color:#f92672"&gt;*&lt;/span&gt; i; j &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; n; j &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; i) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; isPrime[j] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; false;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;count(isPrime.begin(), isPrime.end(), true);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Prime number 는 테라토스테네스의 체 쓰면 된다.&lt;/p&gt;</description></item><item><title>238. Product of Array Except Self</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0238-product-of-array-except-self/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0238-product-of-array-except-self/</guid><description>&lt;h1 id="238-product-of-array-except-self"&gt;238. Product of Array Except Self&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].&lt;/p&gt;
+&lt;p&gt;The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.&lt;/p&gt;
+&lt;p&gt;You must write an algorithm that runs in O(n) time and without using the division operation.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,2,3,4]&lt;/p&gt;</description></item><item><title>240. Search a 2D Matrix II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0240-search-a-2d-matrix-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0240-search-a-2d-matrix-ii/</guid><description>&lt;h1 id="240-search-a-2d-matrix-ii"&gt;240. Search a 2D Matrix II&lt;/h1&gt;
+&lt;p&gt;Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties:&lt;/p&gt;
+&lt;p&gt;Integers in each row are sorted in ascending from left to right.
+Integers in each column are sorted in ascending from top to bottom.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/240-1.jpg" alt="240-1" width="300"/&gt;
+&lt;p&gt;Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5&lt;/p&gt;
+&lt;p&gt;Output: true&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;img src="../../imgs/240-2.jpg" alt="240-2" width="300"/&gt;
+&lt;p&gt;Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20&lt;/p&gt;</description></item><item><title>274. H-Index</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0274-h-index/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0274-h-index/</guid><description>&lt;h1 id="274-h-index"&gt;274. H-Index&lt;/h1&gt;
+&lt;p&gt;Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper, return the researcher&amp;rsquo;s h-index.&lt;/p&gt;
+&lt;p&gt;According to the definition of h-index on Wikipedia: The h-index is defined as the maximum value of h such that the given researcher has published at least h papers that have each been cited at least h times.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: citations = [3,0,6,1,5]&lt;/p&gt;</description></item><item><title>283. Move Zeroes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0283-move-zeroes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0283-move-zeroes/</guid><description>&lt;h1 id="283-move-zeroes"&gt;283. Move Zeroes&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums, move all 0&amp;rsquo;s to the end of it while maintaining the relative order of the non-zero elements.&lt;/p&gt;
+&lt;p&gt;Note that you must do this in-place without making a copy of the array.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: nums = [0,1,0,3,12]
+Output: [1,3,12,0,0]&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: nums = [0]
+Output: [0]&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;void&lt;/span&gt; moveZeroes(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; cnt &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;nums.size();){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cnt&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(cnt &lt;span style="color:#f92672"&gt;==&lt;/span&gt; nums.size()) &lt;span style="color:#66d9ef"&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(nums[i]&lt;span style="color:#f92672"&gt;==&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nums.push_back(nums[i]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nums.erase(nums.begin()&lt;span style="color:#f92672"&gt;+&lt;/span&gt;i);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Time Complexity : O(N)
+Space Complexity : O(N)&lt;/p&gt;</description></item><item><title>540. Single Element in a Sorted Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0540-single-element-in-a-sorted-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0540-single-element-in-a-sorted-array/</guid><description>&lt;h1 id="540-single-element-in-a-sorted-array"&gt;540. Single Element in a Sorted Array&lt;/h1&gt;
+&lt;p&gt;You are given a sorted array consisting of only integers where every element appears exactly twice, except for one element which appears exactly once.&lt;/p&gt;
+&lt;p&gt;Return the single element that appears only once.&lt;/p&gt;
+&lt;p&gt;Your solution must run in O(log n) time and O(1) space.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,1,2,3,3,4,4,8,8]&lt;/p&gt;
+&lt;p&gt;Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [3,3,7,7,10,11,11]&lt;/p&gt;
+&lt;p&gt;Output: 10&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="solutionhash-map"&gt;Solution(Hash map)&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; singleNonDuplicate(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; unordered_map&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;,&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; um;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; element:nums){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; um[element]&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;auto&lt;/span&gt; element:nums){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(um[element]&lt;span style="color:#f92672"&gt;==&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; element;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;내 풀이, 두 번의 순회와 공간낭비가 있음.&lt;/p&gt;</description></item><item><title>560. Subarray Sum Equals K</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0560-subarray-sum-equals-k/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0560-subarray-sum-equals-k/</guid><description>&lt;h1 id="560-subarray-sum-equals-k"&gt;560. Subarray Sum Equals K&lt;/h1&gt;
+&lt;p&gt;Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.&lt;/p&gt;
+&lt;p&gt;A subarray is a contiguous non-empty sequence of elements within an array.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,1,1], k = 2
+Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,2,3], k = 3
+Output: 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;우선 &lt;strong&gt;Subarray&lt;/strong&gt; 란?
+-&amp;gt; 연속적인 array 형태. 즉, 특정 원소를 하나하나 보는 것이 아니라, 구간통쨰로 보면 된다.&lt;/p&gt;</description></item><item><title>628. Maximum Product of Three Numbers</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0628-maximum-product-of-three-numbers/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/0628-maximum-product-of-three-numbers/</guid><description>&lt;h1 id="628-maximum-product-of-three-numbers"&gt;628. Maximum Product of Three Numbers&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums, find three numbers whose product is maximum and return the maximum product.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: nums = [1,2,3]
+Output: 6&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: nums = [1,2,3,4]
+Output: 24&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 3:
+Input: nums = [-1,-2,-3]
+Output: -6&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;쉬운문제인데 생각하기 귀찮아서 사실 답지봄&lt;/p&gt;
+&lt;h1 id="solution"&gt;Solution&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; maximumProduct(vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;amp;&lt;/span&gt; nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sort(nums.begin(),nums.end());
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n &lt;span style="color:#f92672"&gt;=&lt;/span&gt; nums.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;max&lt;/span&gt;(nums[n&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]&lt;span style="color:#f92672"&gt;*&lt;/span&gt;nums[n&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;]&lt;span style="color:#f92672"&gt;*&lt;/span&gt;nums[n&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;], nums[n&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]&lt;span style="color:#f92672"&gt;*&lt;/span&gt;nums[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]&lt;span style="color:#f92672"&gt;*&lt;/span&gt;nums[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;특이 사항 : 최대 수를 얻으려면 음수 2개 * 양수 제일큰거 하나인 예가 있음.&lt;/p&gt;</description></item><item><title>1480. Running Sum of 1d Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/1480-running-sum-of-1d-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/1480-running-sum-of-1d-array/</guid><description>&lt;h1 id="1480-running-sum-of-1d-array"&gt;1480. Running Sum of 1d Array&lt;/h1&gt;
+&lt;p&gt;Given an array nums. We define a running sum of an array as runningSum[i] = sum(nums[0]?쫚ums[i]).&lt;/p&gt;
+&lt;p&gt;Return the running sum of nums.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,2,3,4]&lt;/p&gt;
+&lt;p&gt;Output: [1,3,6,10]&lt;/p&gt;
+&lt;p&gt;Explanation: Running sum is obtained as follows: [1, 1+2, 1+2+3, 1+2+3+4].&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,1,1,1,1]&lt;/p&gt;
+&lt;p&gt;Output: [1,2,3,4,5]&lt;/p&gt;
+&lt;p&gt;Explanation: Running sum is obtained as follows: [1, 1+1, 1+1+1, 1+1+1+1, 1+1+1+1+1].&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [3,1,2,10,1]&lt;/p&gt;</description></item><item><title>1510. Find Lucky Integer in an Array</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/1510-find-lucky-integer-in-an-array/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/1510-find-lucky-integer-in-an-array/</guid><description>&lt;h1 id="1510-find-lucky-integer-in-an-array"&gt;1510. Find Lucky Integer in an Array&lt;/h1&gt;
+&lt;p&gt;Given an array of integers arr, a lucky integer is an integer that has a frequency in the array equal to its value.
+Return the largest lucky integer in the array. If there is no lucky integer return -1.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: arr = [2,2,3,4]
+Output: 2
+Explanation: The only lucky number in the array is 2 because frequency[2] == 2.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 2&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>2016. Maximum Difference Between Increasing Elements</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2016-maximum-difference-between-increasing-elements/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2016-maximum-difference-between-increasing-elements/</guid><description>&lt;h1 id="2016-maximum-difference-between-increasing-elements"&gt;2016. Maximum Difference Between Increasing Elements&lt;/h1&gt;
+&lt;p&gt;Given a 0-indexed integer array nums of size n, find the maximum difference between nums[i] and nums[j] (i.e., nums[j] - nums[i]), such that 0 &amp;lt;= i &amp;lt; j &amp;lt; n and nums[i] &amp;lt; nums[j].&lt;/p&gt;
+&lt;p&gt;Return the maximum difference. If no such i and j exists, return -1.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [7,1,5,4]&lt;/p&gt;
+&lt;p&gt;Output: 4&lt;/p&gt;
+&lt;p&gt;Explanation:&lt;/p&gt;
+&lt;p&gt;The maximum difference occurs with i = 1 and j = 2, nums[j] - nums[i] = 5 - 1 = 4.&lt;/p&gt;</description></item><item><title>2071. Maximum Number of Tasks You Can Assign</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2071-maximum-number-of-tasks-you-can-assign/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2071-maximum-number-of-tasks-you-can-assign/</guid><description>&lt;h1 id="2071-maximum-number-of-tasks-you-can-assign"&gt;2071. Maximum Number of Tasks You Can Assign&lt;/h1&gt;
+&lt;p&gt;You have n tasks and m workers. Each task has a strength requirement stored in a 0-indexed integer array tasks, with the ith task requiring tasks[i] strength to complete. The strength of each worker is stored in a 0-indexed integer array workers, with the jth worker having workers[j] strength. Each worker can only be assigned to a single task and must have a strength greater than or equal to the task&amp;rsquo;s strength requirement (i.e., workers[j] &amp;gt;= tasks[i]).&lt;/p&gt;</description></item><item><title>2094. Finding 3-Digit Even Numbers</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2094-finding-3-digit-even-numbers/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2094-finding-3-digit-even-numbers/</guid><description>&lt;h1 id="2094-finding-3-digit-even-numbers"&gt;2094. Finding 3-Digit Even Numbers&lt;/h1&gt;
+&lt;p&gt;You are given an integer array digits, where each element is a digit. The array may contain duplicates.&lt;/p&gt;
+&lt;p&gt;You need to find all the unique integers that follow the given requirements:&lt;/p&gt;
+&lt;p&gt;The integer consists of the concatenation of three elements from digits in any arbitrary order.
+The integer does not have leading zeros.
+The integer is even.
+For example, if the given digits were [1, 2, 3], integers 132 and 312 follow the requirements.&lt;/p&gt;</description></item><item><title>2131. Longest Palindrome by Concatenating Two Letter Words</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2131-longest-palindrome-by-concatenating-two-letter-words/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2131-longest-palindrome-by-concatenating-two-letter-words/</guid><description>&lt;h1 id="2131-longest-palindrome-by-concatenating-two-letter-words"&gt;2131. Longest Palindrome by Concatenating Two Letter Words&lt;/h1&gt;
+&lt;p&gt;You are given an array of strings words. Each element of words consists of two lowercase English letters.&lt;/p&gt;
+&lt;p&gt;Create the longest possible palindrome by selecting some elements from words and concatenating them in any order. Each element can be selected at most once.&lt;/p&gt;
+&lt;p&gt;Return the length of the longest palindrome that you can create. If it is impossible to create any palindrome, return 0.&lt;/p&gt;</description></item><item><title>2302. Count Subarrays With Score Less Than K</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2302-count-subarrays-with-score-less-than-k/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2302-count-subarrays-with-score-less-than-k/</guid><description>&lt;h1 id="2302-count-subarrays-with-score-less-than-k"&gt;2302. Count Subarrays With Score Less Than K&lt;/h1&gt;
+&lt;p&gt;The score of an array is defined as the product of its sum and its length.&lt;/p&gt;
+&lt;p&gt;For example, the score of [1, 2, 3, 4, 5] is (1 + 2 + 3 + 4 + 5) * 5 = 75.
+Given a positive integer array nums and an integer k, return the number of non-empty subarrays of nums whose score is strictly less than k.&lt;/p&gt;</description></item><item><title>2537. Count the Number of Good Subarrays</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2537-count-the-number-of-good-subarrays/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2537-count-the-number-of-good-subarrays/</guid><description>&lt;h1 id="2537-count-the-number-of-good-subarrays"&gt;2537. Count the Number of Good Subarrays&lt;/h1&gt;
+&lt;p&gt;Given an integer array nums and an integer k, return the number of good subarrays of nums.&lt;/p&gt;
+&lt;p&gt;A subarray arr is good if there are at least k pairs of indices (i, j) such that i &amp;lt; j and arr[i] == arr[j].&lt;/p&gt;
+&lt;p&gt;A subarray is a contiguous non-empty sequence of elements within an array.&lt;/p&gt;
+&lt;p&gt;Example 1:&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,1,1,1,1], k = 10
+Output: 1
+Explanation: The only good subarray is the array nums itself.
+Example 2:&lt;/p&gt;</description></item><item><title>2566. Maximum Difference by Remapping a Digit</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2566-maximum-difference-by-remapping-a-digit/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2566-maximum-difference-by-remapping-a-digit/</guid><description>&lt;h1 id="2566-maximum-difference-by-remapping-a-digit"&gt;2566. Maximum Difference by Remapping a Digit&lt;/h1&gt;
+&lt;ol start="2566"&gt;
+&lt;li&gt;Maximum Difference by Remapping a Digit
+Solved
+Easy
+Topics
+conpanies icon
+Companies
+Hint
+You are given an integer num. You know that Bob will sneakily remap one of the 10 possible digits (0 to 9) to another digit.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Return the difference between the maximum and minimum values Bob can make by remapping exactly one digit in num.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;p&gt;When Bob remaps a digit d1 to another digit d2, Bob replaces all occurrences of d1 in num with d2.
+Bob can remap a digit to itself, in which case num does not change.
+Bob can remap different digits for obtaining minimum and maximum values respectively.
+The resulting number after remapping can contain leading zeroes.&lt;/p&gt;</description></item><item><title>2918. Minimum Equal Sum of Two Arrays After Replacing Zeros</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2918-minimum-equal-sum-of-two-arrays-after-replacing-zeros/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2918-minimum-equal-sum-of-two-arrays-after-replacing-zeros/</guid><description>&lt;h1 id="2918-minimum-equal-sum-of-two-arrays-after-replacing-zeros"&gt;2918. Minimum Equal Sum of Two Arrays After Replacing Zeros&lt;/h1&gt;
+&lt;p&gt;You are given two arrays nums1 and nums2 consisting of positive integers.&lt;/p&gt;
+&lt;p&gt;You have to replace all the 0&amp;rsquo;s in both arrays with strictly positive integers such that the sum of elements of both arrays becomes equal.&lt;/p&gt;
+&lt;p&gt;Return the minimum equal sum you can obtain, or -1 if it is impossible.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums1 = [3,2,0,1,0], nums2 = [6,5,0]&lt;/p&gt;</description></item><item><title>2962. Count Subarrays Where Max Element Appears at Least K Times</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2962-count-subarrays-where-max-element-appears-at-least-k-times/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/2962-count-subarrays-where-max-element-appears-at-least-k-times/</guid><description>&lt;h1 id="2962-count-subarrays-where-max-element-appears-at-least-k-times"&gt;2962. Count Subarrays Where Max Element Appears at Least K Times&lt;/h1&gt;
+&lt;p&gt;You are given an integer array nums and a positive integer k.&lt;/p&gt;
+&lt;p&gt;Return the number of subarrays where the maximum element of nums appears at least k times in that subarray.&lt;/p&gt;
+&lt;p&gt;A subarray is a contiguous sequence of elements within an array.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: nums = [1,3,2,3,3], k = 2&lt;/p&gt;
+&lt;p&gt;Output: 6&lt;/p&gt;
+&lt;p&gt;Explanation: The subarrays that contain the element 3 at least 2 times are: [1,3,2,3], [1,3,2,3,3], [3,2,3], [3,2,3,3], [2,3,3] and [3,3].&lt;/p&gt;</description></item><item><title>3024. Type of Triangle</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3024-type-of-triangle/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3024-type-of-triangle/</guid><description>&lt;h1 id="3024-type-of-triangle"&gt;3024. Type of Triangle&lt;/h1&gt;
+&lt;p&gt;You are given a 0-indexed integer array nums of size 3 which can form the sides of a triangle.&lt;/p&gt;
+&lt;p&gt;A triangle is called equilateral if it has all sides of equal length.
+A triangle is called isosceles if it has exactly two sides of equal length.
+A triangle is called scalene if all its sides are of different lengths.
+Return a string representing the type of triangle that can be formed or &amp;ldquo;none&amp;rdquo; if it cannot form a triangle.&lt;/p&gt;</description></item><item><title>3355. Zero Array Transformation I</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3355-zero-array-transformation-i/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3355-zero-array-transformation-i/</guid><description>&lt;h1 id="3355-zero-array-transformation-i"&gt;3355. Zero Array Transformation I&lt;/h1&gt;
+&lt;p&gt;You are given an integer array nums of length n and a 2D array queries, where queries[i] = [li, ri].&lt;/p&gt;
+&lt;p&gt;For each queries[i]:&lt;/p&gt;
+&lt;p&gt;Select a subset of indices within the range [li, ri] in nums.
+Decrement the values at the selected indices by 1.
+A Zero Array is an array where all elements are equal to 0.&lt;/p&gt;
+&lt;p&gt;Return true if it is possible to transform nums into a Zero Array after processing all the queries sequentially, otherwise return false.&lt;/p&gt;</description></item><item><title>3403. Find the Lexicographically Largest String From the Box I</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3403-find-the-lexicographically-largest-string-from-the-box-i/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3403-find-the-lexicographically-largest-string-from-the-box-i/</guid><description>&lt;h1 id="3403-find-the-lexicographically-largest-string-from-the-box-i"&gt;3403. Find the Lexicographically Largest String From the Box I&lt;/h1&gt;
+&lt;p&gt;You are given a string word, and an integer numFriends.&lt;/p&gt;
+&lt;p&gt;Alice is organizing a game for her numFriends friends. There are multiple rounds in the game, where in each round:&lt;/p&gt;
+&lt;p&gt;word is split into numFriends non-empty strings, such that no previous round has had the exact same split.
+All the split words are put into a box.
+Find the lexicographically largest string from the box after all the rounds are finished.&lt;/p&gt;</description></item><item><title>3442. Maximum Difference Between Even and Odd Frequency I</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3442-maximum-difference-between-even-and-odd-frequency-i/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3442-maximum-difference-between-even-and-odd-frequency-i/</guid><description>&lt;h1 id="3442-maximum-difference-between-even-and-odd-frequency-i"&gt;3442. Maximum Difference Between Even and Odd Frequency I&lt;/h1&gt;
+&lt;p&gt;You are given a string s consisting of lowercase English letters.&lt;/p&gt;
+&lt;p&gt;Your task is to find the maximum difference diff = freq(a1) - freq(a2) between the frequency of characters a1 and a2 in the string such that:&lt;/p&gt;
+&lt;p&gt;a1 has an odd frequency in the string.
+a2 has an even frequency in the string.
+Return this maximum difference.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: s = &amp;ldquo;aaaaabbc&amp;rdquo;&lt;/p&gt;</description></item><item><title>3601. Find the K-th Character in String Game II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3601-find-the-k-th-character-in-string-game-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3601-find-the-k-th-character-in-string-game-ii/</guid><description>&lt;h1 id="3601-find-the-k-th-character-in-string-game-ii"&gt;3601. Find the K-th Character in String Game II&lt;/h1&gt;
+&lt;p&gt;Alice and Bob are playing a game. Initially, Alice has a string word = &amp;ldquo;a&amp;rdquo;.
+You are given a positive integer k. You are also given an integer array operations, where operations[i] represents the type of the ith operation.
+Now Bob will ask Alice to perform all operations in sequence:&lt;/p&gt;
+&lt;p&gt;If operations[i] == 0, append a copy of word to itself.
+If operations[i] == 1, generate a new string by changing each character in word to its next character in the English alphabet, and append it to the original word. For example, performing the operation on &amp;ldquo;c&amp;rdquo; generates &amp;ldquo;cd&amp;rdquo; and performing the operation on &amp;ldquo;zb&amp;rdquo; generates &amp;ldquo;zbac&amp;rdquo;.&lt;/p&gt;</description></item><item><title>3617. Find the Original Typed String I</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3617-find-the-original-typed-string-i/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3617-find-the-original-typed-string-i/</guid><description>&lt;h1 id="3617-find-the-original-typed-string-i"&gt;3617. Find the Original Typed String I&lt;/h1&gt;
+&lt;p&gt;Alice is attempting to type a specific string on her computer. However, she tends to be clumsy and may press a key for too long, resulting in a character being typed multiple times.
+Although Alice tried to focus on her typing, she is aware that she may still have done this at most once.
+You are given a string word, which represents the final output displayed on Alice&amp;rsquo;s screen.
+Return the total number of possible original strings that Alice might have intended to type.&lt;/p&gt;</description></item><item><title>3618. Find the Original Typed String II</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3618-find-the-original-typed-string-ii/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/array/3618-find-the-original-typed-string-ii/</guid><description>&lt;h1 id="3618-find-the-original-typed-string-ii"&gt;3618. Find the Original Typed String II&lt;/h1&gt;
+&lt;p&gt;Alice is attempting to type a specific string on her computer. However, she tends to be clumsy and may press a key for too long, resulting in a character being typed multiple times.
+You are given a string word, which represents the final output displayed on Alice&amp;rsquo;s screen. You are also given a positive integer k.
+Return the total number of possible original strings that Alice might have intended to type, if she was trying to type a string of size at least k.
+Since the answer may be very large, return it modulo 109 + 7.&lt;/p&gt;</description></item></channel></rss>

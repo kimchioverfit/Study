@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>String on Study Notes</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/</link><description>Recent content in String on Study Notes</description><generator>Hugo</generator><language>ko-kr</language><atom:link href="https://kimchioverfit.github.io/Study/algorithm/leetcode/string/index.xml" rel="self" type="application/rss+xml"/><item><title>58. Length of Last Word</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/0058-length-of-last-word/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/0058-length-of-last-word/</guid><description>&lt;h1 id="58-length-of-last-word"&gt;58. Length of Last Word&lt;/h1&gt;
+&lt;p&gt;Given a string s consisting of words and spaces, return the length of the last word in the string.&lt;/p&gt;
+&lt;p&gt;A word is a maximal
+substring
+consisting of non-space characters only.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Example 1:
+Input: s = &amp;#34;Hello World&amp;#34;
+Output: 5
+Explanation: The last word is &amp;#34;World&amp;#34; with length 5.&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 2:
+Input: s = &amp;#34; fly me to the moon &amp;#34;
+Output: 4
+Explanation: The last word is &amp;#34;moon&amp;#34; with length 4.&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Example 3:
+Input: s = &amp;#34;luffy is still joyboy&amp;#34;
+Output: 6
+Explanation: The last word is &amp;#34;joyboy&amp;#34; with length 6.&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="solution"&gt;Solution&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;public&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; count &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;lengthOfLastWord&lt;/span&gt;(string s) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;s.size()&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;--&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(s[i]&lt;span style="color:#f92672"&gt;!=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39; &amp;#39;&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; count&lt;span style="color:#f92672"&gt;++&lt;/span&gt;; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (s[i]&lt;span style="color:#f92672"&gt;==&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39; &amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; count &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; count;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; count;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;s.size()&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i&lt;span style="color:#f92672"&gt;--&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 부분에서,&lt;/p&gt;</description></item><item><title>1768. Merge Strings Alternately</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/1768-merge-strings-alternately/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/1768-merge-strings-alternately/</guid><description>&lt;h1 id="1768-merge-strings-alternately"&gt;1768. Merge Strings Alternately&lt;/h1&gt;
+&lt;p&gt;You are given two strings word1 and word2. Merge the strings by adding letters in alternating order, starting with word1. If a string is longer than the other, append the additional letters onto the end of the merged string.&lt;/p&gt;
+&lt;p&gt;Return the merged string.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Example 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Input: word1 = &amp;ldquo;abc&amp;rdquo;, word2 = &amp;ldquo;pqr&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Output: &amp;ldquo;apbqcr&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Explanation: The merged string will be merged as so:&lt;/p&gt;
+&lt;p&gt;word1: a b c&lt;/p&gt;</description></item><item><title>Basic</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/2839-check-if-strings-can-be-made-equal-with-operations-i/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/2839-check-if-strings-can-be-made-equal-with-operations-i/</guid><description>&lt;h1 id="2839-check-if-strings-can-be-made-equal-with-operations-i"&gt;2839. Check if Strings Can be Made Equal With Operations I&lt;/h1&gt;
+&lt;p&gt;You are given two strings s1 and s2, both of length 4, consisting of lowercase English letters.&lt;/p&gt;
+&lt;p&gt;You can apply the following operation on any of the two strings any number of times:&lt;/p&gt;
+&lt;p&gt;Choose any two indices i and j such that j - i = 2, then swap the two characters at those indices in the string.
+Return true if you can make the strings s1 and s2 equal, and false otherwise.&lt;/p&gt;</description></item><item><title>3304. Find the K-th Character in String Game I</title><link>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/3304-find-the-k-th-character-in-string-game-i/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kimchioverfit.github.io/Study/algorithm/leetcode/string/3304-find-the-k-th-character-in-string-game-i/</guid><description>&lt;h1 id="3304-find-the-k-th-character-in-string-game-i"&gt;3304. Find the K-th Character in String Game I&lt;/h1&gt;
+&lt;p&gt;Alice and Bob are playing a game. Initially, Alice has a string word = &amp;ldquo;a&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;You are given a positive integer k.&lt;/p&gt;
+&lt;p&gt;Now Bob will ask Alice to perform the following operation forever:&lt;/p&gt;
+&lt;p&gt;Generate a new string by changing each character in word to its next character in the English alphabet, and append it to the original word.
+For example, performing the operation on &amp;ldquo;c&amp;rdquo; generates &amp;ldquo;cd&amp;rdquo; and performing the operation on &amp;ldquo;zb&amp;rdquo; generates &amp;ldquo;zbac&amp;rdquo;.&lt;/p&gt;</description></item></channel></rss>
